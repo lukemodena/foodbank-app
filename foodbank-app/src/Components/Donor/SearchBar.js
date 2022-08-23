@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState} from 'react';
 
 const SearchBar = ({callback}) => {
     const [innerValue, setInnerValue] = useState("");
@@ -7,14 +7,15 @@ const SearchBar = ({callback}) => {
         callback(innerValue)
     }
   return (
-    <form className='date-searchBar' onSubmit={handleSubmit}>
+    <form className='searchBar' onSubmit={handleSubmit}>
       <input 
-            type="date" 
-            className='date-searchBarInput' 
+            style={{borderRight: "0px"}}
+            type="text" 
+            className='searchBarInput' 
             value={innerValue} 
             onChange={(e) => setInnerValue(e.target.value)} 
         />
-        <input className='date-searchBarSubmit' type="submit" value="Search" />
+        <input className='searchBarSubmit' type="submit" value="Search" />
     </form>
   )
 }

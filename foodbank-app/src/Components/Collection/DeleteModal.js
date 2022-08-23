@@ -1,5 +1,5 @@
 import React,{Component} from "react";
-import {Button, ButtonToolbar, Alert, Modal } from 'react-bootstrap';
+import {Button, Alert, Modal } from 'react-bootstrap';
 
 
 export class DeleteModal extends Component{

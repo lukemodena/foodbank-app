@@ -36,3 +36,256 @@
     transform: rotate(360deg);
   }
 }
+
+.navBar {
+  border-radius: 0rem 0rem .2rem .2rem;
+}
+
+.navBar-logo {
+  width: 50px;
+  height: 50px;
+}
+
+.dropdownFilter {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.dropdownFilterButton {
+  transform: translate(0px, 0px);
+  position: absolute;
+  width: 175.5px;
+  height: 27.07px;
+  color: #000;
+  border: 0.5px solid #C7C7C7;
+  box-sizing: border-box;
+  padding: 1px 6px;
+}
+
+.addButton {
+  transform: translate(451px, 5px);
+  position: absolute;
+  width: 27.07px;
+  height: 27.07px;
+  background-color: #f0f0f0;
+  border: 0.5px solid #C7C7C7;
+  padding: 1px 1px;
+  border-radius: .2rem;
+}
+
+.addButton-Icon {
+  transform: translate(0.5px, -2px);
+  width: 13.535px;
+  height: 13.535px;
+  background-color: rgba(0, 0, 0, 0);
+  border: #C7C7C7;
+  color: #000;
+  padding: 1px 1px;
+  border-radius: .2rem;
+  transition: 0.15s;
+}
+
+.addButton:hover > .addButton-Icon {
+  color: white;
+}
+
+.searchBar {
+  position: absolute;
+  transform: translate(183.5px, 0px);
+  width: 50%;
+  height: 27.05px;
+  margin: auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.searchBarInput {
+  transform: translate(0px, 0px);
+  width: 245.5px;
+  height: 27.07px;
+  position: absolute;
+  border: 0.5px solid #C7C7C7;
+  border-radius: .2rem .2rem .2rem .2rem;
+}
+
+.searchBarSubmit {
+  transform: translate(185.5px, 0px);
+  height: 27.05px;
+  position: absolute;
+  border-top: 0.5px solid #C7C7C7;
+  border-right: 0.5px solid #C7C7C7;
+  border-bottom: 0.5px solid #C7C7C7;
+  border-left: 0.5px solid #C7C7C7;
+  border-radius: 0rem .2rem .2rem 0rem;
+  z-index: 0;
+  transition: 0.15s;
+}
+
+.searchBarSubmit:hover {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+
+.date-searchBar {
+  position: absolute;
+  transform: translate(183.5px, 0px);
+  width: 50%;
+  height: 27.05px;
+  margin: auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.date-searchBarInput {
+  transform: translate(0px, 0px);
+  width: 186.5px;
+  height: 27.07px;
+  position: absolute;
+  border: 0.5px solid #C7C7C7;
+  border-radius: .2rem 0rem 0rem .2rem;
+  z-index: 1;
+}
+
+.date-searchBarSubmit {
+  transform: translate(185.5px, 0px);
+  height: 27.05px;
+  position: absolute;
+  border-top: 0.5px solid #C7C7C7;
+  border-right: 0.5px solid #C7C7C7;
+  border-bottom: 0.5px solid #C7C7C7;
+  border-left: 0.5px solid #C7C7C7;
+  border-radius: 0rem .2rem .2rem 0rem;
+  z-index: 0;
+  transition: 0.15s;
+}
+
+.date-searchBarSubmit:hover {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+
+@media (max-width: 485px) {
+  .dropdownFilter {
+    width: 50%;
+  }
+  .dropdownFilterButton {
+    width: 50%;
+  }
+
+  .searchBarInput {
+    width: 100%;
+    transform: translate(-53.5px, 0px);
+  }
+
+  .searchBarSubmit {
+    transform: translate(126.5px, 0px);
+  }
+
+  .date-searchBarInput {
+    width: 181.5px;
+    transform: translate(-53.5px, 0px);
+  }
+
+  .date-searchBarSubmit {
+    transform: translate(126.5px, 0px);
+  }
+
+  .addButton {
+    transform: translate(390.93px, 5px);
+  }
+}
+
+@media (max-width: 415px) {
+  .dropdownFilter {
+    width: 50%;
+  }
+  .dropdownFilterButton {
+    width: 50%;
+  }
+
+  .searchBarInput {
+    width: 118%;
+    transform: translate(-73.5px, 0px);
+  }
+
+  .searchBarSubmit {
+    transform: translate(110px, 0px);
+  }
+
+  .date-searchBarInput {
+    width: 181.5px;
+    transform: translate(-73.5px, 0px);
+  }
+
+  .date-searchBarSubmit {
+    transform: translate(107px, 0px);
+  }
+
+  .addButton {
+    transform: translate(370.93px, 5px);
+  }
+}
+
+
+@media (max-width: 404px) {
+  .dropdownFilter {
+    width: 50%;
+  }
+  .dropdownFilterButton {
+    width: 50%;
+  }
+
+  .searchBarInput {
+    width: 100%;
+    transform: translate(-80.5px, 0px);
+  }
+
+  .searchBarSubmit {
+    transform: translate(60.5px, 0px);
+  }
+
+  .date-searchBarInput {
+    width: 141.5px;
+    transform: translate(-80.5px, 0px);
+  }
+
+  .date-searchBarSubmit {
+    transform: translate(60.5px, 0px);
+  }
+  .addButton {
+    transform: translate(319px, 5px);
+  }
+}
+
+@media (max-width: 360px) {
+  .dropdownFilter {
+    width: 90.7px;
+  }
+  .dropdownFilterButton {
+    width: 90.7px;
+  }
+
+  .searchBarInput {
+    width: 170.5px;
+    transform: translate(-88.5px, 0px);
+  }
+
+  .searchBarSubmit {
+    transform: translate(21.5px, 0px);
+  }
+
+  .date-searchBarInput {
+    width: 112.5px;
+    transform: translate(-88.5px, 0px);
+  }
+
+  .date-searchBarSubmit {
+    transform: translate(22.5px, 0px);
+  }
+
+  .addButton {
+    transform: translate(282.5px, 5px);
+  }
+}

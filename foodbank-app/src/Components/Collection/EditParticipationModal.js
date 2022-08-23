@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Modal, Button, Row, Col, Form, Image} from 'react-bootstrap';
+import {Modal, Button, Row, Col, Form} from 'react-bootstrap';
 
 export class EditParticipationModal extends Component{
     constructor(props){
