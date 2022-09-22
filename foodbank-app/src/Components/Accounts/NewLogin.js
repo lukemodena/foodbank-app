@@ -25,7 +25,7 @@ const NewLogin = ({ login, isAuthenticated }) => {
 
   return (
     <div className='col-md-6 m-auto'>
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title id='contained-modal-title-vcenter'>
               Login: 
           </Modal.Title>
