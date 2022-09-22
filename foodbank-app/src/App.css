@@ -37,6 +37,7 @@
   }
 }
 
+/* Nav */
 .navBar {
   border-radius: 0rem 0rem .2rem .2rem;
 }
@@ -46,6 +47,7 @@
   height: 50px;
 }
 
+/* Dropdown */
 .dropdownFilter {
   padding-top: 5px;
   padding-bottom: 5px;
@@ -62,6 +64,38 @@
   padding: 1px 6px;
 }
 
+/* Edit Button */
+.editButton {
+  background-color: #f0f0f0;
+  border: 0.5px solid #C7C7C7;
+}
+
+.editButton-Icon {
+  background-color: rgba(0, 0, 0, 0);
+  border: #C7C7C7;
+  color: #000;
+  transition: 0.15s;
+}
+
+.editButton:hover > .editButton-Icon {
+  color: white;
+}
+
+/* Total */
+
+.totalButton {
+  transform: translate(486px, 5px);
+  position: absolute;
+  width: 41.07px;
+  height: 27.07px;
+  background-color: #f0f0f0;
+  border: 0.5px solid #C7C7C7;
+  padding: 1px 1px;
+  font-size: 10px;
+  border-radius: .2rem;
+}
+
+/* Add Button */
 .addButton {
   transform: translate(451px, 5px);
   position: absolute;
@@ -137,13 +171,22 @@
   padding-bottom: 5px;
 }
 
-.date-searchBarInput {
+.date-searchBarInput-start {
   transform: translate(0px, 0px);
-  width: 186.5px;
+  width: 93.25px;
   height: 27.07px;
   position: absolute;
   border: 0.5px solid #C7C7C7;
   border-radius: .2rem 0rem 0rem .2rem;
+  z-index: 1;
+}
+.date-searchBarInput-end {
+  transform: translate(93.25px, 0px);
+  width: 93.25px;
+  height: 27.07px;
+  position: absolute;
+  border: 0.5px solid #C7C7C7;
+  border-radius: 0rem 0rem 0rem 0rem;
   z-index: 1;
 }
 
@@ -183,9 +226,13 @@
     transform: translate(126.5px, 0px);
   }
 
-  .date-searchBarInput {
-    width: 181.5px;
+  .date-searchBarInput-start {
+    width: 90.75px;
     transform: translate(-53.5px, 0px);
+  }
+  .date-searchBarInput-end {
+    width: 90.75px;
+    transform: translate(37.25px, 0px);
   }
 
   .date-searchBarSubmit {
@@ -214,9 +261,12 @@
     transform: translate(110px, 0px);
   }
 
-  .date-searchBarInput {
-    width: 181.5px;
+  .date-searchBarInput-start {
     transform: translate(-73.5px, 0px);
+  }
+
+  .date-searchBarInput-end {
+    transform: translate(19.75px, 0px);
   }
 
   .date-searchBarSubmit {
@@ -246,9 +296,14 @@
     transform: translate(60.5px, 0px);
   }
 
-  .date-searchBarInput {
-    width: 141.5px;
+  .date-searchBarInput-start {
+    width: 70.75px;
     transform: translate(-80.5px, 0px);
+  }
+
+  .date-searchBarInput-end {
+    width: 70.75px;
+    transform: translate(-9.75px, 0px);
   }
 
   .date-searchBarSubmit {
@@ -276,9 +331,14 @@
     transform: translate(21.5px, 0px);
   }
 
-  .date-searchBarInput {
-    width: 112.5px;
+  .date-searchBarInput-start {
+    width: 56.25px;
     transform: translate(-88.5px, 0px);
+  }
+
+  .date-searchBarInput-end {
+    width: 56.25px;
+    transform: translate(-32.25px, 0px);
   }
 
   .date-searchBarSubmit {
