@@ -43,7 +43,7 @@ export class Navigation extends Component{
                             {this.state.authenticated && <NavLink className="d-inline p-2 bg-light text-black" to="/donor">
                                 Donors
                             </NavLink>}
-                            <NavLink className="d-inline p-2 bg-light text-black" to="/collection">
+                            <NavLink className="d-inline p-2 bg-light text-black" to="/collections">
                                 Collections
                             </NavLink>
                 

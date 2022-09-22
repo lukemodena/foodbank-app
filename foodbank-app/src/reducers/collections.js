@@ -21,6 +21,7 @@ import {
 const initialState = { 
     colls: [],
     result: '',
+    total: 0,
     isAuthenticated: null
 };
 
@@ -43,25 +44,29 @@ export default function(state = initialState, action) {
         case COLLECTIONS_SUCCESS:
             return {
                 ...state,
-                colls: payload
+                colls: payload,
+                total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 )
             }
 
         case COLLECTIONS_FAIL:
             return {
                 ...state,
-                colls: []
+                colls: [],
+                total: 0
             }
 
         case COLLECTION_SEARCH_SUCCESS:
             return{
                 ...state,
-                colls: payload
+                colls: payload,
+                total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 )
             }
             
         case COLLECTION_SEARCH_FAIL:
             return {
                 ...state,
-                colls: payload
+                colls: payload,
+                total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 )
             }
 
         case ADD_COLLECTION_SUCCESS:

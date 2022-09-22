@@ -160,6 +160,7 @@ export class NewCollection extends Component{
 
     static propTypes = {
         colls: PropTypes.array.isRequired,
+        total: PropTypes.number.isRequired,
         getCollections: PropTypes.func.isRequired,
         searchCollections: PropTypes.func.isRequired,
         deleteCollection: PropTypes.func.isRequired,
@@ -179,7 +180,6 @@ export class NewCollection extends Component{
     componentDidUpdate() {
         if (this.state.refresh === "YES") {
             this.props.getCollections();
-            this.props.colls.map(coll=>coll.TotalWeight)
             const total = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 )
         
             this.setState({
@@ -333,7 +333,7 @@ export class NewCollection extends Component{
                         onHide={addModalClose}/>
 
                         <Button variant="font-size: 15px;" disabled className="totalButton">
-                            {this.state.colltotalcost}kg
+                            {this.props.total}kg
                         </Button>
                     </Row>
                 </div>
@@ -425,7 +425,8 @@ export class NewCollection extends Component{
 
 const mapStateToProps = (state) => ({
     colls: state.collections.colls,
-    result: state.collections.result
+    result: state.collections.result,
+    total: state.collections.total
 });
 
 export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto })(NewCollection)
