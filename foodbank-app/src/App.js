@@ -2,7 +2,7 @@ import './App.css';
 import React, { Fragment } from 'react';
 
 import {Home} from './Home';
-import {Navigation} from './Navigation';
+import Navigation from './Navigation';
 import NewLogin from './Components/Accounts/NewLogin';
 import {Register} from './Components/Accounts/Register';
 import Donor from './Components/Donor/Donor';

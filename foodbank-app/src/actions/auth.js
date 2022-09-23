@@ -8,7 +8,8 @@ import {
     LOAD_USER_FAIL,
     AUTHENTICATED_SUCCESS,
     AUTHENTICATED_FAIL,
-    LOGOUT
+    LOGOUT_SUCCESS,
+    LOGOUT_FAIL
 } from './types';
 
 // AUTHENTICATION
@@ -24,7 +25,7 @@ export const checkAuthenticated = () => async dispatch => {
         };
 
         try {
-            const res = await axios.post('http://127.0.0.1:8000/api/auth/user', config)
+            const res = await axios.get('http://127.0.0.1:8000/api/auth/user', config)
             dispatch({
                 type: AUTHENTICATED_SUCCESS,
                 payload: res.data
@@ -98,8 +99,27 @@ export const load_user = () => async dispatch => {
     }
 };
 
-export const logout = () => dispatch => {
-    dispatch({
-        type: LOGOUT
-    });
+export const logout = () => async dispatch => {
+    
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${localStorage.getItem('token')}`
+        }
+    };
+
+    try {    
+        const res = await axios.post('http://127.0.0.1:8000/api/auth/logout', null, config);
+        dispatch({ type: 'CLEAR_DONORS' });
+        dispatch({ type: 'CLEAR_COLLECTIONS' });
+        dispatch({
+            type: LOGOUT_SUCCESS,
+            payload: res.data
+        });
+    } catch(err) {
+        dispatch({
+            type: LOGOUT_FAIL,
+            payload: err.response.data
+        });
+    }
 };

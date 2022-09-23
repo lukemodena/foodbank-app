@@ -1,6 +1,11 @@
 import React,{Component} from 'react';
 import {Modal, Button, Row, Col, Form, Image} from 'react-bootstrap';
 
+import { connect } from 'react-redux';
+import { getDonors } from '../../actions/donors';
+import { getCollections } from '../../actions/collections';
+
+
 export class EditParticipationModal extends Component{
     constructor(props){
         super(props);
@@ -8,36 +13,38 @@ export class EditParticipationModal extends Component{
             dons:[]
         }
         this.handleSubmit=this.handleSubmit.bind(this);
+        this.participationList=this.participationList.bind(this);
+    }
+    componentDidMount(){
+        getDonors();
     }
 
-    refreshList(){
-        fetch('http://127.0.0.1:8000/donors')
+
+    participationList(event){
+        event.preventDefault()
+        fetch('http://127.0.0.1:8000/participation')
         .then(response=>response.json())
         .then(data=>{
-            this.setState({dons:data});
+            console.log(data);
         })
-    }
-
-    componentDidMount(){
-        this.refreshList();
     }
 
     handleSubmit(event){
         event.preventDefault()
-        fetch('http://127.0.0.1:8000/collection',{
-            method:'PUT',
+        fetch('http://127.0.0.1:8000/participation',{
+            method:'POST',
             headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
+                ParticipationID:null,
+                Participation:event.target.Participation.value,
+                DonationType:event.target.DonationType.value,
+                TotalDonated:parseFloat(event.target.TotalDonated.value),
+                DonorID:event.target.DonorID.value,
                 CollectionID:event.target.CollectionID.value,
-                CollectionDate:event.target.CollectionDate.value,
-                Type:event.target.Type.value,
-                TotalWeight:event.target.TotalWeight.value,
-                TotalCost:event.target.TotalCost.value,
-                CollectionPhoto:this.photofilename,
-                CollectionSpreadsheet:this.spreadsheetfilename
+                WholesaleID:event.target.WholesaleID.value
             })
         })
         .then(res=>res.json())
@@ -52,7 +59,6 @@ export class EditParticipationModal extends Component{
 
 
     render(){
-        const {dons}=this.state;
         return (
             <div className='container'>
                 <Modal
@@ -66,7 +72,6 @@ export class EditParticipationModal extends Component{
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-
                         <Row>
                             <Col sm={6}>
                                 <Form onSubmit={this.handleSubmit}>
@@ -74,23 +79,35 @@ export class EditParticipationModal extends Component{
                                         <Form.Label>CollectionID</Form.Label>
                                         <Form.Control type='text' name='CollectionID' disabled placeholder='CollectionID' defaultValue={this.props.collid}/>
                                     </Form.Group>
-                                    <Form.Group controlId='DonorID'>
-                                        <option>Please specify...</option>
-                                        {dons.map(don=>
-                                            <option key={don.DonorID} value={don.DonorID}>
-                                                {don.FullName}
-                                            </option>
-                                        )}   
-                                    </Form.Group>
+                                    {/* <Form.Group controlId='DonorID'>
+                                        <Form.Label>Donor</Form.Label>
+                                        <Form.Select aria-label="DonorID" required name='DonorID' placeholder='DonorID'>
+                                            {this.props.dons.map((don)=> (
+                                                <option key={don.DonorID} value={don.DonorID}>
+                                                    {don.FullName}
+                                                </option>
+                                            ))}  
+                                        </Form.Select>
+                                    </Form.Group> */}
                                     <Form.Group controlId='Participation'>
                                         <Form.Label>Donor Participating</Form.Label>
-                                        <Form.Select aria-label="Type" required name='Participation' placeholder='Participation'>
+                                        <Form.Select aria-label="Participation" required name='Participation' placeholder='Participation'>
                                             <option>Please specify...</option>
                                             <option value="true">Yes</option>
                                             <option value="false">No</option>
                                         </Form.Select>
                                     </Form.Group>
-
+                                    <Form.Group controlId='DonationType'>
+                                        <Form.Label>Donation Type</Form.Label>
+                                        <Form.Select aria-label="DonationType" required name='DonationType' placeholder='DonationType'>
+                                            <option>Please specify...</option>
+                                            <option value="0">N/A</option>
+                                            <option value="1">Drop-Off</option>
+                                            <option value="2">Collection</option>
+                                            <option value="3">Money Donation</option>
+                                            <option value="4">Online Order</option>
+                                        </Form.Select>
+                                    </Form.Group>
                                     <Form.Group controlId='TotalDonated'>
                                         <Form.Label>Total Donated</Form.Label>
                                         <Form.Control type='text' name='TotalDonated' required placeholder='TotalDonated'/>
@@ -101,28 +118,16 @@ export class EditParticipationModal extends Component{
                                     </Form.Group>
                                     <Form.Group>
                                         <Button variant='primary' type='submit'>
-                                            Update Collection
+                                            Add Participant
                                         </Button>
                                     </Form.Group>
-                                </Form>
-                            </Col>
-                            <Col sm={6}>
-                                <Form onSubmit={this.handleSubmitPhoto}>
-                                    <Form.Group controlId='CollectionID'>
-                                        <Form.Label>CollectionID</Form.Label>
-                                        <Form.Control type='text' name='CollectionID' disabled placeholder='CollectionID' defaultValue={this.props.collid}/>
-                                    </Form.Group>
-                                    <Image width="200px" height="200px" src={'http://127.0.0.1:8000/media/'+this.props.collphoto}/>
-                                    <input onChange={this.handleFileSelected} type="file" id='photofile' accept='image/*'/>
-                                    <Form.Group>
-                                        <Button variant='primary' type='submit'>
-                                            UploadPhoto
-                                        </Button>
-                                    </Form.Group> 
                                 </Form>
                             </Col>
                         </Row>
                     </Modal.Body>
+                    <Button onClick={this.participationList}>
+                        Participant List    
+                    </Button>
                     <Modal.Footer>
                         <Button variant='danger' onClick={this.props.onHide}>Close</Button>
                     </Modal.Footer>
@@ -131,3 +136,10 @@ export class EditParticipationModal extends Component{
         )
     }
 }
+
+const mapStateToProps = (state) => ({
+    dons: state.donors.dons,
+    colls: state.collections.colls
+});
+
+export default connect(mapStateToProps, { getDonors, getCollections })(EditParticipationModal)

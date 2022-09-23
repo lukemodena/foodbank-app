@@ -9,6 +9,7 @@ import {
     EDIT_DONOR_FAIL,
     DELETE_DONOR_SUCCESS,
     DELETE_DONOR_FAIL,
+    CLEAR_DONORS,
     AUTHENTICATED_SUCCESS,
     AUTHENTICATED_FAIL,
 } from '../actions/types';
@@ -94,6 +95,14 @@ export default function(state = initialState, action) {
                 ...state,
                 result: payload
             }
+
+        case CLEAR_DONORS:
+            return {
+                ...state,
+                dons: [],
+                result: ''
+            }
+
     default:
         return state;
     }

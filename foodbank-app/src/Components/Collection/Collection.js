@@ -1,12 +1,12 @@
 import React,{Component} from "react";
-import {Button, Table, Dropdown, Col, Form, Row, Modal, Image, Card} from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import {Button, Table, Dropdown, Col, Form, Row, Modal, Image} from 'react-bootstrap';
 import { BsPlusLg, BsDownload } from "react-icons/bs";
 import SearchBar from "./SearchBar";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { AddCollectionModal } from "./AddCollModal";
+import { EditParticipationModal } from "../Participation/Participation";
 
 import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto } from '../../actions/collections';
 
@@ -32,7 +32,7 @@ function EditCollectionModal(props) {
             size='lg'
             aria-labelledby='contained-modal-title-vcenter'
             centered>
-                <Modal.Header closeButton>
+                <Modal.Header closeButton onClick={onHide}>
                     <Modal.Title id='contained-modal-title-vcenter'>
                         Edit Collection:
                     </Modal.Title>
@@ -299,6 +299,7 @@ export class NewCollection extends Component{
         const {collid, colldate, colltype, colltotalweight, colltotalcost, collphoto, collphotourl, collspreadsheet}=this.state;
         let addModalClose=()=>this.setState({addModalShow:false, refresh: "YES"});
         let editModalClose=()=>this.setState({editModalShow:false, refresh: "YES"});
+        let editParticipationClose=()=>this.setState({editParticipationShow:false, refresh: "YES"});
 
         return(
             <div>
@@ -401,12 +402,18 @@ export class NewCollection extends Component{
                                                     Delete
                                                 </Dropdown.Item>
 
-                                                <Dropdown.Item 
-                                                onClick={console.log("participation")}
+                                                <Dropdown.Item onClick={() => 
+                                                    this.setState({
+                                                        editParticipationShow:true,
+                                                        collid:coll.CollectionID
+                                                    })}
                                                 >
                                                     Participation
                                                 </Dropdown.Item>
-                                                
+                                                <EditParticipationModal show={this.state.editParticipationShow}
+                                                onHide={editParticipationClose}
+                                                collid={collid}
+                                                />
                                             </Dropdown.Menu>
                                         </Dropdown>
 
