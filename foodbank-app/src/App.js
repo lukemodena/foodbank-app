@@ -28,7 +28,8 @@ function App() {
 
             <Routes>
               <Route exact path='/' element={<Home/>}/>
-              {authenticated && <Route path='/donor' element={<Donor/>}/>}
+              <Route path='/donor' element={<Donor/>}/>
+              {/* {authenticated && <Route path='/donor' element={<Donor/>}/>} */}
               <Route path='/collections' element={<Collection/>}/>
               <Route exact path='/login' element={<NewLogin/>}/>
               <Route exact path='/register' element={<Register/>}/>
