@@ -191,7 +191,7 @@ export class NewDonors extends Component {
                                 <th>Type</th>
                                 <th>Notes</th>
                                 <th>Phone</th>
-                                <th>No. Donated</th>
+                                <th>Times Donated</th>
                                 <th>Options</th>
                             </tr>
                         </thead>

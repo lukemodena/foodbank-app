@@ -8,11 +8,11 @@ import PropTypes from 'prop-types';
 import { AddCollectionModal } from "./AddCollModal";
 import { EditCollectionModal } from "./EditCollModal";
 import { EditParticipationModal } from "../Participation/Participation";
-import { AddWholesaleModal } from "./Wholesale/AddWholesaleModal";
+import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
 
 import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto } from '../../actions/collections';
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
-
+import { getDonors } from "../../actions/donors";
 
 export class NewCollection extends Component{
 
@@ -22,6 +22,7 @@ export class NewCollection extends Component{
             refresh: "NO",
             colls:[],
             whol:[],
+            dons:[],
             colltotalcost: null,
             searchValue: [],
             startDate: "",
@@ -61,6 +62,7 @@ export class NewCollection extends Component{
 
     static propTypes = {
         colls: PropTypes.array.isRequired,
+        dons: PropTypes.array.isRequired,
         total: PropTypes.number.isRequired,
         getCollections: PropTypes.func.isRequired,
         searchCollections: PropTypes.func.isRequired,
@@ -203,7 +205,8 @@ export class NewCollection extends Component{
     handleGetWholesale = (collid) => {
         let collId = collid
         this.props.getWholesale(collId)
-    }
+        this.props.getDonors()
+    };
 
     handleEditWholesale = (e) => {
         e.preventDefault()
@@ -216,10 +219,25 @@ export class NewCollection extends Component{
         let wholesaleReceipt = e.target.WholesaleID.value;
 
         this.props.editWholesale(wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt)
-    }
+    };
+
+    handleAddParticipant = (e) => {
+        e.preventDefault()
+        
+        let CollectionID = e.target.CollectionID.value
+        let DonorID = e.target.DonorID.value
+        let Participation = e.target.Participation.value
+        let DonationType = e.target.DonationType.value
+        let TotalDonated = e.target.TotalDonated.value
+        let DropOffTime = e.target.DropOffTime.value
+        let WholesaleID = e.target.WholesaleID.value
+
+        console.log(DropOffTime)
+    };
+
     
     render(){
-        const {collid, colldate, colltype, colltotalweight, colltotalcost, collphoto, collspreadsheet, whoid, whototaldonated, whototalspent, whoremainder, whoreceipt}=this.state;
+        const {collid, colldate, colltype, colltotalweight, colltotalcost, collphoto, collspreadsheet, whoid, whototaldonated, whototalspent, whoremainder, whoreceipt, dons}=this.state;
         let addModalClose=()=>this.setState({addModalShow:false, refresh: "YES"});
         let editModalClose=()=>this.setState({editModalShow:false, refresh: "YES"});
         let editParticipationClose=()=>this.setState({editParticipationShow:false, refresh: "YES"});
@@ -338,7 +356,7 @@ export class NewCollection extends Component{
                                                 >
                                                     Wholesale
                                                 </Dropdown.Item>
-                                                <AddWholesaleModal show={this.state.editWholesaleShow}
+                                                <EditWholesaleModal show={this.state.editWholesaleShow}
                                                 onHide={editWholesaleClose}
                                                 editwhol={this.handleEditWholesale}
                                                 collid={collid}
@@ -352,14 +370,19 @@ export class NewCollection extends Component{
                                                 <Dropdown.Item onClick={() => 
                                                     this.setState({
                                                         editParticipationShow:true,
-                                                        collid:coll.CollectionID
+                                                        collid:coll.CollectionID,
+                                                        whoid:this.props.whol[0].WholesaleID,
+                                                        dons:this.props.dons
                                                     })}
                                                 >
                                                     Participation
                                                 </Dropdown.Item>
                                                 <EditParticipationModal show={this.state.editParticipationShow}
                                                 onHide={editParticipationClose}
+                                                addpart={this.handleAddParticipant}
                                                 collid={collid}
+                                                whoid={whoid}
+                                                dons={dons}
                                                 />
                                             </Dropdown.Menu>
                                         </Dropdown>
@@ -380,8 +403,9 @@ export class NewCollection extends Component{
 const mapStateToProps = (state) => ({
     colls: state.collections.colls,
     whol: state.wholesale.whol,
+    dons: state.donors.dons,
     result: state.collections.result,
     total: state.collections.total
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale })(NewCollection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors})(NewCollection)

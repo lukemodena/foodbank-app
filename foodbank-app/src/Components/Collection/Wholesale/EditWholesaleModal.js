@@ -1,7 +1,7 @@
 import React from "react";
 import {Button, Col, Form, Row, Modal} from 'react-bootstrap';
 
-export function AddWholesaleModal(props) {
+export function EditWholesaleModal(props) {
     const {
         show,
         onHide,
@@ -22,7 +22,7 @@ export function AddWholesaleModal(props) {
             centered>
                 <Modal.Header closeButton onClick={onHide}>
                     <Modal.Title id='contained-modal-title-vcenter'>
-                        Add Wholesale:
+                        Cash Donations:
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -60,7 +60,7 @@ export function AddWholesaleModal(props) {
                                 </Form.Group>
                                 <Form.Group>
                                     <Button variant='primary' type='submit'>
-                                        Save Wholesale
+                                        Save Cash Donation
                                     </Button>
                                 </Form.Group> 
                             </Form>
