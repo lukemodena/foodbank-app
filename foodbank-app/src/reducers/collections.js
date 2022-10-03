@@ -15,6 +15,8 @@ import {
     OLD_PHOTO_DELETE_FAIL,
     OLD_PHOTO_DELETE_CANCEL,
     CLEAR_COLLECTIONS,
+    COLLECTION_ID_SEARCH_SUCCESS,
+    COLLECTION_ID_SEARCH_FAIL,
     AUTHENTICATED_SUCCESS,
     AUTHENTICATED_FAIL,
 } from '../actions/types';
@@ -138,6 +140,17 @@ export default function(state = initialState, action) {
                 result: '',
                 total: 0,
             }
+
+        case COLLECTION_ID_SEARCH_SUCCESS:
+            return {
+                ...state
+            }
+
+        case COLLECTION_ID_SEARCH_FAIL:
+            return {
+                ...state
+            }
+
     default:
         return state;
     }

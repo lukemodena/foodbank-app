@@ -16,7 +16,11 @@ import {
     COLLECTION_PHOTO_FAIL,
     OLD_PHOTO_DELETE_SUCCESS,
     OLD_PHOTO_DELETE_FAIL,
-    OLD_PHOTO_DELETE_CANCEL
+    OLD_PHOTO_DELETE_CANCEL,
+    COLLECTION_ID_SEARCH_SUCCESS,
+    COLLECTION_ID_SEARCH_FAIL,
+    ADD_WHOLESALE_SUCCESS,
+    ADD_WHOLESALE_FAIL
 } from './types';
 
 // PULL COLLECTION
@@ -101,6 +105,50 @@ export const searchCollections = (monthType, searchInputStart, searchInputEnd) =
     }
 };
 
+// ADD WHOLESALE
+
+export const addWholesale = (collId) => async dispatch => {
+
+    if (localStorage.getItem('token')){
+
+        
+        const config ={
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`,
+                'Accept': 'application/json'
+            }
+        };
+        
+        const body = {
+            "WholesaleID":null,
+            "TotalDonated":"0",
+            "TotalSpent":"0",
+            "Remainder":"0",
+            "WholesaleReceipt":"N/A",
+            "CollectionID":`${collId}`
+        };
+    
+        try {
+            const res = await axios.post('http://127.0.0.1:8000/wholesale', body, config);
+            dispatch({
+                type: ADD_WHOLESALE_SUCCESS,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: ADD_WHOLESALE_FAIL
+            });
+            dispatch(alert('Failed'));
+        }
+    } else {
+        dispatch({
+            type: ADD_WHOLESALE_FAIL
+        });
+        dispatch(alert('Insufficient Credentials'));
+    }
+};
+
 // ADD COLLECTION
 
 export const addCollection = (date, type, totalWeight, totalCost, photo, spreadsheet) => async dispatch => {
@@ -129,6 +177,21 @@ export const addCollection = (date, type, totalWeight, totalCost, photo, spreads
                 type: ADD_COLLECTION_SUCCESS,
                 payload: res.data
             });
+            try {
+                const res = await axios.get(`http://127.0.0.1:8000/searchcollections?startdate=${date}`, config);
+                dispatch({
+                    type: COLLECTION_ID_SEARCH_SUCCESS,
+                    payload: res.data[0].CollectionID
+                });
+
+                const data = await res.data[0].CollectionID
+
+                dispatch(addWholesale(data));
+            } catch (err) {
+                dispatch({
+                    type: COLLECTION_ID_SEARCH_FAIL
+                });
+            }
         } catch (err) {
             dispatch({
                 type: ADD_COLLECTION_FAIL

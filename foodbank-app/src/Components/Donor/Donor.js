@@ -1,125 +1,16 @@
 import React, { Component } from 'react';
-import {Button, Table, Dropdown, Modal, Row, Col, Form} from 'react-bootstrap';
+import {Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BsPlusLg } from "react-icons/bs";
 import PropTypes from 'prop-types';
+
 import { AddDonorModal } from "./AddDonModal";
+import { EditDonorModal } from './EditDonModal';
 import SearchBar from "./SearchBar";
 
 import { getDonors, searchDonors, deleteDonor, editDonor } from '../../actions/donors';
 
-
-// EDIT DONOR MODAL (Function) //
-
-function EditDonorModal(props) {
-    const { 
-        show,
-        onHide,
-        edit,
-        donid,
-        donfirstname,
-        donlastname,
-        donfullname,
-        donemail,
-        donaddress1,
-        donaddress2,
-        donpostcode,
-        dondonortype,
-        donnotes,
-        donphone,
-        donaddemail,
-    } = props
-
-    return (
-        <div className='container'>
-            <Modal
-            show={show}
-            size='lg'
-            aria-labelledby='contained-modal-title-vcenter'
-            centered>
-                <Modal.Header closeButton onClick={onHide}>
-                    <Modal.Title id='contained-modal-title-vcenter'>
-                        Edit Donor: {donfullname}
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Row>
-                        <Col sm={6}>
-                            <Form onSubmit={edit}>
-                                <Form.Group controlId='DonorID'>
-                                    <Form.Label>DonorID</Form.Label>
-                                    <Form.Control type='text' name='DonorID' disabled placeholder='DonorID' defaultValue={donid} />
-                                </Form.Group>
-                                <Form.Group controlId='FirstName'>
-                                    <Form.Label>FirstName</Form.Label>
-                                    <Form.Control type='text' name='FirstName' required placeholder='FirstName' defaultValue={donfirstname} />
-                                </Form.Group>
-                                <Form.Group controlId='LastName'>
-                                    <Form.Label>LastName</Form.Label>
-                                    <Form.Control type='text' name='LastName' required placeholder='LastName' defaultValue={donlastname} />
-                                </Form.Group>
-                                <Form.Group controlId='FullName'>
-                                    <Form.Label>LastName</Form.Label>
-                                    <Form.Control type='text' name='FullName' disabled placeholder='FullName' defaultValue={donfullname}/>
-                                </Form.Group>
-                                <Form.Group controlId='Email'>
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control type='text' name='Email' required placeholder='Email' defaultValue={donemail} />
-                                </Form.Group>
-                                <Form.Group controlId='Address1'>
-                                    <Form.Label>Address1</Form.Label>
-                                    <Form.Control type='text' name='Address1' required placeholder='Address1' defaultValue={donaddress1} />
-                                </Form.Group>
-                                <Form.Group controlId='Address2'>
-                                    <Form.Label>Address2</Form.Label>
-                                    <Form.Control type='text' name='Address2' required placeholder='Address2' defaultValue={donaddress2} />
-                                </Form.Group>
-                                <Form.Group controlId='PostCode'>
-                                    <Form.Label>PostCode</Form.Label>
-                                    <Form.Control type='text' name='PostCode' required placeholder='PostCode' defaultValue={donpostcode} />
-                                </Form.Group>
-                                <Form.Group controlId='DonorType'>
-                                    <Form.Label>DonorType</Form.Label>
-                                    <Form.Select aria-label="DonorType" required defaultValue={dondonortype} >
-                                        <option>Please select donor type...</option>
-                                        <option value="1">1 Month</option>
-                                        <option value="3">3 Months</option>
-                                        <option value="1,spec">1 Month SPECIAL</option>
-                                        <option value="3,spec">3 Months SPECIAL</option>
-                                    </Form.Select>
-                                </Form.Group>  
-                                <Form.Group controlId='Notes'>
-                                    <Form.Label>Notes</Form.Label>
-                                    <Form.Control type='text' name='Notes' required placeholder='Notes' defaultValue={donnotes} />
-                                </Form.Group>
-                                <Form.Group controlId='Phone'>
-                                    <Form.Label>Phone</Form.Label>
-                                    <Form.Control type='text' name='Phone' required placeholder='Phone' defaultValue={donphone} />
-                                </Form.Group>
-                                <Form.Group controlId='AddEmail'>
-                                    <Form.Label>AddEmail</Form.Label>
-                                    <Form.Control type='text' name='AddEmail' required placeholder='AddEmail' defaultValue={donaddemail} />
-                                </Form.Group>
-                                <Form.Group>
-                                    <Button variant='primary' type='submit'>
-                                        Edit Donor
-                                    </Button>
-                                </Form.Group>
-                            </Form>
-                        </Col>
-                    </Row>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant='danger' onClick={onHide}>Close</Button>
-                </Modal.Footer>
-            </Modal>
-        </div>
-    )
-}
-
-
 // MAIN DONORS PAGE //
-
 
 export class NewDonors extends Component {
 
@@ -175,7 +66,6 @@ export class NewDonors extends Component {
     // Handle Data Request (Initial + Refresh)
 
     componentDidMount() {
-        let token = window.localStorage.getItem('token')
         this.props.getDonors();
     }
 
@@ -235,15 +125,15 @@ export class NewDonors extends Component {
         let postCode = e.target.PostCode.value;
         let donorType = e.target.DonorType.value;
         let notes = e.target.Notes.value;
-        let phone = e.target.Phone.value;
-        let addEmail = e.target.AddEmail.value;
+        let phone = e.target.Phone.value
+        let involveNo = e.target.InvolveNo.value
 
-        this.props.editDonor(donorId, fullName, firstName, lastName, email, address1, address2, postCode, donorType, notes, phone, addEmail);
+        this.props.editDonor(donorId, fullName, firstName, lastName, email, address1, address2, postCode, donorType, notes, phone, involveNo);
         this.setState({editModalShow:false, refresh: "YES"});
     }
 
     render() {
-        const {donid, donfullname, donfirstname, donlastname, donemail, donaddress1, donaddress2, donpostcode, dondonortype, donnotes, donphone, donaddemail}=this.state;
+        const {donid, donfullname, donfirstname, donlastname, donemail, donaddress1, donaddress2, donpostcode, dondonortype, donnotes, donphone, doninvolveno}=this.state;
         let addModalClose=()=>this.setState({addModalShow:false, refresh: "YES"});
         let editModalClose=()=>this.setState({editModalShow:false, refresh: "YES"});
 
@@ -301,7 +191,7 @@ export class NewDonors extends Component {
                                 <th>Type</th>
                                 <th>Notes</th>
                                 <th>Phone</th>
-                                <th>Additional Email</th>
+                                <th>No. Donated</th>
                                 <th>Options</th>
                             </tr>
                         </thead>
@@ -319,7 +209,7 @@ export class NewDonors extends Component {
                                     <td>{don.DonorType}</td>
                                     <td>{don.Notes}</td>
                                     <td>{don.Phone}</td>
-                                    <td>{don.AddEmail}</td>
+                                    <td>{don.InvolveNo}</td>
                                     <td>
                                     <Dropdown>
                                         <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -342,7 +232,7 @@ export class NewDonors extends Component {
                                                     dondonortype:don.DonorType,
                                                     donnotes:don.Notes,
                                                     donphone:don.Phone,
-                                                    donaddemail:don.AddEmail
+                                                    doninvolveno:don.InvolveNo
                                                     })}
                                             >
                                                 Edit
@@ -362,7 +252,7 @@ export class NewDonors extends Component {
                                             dondonortype={dondonortype}
                                             donnotes={donnotes}
                                             donphone={donphone}
-                                            donaddemail={donaddemail}
+                                            doninvolveno={doninvolveno}
                                             />
 
                                             {/* Delete Donor */}

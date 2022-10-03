@@ -19,8 +19,7 @@ export class AddDonorForm extends Component{
             Address2:"",
             PostCode:"",
             Notes:"",
-            Phone:"",
-            AddEmail:""
+            Phone:""
         }
     };
 
@@ -77,9 +76,8 @@ export class AddDonorForm extends Component{
         let donorType = e.target.DonorType.value;
         let notes = e.target.Notes.value;
         let phone = e.target.Phone.value;
-        let addEmail = e.target.AddEmail.value;
 
-        this.props.addDonor(fullName, firstName, lastName, email, address1, address2, postCode, donorType, notes, phone, addEmail);
+        this.props.addDonor(fullName, firstName, lastName, email, address1, address2, postCode, donorType, notes, phone);
 
         this.setState({
             fname:"",
@@ -90,8 +88,7 @@ export class AddDonorForm extends Component{
             Address2:"",
             PostCode:"",
             Notes:"",
-            Phone:"",
-            AddEmail:""
+            Phone:""
         })
     }
 
@@ -146,10 +143,6 @@ export class AddDonorForm extends Component{
                     <Form.Group controlId='Phone'>
                         <Form.Label>Phone</Form.Label>
                         <Form.Control type='text' name='Phone' required placeholder='Phone' onChange={this.onChange} value={this.state.Phone}/>
-                    </Form.Group>
-                    <Form.Group controlId='AddEmail'>
-                        <Form.Label>Additional Email</Form.Label>
-                        <Form.Control type='email' name='AddEmail' placeholder='AddEmail' onChange={this.onChange} value={this.state.AddEmail}/>
                     </Form.Group>
                     <Form.Group>
                         <Button variant='primary' type='submit'>

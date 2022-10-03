@@ -1,117 +1,17 @@
 import React,{Component} from "react";
-import {Button, Table, Dropdown, Col, Form, Row, Modal, Image} from 'react-bootstrap';
-import { BsPlusLg, BsDownload } from "react-icons/bs";
+import {Button, Table, Dropdown, Row} from 'react-bootstrap';
+import { BsPlusLg } from "react-icons/bs";
 import SearchBar from "./SearchBar";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { AddCollectionModal } from "./AddCollModal";
+import { EditCollectionModal } from "./EditCollModal";
 import { EditParticipationModal } from "../Participation/Participation";
+import { AddWholesaleModal } from "./Wholesale/AddWholesaleModal";
 
 import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto } from '../../actions/collections';
-
-function EditCollectionModal(props) {
-    const {
-        show,
-        onHide,
-        handleFile,
-        addphoto,
-        collid,
-        colldate,
-        colltype,
-        colltotalweight,
-        colltotalcost,
-        collphoto,
-        collphotourl,
-        collspreadsheet
-    } = props
-    return (
-        <div className='container'>
-            <Modal
-            show={show}
-            size='lg'
-            aria-labelledby='contained-modal-title-vcenter'
-            centered>
-                <Modal.Header closeButton onClick={onHide}>
-                    <Modal.Title id='contained-modal-title-vcenter'>
-                        Edit Collection:
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-
-                    <Row>
-                        <Col sm={6}>
-                            <Form onSubmit={addphoto}>
-                                <Form.Group controlId='CollectionID'>
-                                    <Form.Label>Collection ID</Form.Label>
-                                    <Form.Control type='text' name='CollectionID' disabled placeholder='CollectionID' defaultValue={collid}/>
-                                </Form.Group>
-
-                                <Form.Group controlId='CollectionDate'>
-                                    <Form.Label>Collection Date</Form.Label>
-                                    <Form.Control type='date' name='CollectionDate' required placeholder='CollectionDate' defaultValue={colldate}/>
-                                </Form.Group>
-                                <Form.Group controlId='Type'>
-                                    <Form.Label>Collection Type</Form.Label>
-                                    <Form.Select aria-label="Type" required name='Type' placeholder='Type' defaultValue={colltype}>
-                                        <option>Please select collection type...</option>
-                                        <option value="1">1 Month Drop Off</option>
-                                        <option value="3">3 Month Collection</option>
-                                        <option value="0">CANCELLED</option>
-                                    </Form.Select>
-                                </Form.Group>
-                                <Form.Group controlId='TotalWeight'>
-                                    <Form.Label>Total Weight</Form.Label>
-                                    <Form.Control type='text' name='TotalWeight' required placeholder='TotalWeight' defaultValue={colltotalweight}/>
-                                </Form.Group>
-                                <Form.Group controlId='TotalCost'>
-                                    <Form.Label>Total Cost</Form.Label>
-                                    <Form.Control type='text' name='TotalCost' required placeholder='TotalCost' defaultValue={colltotalcost}/>
-                                </Form.Group>
-                                <Form.Group controlId='CollectionPhoto'>
-                                    <Form.Label>Collection Photo Filename</Form.Label>
-                                    <Form.Control type='text' name='CollectionPhoto' disabled placeholder='CollectionID' defaultValue={collphoto}/>
-                                </Form.Group>
-                                <Form.Group controlId='CollectionSpreadsheet'>
-                                    <Form.Label>CollectionSpreadsheet</Form.Label>
-                                    <Form.Control type='text' name='CollectionSpreadsheet' required placeholder='CollectionSpreadsheet' defaultValue={collspreadsheet}/>
-                                </Form.Group>
-
-                                <Form.Group controlId='photofile' className="mb-3">
-                                    <Form.Label>Collection Photo Upload</Form.Label>
-                                    <Form.Control type="file" name='photofile' onChange={handleFile} />
-                                </Form.Group>
-                                <Form.Group>
-                                    <Button variant='primary' type='submit'>
-                                        Update Collection
-                                    </Button>
-                                </Form.Group> 
-                            </Form>
-                        </Col>
-                        <Col sm={6}>
-                            <Form>
-                                <Form.Group>
-                                    <Image width="200px" height="200px" src={'http://127.0.0.1:8000/media/'+collphoto}/>
-                                </Form.Group>
-
-                                <Form.Group>
-                                    <Button variant="outline-secondary" className="editButton">
-                                        <BsDownload className="editButton-Icon"/>
-                                    </Button>
-                                </Form.Group>
-                             
-                                {/* <Link to={collphotourl} target="_blank" download></Link> */}
-                            </Form>
-                        </Col>
-                    </Row>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant='danger' onClick={onHide}>Close</Button>
-                </Modal.Footer>
-            </Modal>
-        </div>
-    )
-}
+import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
 
 
 export class NewCollection extends Component{
@@ -121,6 +21,7 @@ export class NewCollection extends Component{
         this.state={
             refresh: "NO",
             colls:[],
+            whol:[],
             colltotalcost: null,
             searchValue: [],
             startDate: "",
@@ -166,6 +67,10 @@ export class NewCollection extends Component{
         deleteCollection: PropTypes.func.isRequired,
         editCollection: PropTypes.func.isRequired,
         addCollectionPhoto: PropTypes.func.isRequired,
+        addWholesale: PropTypes.func.isRequired,
+        getWholesale: PropTypes.func.isRequired,
+        editWholesale: PropTypes.func.isRequired,
+        whol: PropTypes.array.isRequired,
         };
 
 
@@ -198,7 +103,7 @@ export class NewCollection extends Component{
     handleFilter = (value, filter) => {
         let monthType = value;
 
-        if (monthType == "0") {
+        if (monthType === "0") {
             this.props.getCollections();
             const total = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
             this.setState({
@@ -294,12 +199,31 @@ export class NewCollection extends Component{
             this.props.addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet);
         }
     };
+
+    handleGetWholesale = (collid) => {
+        let collId = collid
+        this.props.getWholesale(collId)
+    }
+
+    handleEditWholesale = (e) => {
+        e.preventDefault()
+
+        let wholId = e.target.WholesaleID.value;
+        let totalDonated = e.target.WholesaleID.value;
+        let totalSpent = e.target.WholesaleID.value;
+        let collId = e.target.WholesaleID.value;
+        let newDonationVal = e.target.WholesaleID.value;
+        let wholesaleReceipt = e.target.WholesaleID.value;
+
+        this.props.editWholesale(wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt)
+    }
     
     render(){
-        const {collid, colldate, colltype, colltotalweight, colltotalcost, collphoto, collphotourl, collspreadsheet}=this.state;
+        const {collid, colldate, colltype, colltotalweight, colltotalcost, collphoto, collspreadsheet, whoid, whototaldonated, whototalspent, whoremainder, whoreceipt}=this.state;
         let addModalClose=()=>this.setState({addModalShow:false, refresh: "YES"});
         let editModalClose=()=>this.setState({editModalShow:false, refresh: "YES"});
         let editParticipationClose=()=>this.setState({editParticipationShow:false, refresh: "YES"});
+        let editWholesaleClose=()=>this.setState({editWholesaleShow:false, refresh: "YES"});
 
         return(
             <div>
@@ -364,7 +288,7 @@ export class NewCollection extends Component{
                                     <td>{coll.CollectionSpreadsheet}</td>
                                     <td>
                                         
-                                        <Dropdown>
+                                        <Dropdown onToggle={() => this.handleGetWholesale(coll.CollectionID)}>
                                             <Dropdown.Toggle variant="success" id="dropdown-basic">
                                                 ...
                                             </Dropdown.Toggle>
@@ -394,13 +318,36 @@ export class NewCollection extends Component{
                                                 colltotalweight={colltotalweight}
                                                 colltotalcost={colltotalcost}
                                                 collphoto={collphoto}
-                                                collphotourl={collphotourl}
                                                 collspreadsheet={collspreadsheet}
                                                 />
                                                 <Dropdown.Item
                                                 onClick={()=>this.handleDelete(coll.CollectionID)}>
                                                     Delete
                                                 </Dropdown.Item>
+
+                                                <Dropdown.Item onClick={() => 
+                                                    this.setState({
+                                                        editWholesaleShow:true,
+                                                        collid:coll.CollectionID,
+                                                        whoid:this.props.whol[0].WholesaleID,
+                                                        whototaldonated:this.props.whol[0].TotalDonated,
+                                                        whototalspent:this.props.whol[0].TotalSpent,
+                                                        whoremainder:this.props.whol[0].Remainder,
+                                                        whoreceipt:this.props.whol[0].WholesaleReceipt
+                                                    })}
+                                                >
+                                                    Wholesale
+                                                </Dropdown.Item>
+                                                <AddWholesaleModal show={this.state.editWholesaleShow}
+                                                onHide={editWholesaleClose}
+                                                editwhol={this.handleEditWholesale}
+                                                collid={collid}
+                                                whoid={whoid}
+                                                whototaldonated={whototaldonated}
+                                                whototalspent={whototalspent}
+                                                whoremainder={whoremainder}
+                                                whoreceipt={whoreceipt}
+                                                />
 
                                                 <Dropdown.Item onClick={() => 
                                                     this.setState({
@@ -432,8 +379,9 @@ export class NewCollection extends Component{
 
 const mapStateToProps = (state) => ({
     colls: state.collections.colls,
+    whol: state.wholesale.whol,
     result: state.collections.result,
     total: state.collections.total
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto })(NewCollection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale })(NewCollection)
