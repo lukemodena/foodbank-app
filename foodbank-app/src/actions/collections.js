@@ -1,4 +1,4 @@
-import React from "react";
+
 import axios from 'axios';
 
 import {
@@ -262,7 +262,8 @@ export const deleteCollection = (collectionId) => async dispatch => {
         try {
             const res = await axios.delete(`http://127.0.0.1:8000/collection/${collectionId}`, config);
             dispatch({
-                type: DELETE_COLLECTION_SUCCESS
+                type: DELETE_COLLECTION_SUCCESS,
+                payload: res.data
             });
         } catch (err) {
             dispatch({

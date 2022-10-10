@@ -1,7 +1,9 @@
 import React from 'react';
 import {Modal, Button, Row, Col, Form, Dropdown} from 'react-bootstrap';
 
+import dayjs from 'dayjs';
 import { TextField } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import { LocalizationProvider } from '@mui/x-date-pickers/';
 import { TimePicker } from '@mui/x-date-pickers/';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -17,11 +19,39 @@ export function EditParticipationModal(props){
         dons
     } = props
 
-    const [value, setValue] = React.useState(new Date('2014-08-18T00:00:00'));
+    const [value, setValue] = React.useState(dayjs('2022-04-07'));
     const handleChange = (newValue) => {
         setValue(newValue);
       };
 
+    const [donationTypeVal, setDonationTypeVal] = React.useState('')
+    const typeChange = (e) => {
+        setDonationTypeVal(e.target.value);
+    };
+
+    const [totalDonatedVal, setTotalDonatedVal] = React.useState('0')
+    const totDonChange = (e) => {
+        setTotalDonatedVal(e.target.value);
+    };
+
+    const [paymentRecievedVal, setPaymentRecievedVal] = React.useState('false')
+    const payRecChange = (e) => {
+        setPaymentRecievedVal(e.target.value);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        let CollectionID = e.target.CollectionID.value
+        let DonorID = e.target.DonorID.value
+        let PaymentRecieved = paymentRecievedVal
+        let DonationType = e.target.DonationType.value
+        let TotalDonated = totalDonatedVal
+        let DropOffTime = value
+        let WholesaleID = e.target.WholesaleID.value
+
+        addpart(CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, WholesaleID);
+    }
 
 
     return (
@@ -31,7 +61,7 @@ export function EditParticipationModal(props){
             size='lg'
             aria-labelledby='contained-modal-title-vcenter'
             centered>
-                <Modal.Header closeButton onClick={onHide}>
+                <Modal.Header closeButton onClick={() => {setValue('2022-04-07'); setDonationTypeVal(''); setTotalDonatedVal('0'); setPaymentRecievedVal('false'); onHide()}}>
                     <Modal.Title id='contained-modal-title-vcenter'>
                         Add Participating Donor:
                     </Modal.Title>
@@ -40,7 +70,7 @@ export function EditParticipationModal(props){
         
                     <Row>
                         <Col sm={6}>
-                            <Form onSubmit={addpart}>
+                            <Form onSubmit={handleSubmit}>
                                 <Form.Group controlId='CollectionID'>
                                     <Form.Control type='hidden' name='CollectionID' disabled placeholder='CollectionID' defaultValue={collid}/>
                                 </Form.Group>
@@ -57,18 +87,10 @@ export function EditParticipationModal(props){
                                         ))}
                                     </Form.Select>
                                 </Form.Group>
-                                <Form.Group controlId='Participation'>
-                                    <Form.Label>Donor Participating</Form.Label>
-                                    <Form.Select aria-label="Participation" required name='Participation' placeholder='Participation'>
-                                        <option>Please specify...</option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                    </Form.Select>
-                                </Form.Group>
                                 <Form.Group controlId='DonationType'>
                                     <Form.Label>Donation Type</Form.Label>
-                                    <Form.Select aria-label="DonationType" required name='DonationType' placeholder='DonationType'>
-                                        <option>Please specify...</option>
+                                    <Form.Select aria-label="DonationType" required name='DonationType' placeholder='DonationType' onChange={typeChange}>
+                                        <option value="">Please specify...</option>
                                         <option value="0">N/A</option>
                                         <option value="1">Drop-Off</option>
                                         <option value="2">Collection</option>
@@ -77,21 +99,31 @@ export function EditParticipationModal(props){
                                     </Form.Select>
                                 </Form.Group>
                                 <Form.Group controlId='DropOffTime'>
-                                    <Form.Label>Drop-Off Time</Form.Label>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <TimePicker
-                                            label="DropOffTime"
-                                            value={value}
-                                            onChange={handleChange}
-                                            renderInput={(params) => <TextField {...params} />}
-                                        />
-                                    </LocalizationProvider>
+                                    <Stack>
+                                        {(donationTypeVal === '1' || donationTypeVal ===  '4') &&<Form.Label>Drop-Off Time</Form.Label>}
+                                        {(donationTypeVal === '1' || donationTypeVal ===  '4') &&<LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <TimePicker
+                                                label="DropOffTime"
+                                                value={value}
+                                                onChange={handleChange}
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />
+                                        </LocalizationProvider>}
+                                    </Stack>
                                     <Form.Control type='hidden' name='DropOffTime' placeholder='DropOffTime' value={value}/>
                                 </Form.Group>
                                 
                                 <Form.Group controlId='TotalDonated'>
-                                    <Form.Label>Total Donated</Form.Label>
-                                    <Form.Control type='text' name='TotalDonated' required placeholder='TotalDonated'/>
+                                    {donationTypeVal === '3' &&<Form.Label>Total Donated (£)</Form.Label>}
+                                    {donationTypeVal === '3' &&<Form.Control type='text' name='TotalDonated' required placeholder='TotalDonated' defaultValue={totalDonatedVal} onChange={totDonChange}/>}
+                                </Form.Group>
+                                <Form.Group controlId='PaymentRecieved'>
+                                    {donationTypeVal === '3' &&<Form.Label>Payment Recieved</Form.Label>}
+                                    {donationTypeVal === '3' &&<Form.Select aria-label="PaymentRecieved" required name='PaymentRecieved' placeholder='PaymentRecieved' defaultValue={paymentRecievedVal} onChange={payRecChange}>
+                                        <option>Please specify...</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </Form.Select>}
                                 </Form.Group>
                             
                                 <Form.Group>
@@ -107,7 +139,7 @@ export function EditParticipationModal(props){
                     Participant List    
                 </Button> */}
                 <Modal.Footer>
-                    <Button variant='danger' onClick={onHide}>Close</Button>
+                    <Button variant='danger' onClick={() => {setValue('2022-04-07'); setDonationTypeVal(''); setTotalDonatedVal('0'); setPaymentRecievedVal('false'); onHide()}}>Close</Button>
                 </Modal.Footer>
             </Modal>
         </div>

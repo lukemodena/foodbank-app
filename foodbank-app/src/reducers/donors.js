@@ -12,6 +12,8 @@ import {
     CLEAR_DONORS,
     AUTHENTICATED_SUCCESS,
     AUTHENTICATED_FAIL,
+    DONOR_ID_SEARCH_SUCCESS,
+    DONOR_ID_SEARCH_FAIL,
 } from '../actions/types';
 
 const initialState = { 
@@ -101,6 +103,16 @@ export default function(state = initialState, action) {
                 ...state,
                 dons: [],
                 result: ''
+            }
+
+        case DONOR_ID_SEARCH_SUCCESS:
+            return {
+                ...state
+            }
+
+        case DONOR_ID_SEARCH_FAIL:
+            return {
+                ...state
             }
 
     default:

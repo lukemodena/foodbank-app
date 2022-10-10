@@ -1,4 +1,4 @@
-import React from "react";
+
 import axios from 'axios';
 
 import {
@@ -85,6 +85,8 @@ export const addWholesale = (remainder, collId) => async dispatch => {
     }
 };
 
+// EDIT WHOLESALE
+
 export const editWholesale = (wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt) => async dispatch => {
 
     if (localStorage.getItem('token')){
@@ -109,7 +111,7 @@ export const editWholesale = (wholId, totalDonated, totalSpent, collId, newDonat
         };
     
         try {
-            const res = await axios.post('http://127.0.0.1:8000/wholesale', body, config);
+            const res = await axios.put('http://127.0.0.1:8000/wholesale', body, config);
             dispatch({
                 type: EDIT_WHOLESALE_SUCCESS,
                 payload: res.data
@@ -142,7 +144,8 @@ export const deleteCollection = (wholesaleId) => async dispatch => {
         try {
             const res = await axios.delete(`http://127.0.0.1:8000/wholesale/${wholesaleId}`, config);
             dispatch({
-                type: DELETE_WHOLESALE_SUCCESS
+                type: DELETE_WHOLESALE_SUCCESS,
+                payload: res.data
             });
         } catch (err) {
             dispatch({

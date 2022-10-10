@@ -1,20 +1,19 @@
 import {
-    WHOLESALE_SUCCESS,
-    WHOLESALE_FAIL,
-    ADD_WHOLESALE_SUCCESS,
-    ADD_WHOLESALE_FAIL,
-    EDIT_WHOLESALE_SUCCESS,
-    EDIT_WHOLESALE_FAIL,
-    DELETE_WHOLESALE_SUCCESS,
-    DELETE_WHOLESALE_FAIL,
-    WHOLESALE_ID_SUCCESS,
-    WHOLESALE_ID_FAIL
+    PARTICIPATION_SUCCESS,
+    PARTICIPATION_FAIL,
+    ADD_PARTICIPATION_SUCCESS,
+    ADD_PARTICIPATION_FAIL,
+    EDIT_PARTICIPATION_SUCCESS,
+    EDIT_PARTICIPATION_FAIL,
+    DELETE_PARTICIPATION_SUCCESS,
+    DELETE_PARTICIPATION_FAIL,
+    PARTICIPATION_EXISTS,
+    PARTICIPATION_NOT_EXISTS
 } from '../actions/types';
 
 const initialState = { 
-    whol: [],
+    pars: [],
     result: '',
-    remainder: 0,
     isAuthenticated: null
 };
 
@@ -22,62 +21,65 @@ export default function(state = initialState, action) {
     const { type, payload } = action;
     switch(type) {
 
-        case WHOLESALE_SUCCESS:
+        case PARTICIPATION_SUCCESS:
             return {
                 ...state,
-                whol: payload
+                pars: payload
             }
 
-        case WHOLESALE_FAIL:
+        case PARTICIPATION_FAIL:
             return {
                 ...state,
-                whol: []
+                pars: []
             }
 
-        case ADD_WHOLESALE_SUCCESS:
-            return {
-                ...state,
-                result: payload
-            }
-
-        case ADD_WHOLESALE_FAIL:
+        case ADD_PARTICIPATION_SUCCESS:
             return {
                 ...state,
                 result: payload
             }
 
-        case EDIT_WHOLESALE_SUCCESS:
+        case ADD_PARTICIPATION_FAIL:
             return {
                 ...state,
                 result: payload
             }
 
-        case EDIT_WHOLESALE_FAIL:
+        case EDIT_PARTICIPATION_SUCCESS:
             return {
                 ...state,
                 result: payload
             }
 
-        case DELETE_WHOLESALE_SUCCESS:
+        case EDIT_PARTICIPATION_FAIL:
             return {
                 ...state,
                 result: payload
             }
 
-        case DELETE_WHOLESALE_FAIL:
+        case DELETE_PARTICIPATION_SUCCESS:
             return {
                 ...state,
                 result: payload
             }
 
-        case WHOLESALE_ID_SUCCESS:
+        case DELETE_PARTICIPATION_FAIL:
             return {
-                ...state
+                ...state,
+                result: payload
             }
         
-        case WHOLESALE_ID_FAIL:
+        case PARTICIPATION_EXISTS:
+            alert("Donor Already Participating")
             return {
-                ...state
+                ...state,
+                result: payload
+            }
+        
+        case PARTICIPATION_NOT_EXISTS:
+            return {
+                ...state,
+                result: payload
             }
 
     default:

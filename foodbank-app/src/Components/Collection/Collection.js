@@ -13,6 +13,8 @@ import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
 import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto } from '../../actions/collections';
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
 import { getDonors } from "../../actions/donors";
+import { addParticipant, getParticipants, editParticipant, getCurrentParticipants } from "../../actions/participation";
+import moment from "moment/moment";
 
 export class NewCollection extends Component{
 
@@ -23,6 +25,7 @@ export class NewCollection extends Component{
             colls:[],
             whol:[],
             dons:[],
+            pars: [],
             colltotalcost: null,
             searchValue: [],
             startDate: "",
@@ -73,6 +76,11 @@ export class NewCollection extends Component{
         getWholesale: PropTypes.func.isRequired,
         editWholesale: PropTypes.func.isRequired,
         whol: PropTypes.array.isRequired,
+        pars: PropTypes.array.isRequired,
+        addParticipant: PropTypes.func.isRequired,
+        getParticipants: PropTypes.func.isRequired,
+        editParticipant: PropTypes.func.isRequired, 
+        getCurrentParticipants: PropTypes.func.isRequired, 
         };
 
 
@@ -94,7 +102,7 @@ export class NewCollection extends Component{
                 startDate: "",
                 endDate: "",
                 monthValue: "",
-                monthFilter:"All Donors",
+                monthFilter:"All Collections",
                 colltotalcost: total
             });
         }
@@ -221,18 +229,23 @@ export class NewCollection extends Component{
         this.props.editWholesale(wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt)
     };
 
-    handleAddParticipant = (e) => {
-        e.preventDefault()
+    handleAddParticipant = (CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, WholesaleID) => {
         
-        let CollectionID = e.target.CollectionID.value
-        let DonorID = e.target.DonorID.value
-        let Participation = e.target.Participation.value
-        let DonationType = e.target.DonationType.value
-        let TotalDonated = e.target.TotalDonated.value
-        let DropOffTime = e.target.DropOffTime.value
-        let WholesaleID = e.target.WholesaleID.value
+        let colId = CollectionID
+        let donId = DonorID
+        let payRec = PaymentRecieved
+        let donTyp = DonationType
+        let totDon = TotalDonated
+        let time = DropOffTime
+        let whoId = WholesaleID
 
-        console.log(DropOffTime)
+        let droTim = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(time)
+        let CollID = colId
+        let DonID = donId
+        
+        //console.log("CollectionID: ", CollID, "DonorID: ", DonID, "PaymentRec: ", payRec, "DonorType: ", donTyp, "TotalDon: ", totDon, "DropOffTime: ", droTim, "DonorID: ", donId, "CollectionID: ", colId, "WholesaleID: ", whoId)
+        
+        this.props.getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, donId, colId, whoId)
     };
 
     
@@ -404,8 +417,9 @@ const mapStateToProps = (state) => ({
     colls: state.collections.colls,
     whol: state.wholesale.whol,
     dons: state.donors.dons,
+    pars: state.participants.pars,
     result: state.collections.result,
     total: state.collections.total
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors})(NewCollection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors, getParticipants, addParticipant, editParticipant, getCurrentParticipants})(NewCollection)
