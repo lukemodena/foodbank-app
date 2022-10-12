@@ -16,7 +16,8 @@ export function EditParticipationModal(props){
         addpart,
         collid,
         whoid,
-        dons
+        dons,
+        colldate
     } = props
 
     const [value, setValue] = React.useState(dayjs('2022-04-07'));
@@ -42,14 +43,18 @@ export function EditParticipationModal(props){
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        let CollectionID = e.target.CollectionID.value
-        let DonorID = e.target.DonorID.value
-        let PaymentRecieved = paymentRecievedVal
-        let DonationType = e.target.DonationType.value
-        let TotalDonated = totalDonatedVal
-        let DropOffTime = value
-        let WholesaleID = e.target.WholesaleID.value
+        let CollectionID = e.target.CollectionID.value;
+        let DonorID = e.target.DonorID.value;
+        let PaymentRecieved = paymentRecievedVal;
+        let DonationType = e.target.DonationType.value;
+        let TotalDonated = totalDonatedVal;
+        let DropOffTime = value;
+        let WholesaleID = e.target.WholesaleID.value;
 
+        setValue('2022-04-07'); 
+        setDonationTypeVal(''); 
+        setTotalDonatedVal('0'); 
+        setPaymentRecievedVal('false');
         addpart(CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, WholesaleID);
     }
 
@@ -63,7 +68,7 @@ export function EditParticipationModal(props){
             centered>
                 <Modal.Header closeButton onClick={() => {setValue('2022-04-07'); setDonationTypeVal(''); setTotalDonatedVal('0'); setPaymentRecievedVal('false'); onHide()}}>
                     <Modal.Title id='contained-modal-title-vcenter'>
-                        Add Participating Donor:
+                        Add Participating Donor: (Collection {colldate})
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

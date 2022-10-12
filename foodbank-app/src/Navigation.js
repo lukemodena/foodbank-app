@@ -42,6 +42,9 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
             <NavLink className="d-inline p-2 bg-light text-black" to="/collections">
                 Collections
             </NavLink>
+            <NavLink className="d-inline p-2 bg-light text-black" to="/participants">
+                Participants
+            </NavLink>
 
             <NavLink className="d-inline p-2 bg-light text-black ml-auto" to="#!" onClick={handleLogout}>
                 Logout

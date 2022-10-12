@@ -19,8 +19,40 @@ import {
     WHOLESALE_ID_SUCCESS,
     WHOLESALE_ID_FAIL,
     EDIT_WHOLESALE_SUCCESS,
-    EDIT_WHOLESALE_FAIL
+    EDIT_WHOLESALE_FAIL,
+    PARTICIPATION_LIST_SUCCESSFUL,
+    PARTICIPATION_LIST_FAIL
 } from './types';
+
+// GET PARTICIPANT LIST
+
+export const getParticipantList = (CollectionID) => async dispatch => {
+    if (localStorage.getItem('token')) {
+        const config ={
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`,
+                'Accept': 'application/json'
+            }
+        };
+        try {
+            const res = await axios.get(`http://127.0.0.1:8000/listparticipants?collid=${CollectionID}`, config)
+            dispatch({
+                type: PARTICIPATION_LIST_SUCCESSFUL,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: PARTICIPATION_LIST_FAIL
+            });
+        }
+
+    } else {
+        dispatch({
+            type: PARTICIPATION_LIST_FAIL
+        });
+    }
+}
 
 // PULL PARTICIPANTS
 
@@ -34,7 +66,7 @@ export const getParticipants = (CollectionID) => async dispatch => {
                 'Accept': 'application/json'
             }
         };
-    
+        
         try {
             const res = await axios.get(`http://127.0.0.1:8000/searchparticipants?collid=${CollectionID}`, config)
             dispatch({
@@ -262,7 +294,7 @@ export const addParticipant  = (payRec, donTyp, totDon, droTim, donId, colId, wh
 
 // EDIT PARTICIPANTS
 
-export const editParticipant = (parId, payRec, donTyp, totDon, droTim, donId, colId, whoId) => async dispatch => {
+export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -274,15 +306,17 @@ export const editParticipant = (parId, payRec, donTyp, totDon, droTim, donId, co
         };
         
         const body = {
-            "ParticipationID":parseInt(parId),
-            "PaymentRecieved":`${payRec}`,
-            "DonationType":`${donTyp}`,
-            "TotalDonated":`${totDon}`,
-            "DropOffTime":`${droTim}`,
-            "DonorID":parseInt(donId),
-            "CollectionID":parseInt(colId),
-            "WholesaleID":parseInt(whoId)
+            "ParticipationID":parseInt(ParticipantID),
+            "PaymentRecieved":`${PaymentRecieved}`,
+            "DonationType":`${DonationType}`,
+            "TotalDonated":`${TotalDonated}`,
+            "DropOffTime":`${DropOffTime}`,
+            "DonorID":parseInt(DonorID),
+            "CollectionID":parseInt(CollectionID),
+            "WholesaleID":parseInt(WholesaleID)
         };
+
+        let donChange = parseFloat(DonationChange)
     
         try {
             const res = await axios.post('http://127.0.0.1:8000/participants', body, config);
@@ -290,6 +324,10 @@ export const editParticipant = (parId, payRec, donTyp, totDon, droTim, donId, co
                 type: EDIT_PARTICIPATION_SUCCESS,
                 payload: res.data
             });
+
+            if (donChange !== 0) {
+                dispatch(updateWholesale(CollectionID, WholesaleID, donChange));
+            }
         } catch (err) {
             dispatch({
                 type: EDIT_PARTICIPATION_FAIL
@@ -304,9 +342,65 @@ export const editParticipant = (parId, payRec, donTyp, totDon, droTim, donId, co
     }
 };
 
+// UPDATE WHOLESALE (DELETE)
+
+export const updateWholesaleDelete = (wholesaleID, collectionID, DonationVal) => async dispatch => {
+
+    if (localStorage.getItem('token')){
+        const config ={
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`,
+                'Accept': 'application/json'
+            }
+        };
+        
+        try {
+            const res = await axios.get(`http://127.0.0.1:8000/searchwholesale?collid=${collectionID}`, config)
+            dispatch({
+                type: WHOLESALE_ID_SUCCESS
+            });
+            let currentTotal = parseFloat(res.data[0].TotalDonated) - parseFloat(DonationVal);
+            let remainder = currentTotal - parseFloat(res.data[0].TotalSpent);
+
+            const body = {
+                "WholesaleID": `${wholesaleID}`,
+                "TotalDonated": `${currentTotal}`,
+                "TotalSpent": `${res.data[0].TotalSpent}`,
+                "Remainder": `${remainder}`,
+                "WholesaleReceipt": `${res.data[0].WholesaleReceipt}`,
+                "CollectionID": `${res.data[0].CollectionID}`
+            };
+            try {
+                const res = await axios.put('http://127.0.0.1:8000/wholesale', body, config);
+                dispatch({
+                    type: EDIT_WHOLESALE_SUCCESS,
+                    payload: res.data
+                });
+            } catch (err) {
+                dispatch({
+                    type: EDIT_WHOLESALE_FAIL
+                });
+                dispatch(alert('Failed'));
+            }
+
+        } catch (err) {
+            dispatch({
+                type: WHOLESALE_ID_FAIL
+            });
+        }
+        
+    } else {
+        dispatch({
+            type: EDIT_WHOLESALE_FAIL
+        });
+        dispatch(alert('Insufficient Credentials'));
+    }
+};
+
 // DELETE PARTICIPANTS
 
-export const deleteCollection = (participantID, totalDonated) => async dispatch => {
+export const deleteParticipant = (participantID, DonationVal, collectionID, wholesaleID) => async dispatch => {
     if (localStorage.getItem('token')) {
         const config = {
             headers: {
@@ -320,6 +414,8 @@ export const deleteCollection = (participantID, totalDonated) => async dispatch 
             dispatch({
                 type: DELETE_PARTICIPATION_SUCCESS
             });
+
+            dispatch(updateWholesaleDelete(wholesaleID, collectionID, DonationVal));
         } catch (err) {
             dispatch({
                 type: DELETE_PARTICIPATION_FAIL

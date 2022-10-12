@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
-import {Button, Table, Dropdown, Row} from 'react-bootstrap';
+import {Table, Dropdown, Row} from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { BsPlusLg } from "react-icons/bs";
+import dayjs from 'dayjs';
+
 import PropTypes from 'prop-types';
 
-import { AddDonorModal } from "./AddDonModal";
-import { EditDonorModal } from './EditDonModal';
-import SearchBar from "./SearchBar";
+import { EditParticipationModal } from './EditParticipationModal';
 
-import { getDonors, searchDonors, deleteDonor, editDonor } from '../../actions/donors';
+import { getCollections } from '../../actions/collections';
+import { getParticipantList, editParticipant, deleteParticipant, getCurrentParticipants } from '../../actions/participation';
 
 // MAIN DONORS PAGE //
 
-export class NewDonors extends Component {
+export class ParticipationPage extends Component {
 
     // Set Default States
 
@@ -20,192 +20,140 @@ export class NewDonors extends Component {
         super(props);
         this.state={
             refresh: "NO",
-            searchValue: "",
-            monthValue: "",
-            monthFilter:"All Donors",
-            monthOptions: [
-                {
-                    key: 0,
-                    type: "All",
-                    value: "",
-                    filter: "All Donors"
-                },
-                {
-                    key: 1,
-                    type: "Monthly",
-                    value: "1",
-                    filter: "Monthly Donors"
-                },
-                {
-                    key: 2,
-                    type: "3 Months",
-                    value: "3",
-                    filter: "3 Months Donors"
-                },
-                {
-                    key: 3,
-                    type: "Special",
-                    value: "spec",
-                    filter: "Special Donors"
-                }
-            ],
-
+            collectionDate:"Select Collection",
+            collectionID:"Not Specified",
+            value: dayjs('2022-04-07'),
+            donationTypeVal: null,
+            totalDonatedVal: "0",
+            paymentRecievedVal: "false"
         }
     }
 
     // Imported Props
 
     static propTypes = {
-        dons: PropTypes.array.isRequired,
-        getDonors: PropTypes.func.isRequired,
-        searchDonors: PropTypes.func.isRequired,
-        deleteDonor: PropTypes.func.isRequired,
-        editDonor: PropTypes.func.isRequired,
+        parsList: PropTypes.array.isRequired,
+        colls: PropTypes.array.isRequired,
+        getCollections: PropTypes.func.isRequired,
+        getParticipantList: PropTypes.func.isRequired,
+        deleteParticipant: PropTypes.func.isRequired,
+        editParticipant: PropTypes.func.isRequired,
+        getCurrentParticipants: PropTypes.func.isRequired
       };
 
     // Handle Data Request (Initial + Refresh)
 
     componentDidMount() {
-        this.props.getDonors();
+        this.props.getCollections();
     }
 
     componentDidUpdate() {
         if (this.state.refresh === "YES") {
-            this.props.getDonors();
+            let collection = this.state.collectionID;
+            this.props.getParticipantList(collection);
             this.setState({
-                refresh:"NO",
-                searchValue: "",
-                monthValue: "",
-                monthFilter:"All Donors",
+                refresh:"NO"
             });
         }
     }
 
-    // Donor Month Type Filter
+    // Collection Date Picker
 
-    handleFilter = (value, filter) => {
-        let monthType = value;
-        let searchInput = this.state.searchValue;
-        this.props.searchDonors(monthType, searchInput);
+    handleFilter = (CollectionID, CollectionDate) => {
+        let collection = CollectionID;
+        this.props.getParticipantList(collection);
         this.setState({
-            monthValue: monthType,
-            monthFilter: filter
-        })
+            collectionDate: CollectionDate,
+            collectionID: collection
+        });
     }
 
-    // Donor Search
+    // Edit Participant
 
-    handleSearch = (searchValue) => {
-        let monthType = this.state.monthValue;
-        let searchInput = searchValue;
-        this.setState({searchValue: searchInput});
-        this.props.searchDonors(monthType, searchInput);
-    }
+    handleEditParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID) => {
 
-    // Donor Delete
+        this.props.editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID)
+    };
 
-    handleDelete = (donId) => {
+    // Participant Delete
+
+    handleDelete = (parId, parTotDon, collId, wholId) => {
         if(window.confirm('Are you sure?')){
-            this.props.deleteDonor(donId);
+            this.props.deleteParticipant(parId, parTotDon, collId, wholId);
+            this.setState({refresh:"YES"})
         }
     }
 
-    // Donor Update
-
-    handleEditSubmit = (e) => {
-        e.preventDefault()
-        let fullName = e.target.FirstName.value + " " + e.target.LastName.value;
-
-        let donorId = e.target.DonorID.value;
-        let firstName = e.target.FirstName.value;
-        let lastName = e.target.LastName.value;
-        let email = e.target.Email.value;
-        let address1 = e.target.Address1.value;
-        let address2 = e.target.Address2.value;
-        let postCode = e.target.PostCode.value;
-        let donorType = e.target.DonorType.value;
-        let notes = e.target.Notes.value;
-        let phone = e.target.Phone.value
-        let involveNo = e.target.InvolveNo.value
-
-        this.props.editDonor(donorId, fullName, firstName, lastName, email, address1, address2, postCode, donorType, notes, phone, involveNo);
-        this.setState({editModalShow:false, refresh: "YES"});
-    }
-
     render() {
-        const {donid, donfullname, donfirstname, donlastname, donemail, donaddress1, donaddress2, donpostcode, dondonortype, donnotes, donphone, doninvolveno}=this.state;
-        let addModalClose=()=>this.setState({addModalShow:false, refresh: "YES"});
-        let editModalClose=()=>this.setState({editModalShow:false, refresh: "YES"});
+        const {parid, donid, whoid, collid, donfullname, donemail, donaddress1, donaddress2, donpostcode, donnotes, donphone, pardontype, partotdon, partime, parrec}=this.state;
+        let editParticipationClose=()=>this.setState({editParticipationShow:false, refresh: "YES"});
 
-       
+        const typeChanger = (inputValue) => {
+            this.setState({donationTypeVal:inputValue});
+        };
+
+        const handleChange = (newValue) => {
+            this.setState({value:newValue});
+        };
+        
+        const totDonChange = (inputValue) => {
+            this.setState({totalDonatedVal:inputValue});
+        };
+
+        const payRecChange = (inputValue) => {
+            this.setState({paymentRecievedVal:inputValue});
+        };
+    
         return (
             <div>
 
                 <div style={{margin:"auto"}}>
                     <Row>
 
-                        {/* Donor Month Type Filter */}
+                        {/* Collection Filter */}
 
                         <Dropdown className="dropdownFilter">
                             <Dropdown.Toggle className="dropdownFilterButton" variant="outline-secondary" size="sm" id="dropdown-basic">
-                                {this.state.monthFilter}
+                                {this.state.collectionDate}
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                                {this.state.monthOptions.map((option) => (
-                                    <Dropdown.Item key={option.key} onClick={() => this.handleFilter(option.value, option.filter)} href="#/donor">{option.type}</Dropdown.Item>
+                                {this.props.colls.map((coll) => (
+                                    <Dropdown.Item key={coll.CollectionID} onClick={() => this.handleFilter(coll.CollectionID, coll.CollectionDate)} href="#/participants">{coll.CollectionDate}</Dropdown.Item>
                                 ))}
                             </Dropdown.Menu>
                         </Dropdown>
-
-                        {/* Donor Search */}
-
-                        <SearchBar callback={(searchValue) => this.handleSearch(searchValue)}/>
-
-                        {/* Add New Donor Modal */}
-
-                        <Button variant="secondary" className="addButton"
-                        onClick={()=>this.setState({addModalShow:true})}>
-                            <BsPlusLg className="addButton-Icon"/>
-                        </Button>
-                        <AddDonorModal show={this.state.addModalShow}
-                        onHide={addModalClose}/>
 
                     </Row>
 
                 </div>
                 
-                {/* Donor Table */}
+                {/* Participant Table */}
                 <div style={{overflowX:"auto"}}>
                     <Table className="mt-4" striped bordered hover size="sm">
                         <thead>
                             <tr>
-                                <th>Participant ID</th>
+                                <th>ID</th>
                                 <th>Name</th>
                                 <th>Donation Type</th>
                                 <th>Total Donated</th>
-                                <th>Email</th>
+                                <th>Payment Recieved</th>
                                 <th>Drop-Off Time</th>
-                                <th>Donor ID</th>
-                                <th>Collection ID</th>
-                                <th>Wholesale ID</th>
+                                <th>Email</th>
+                                <th>Phone</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {this.props.dons.map((don)=>
-                                <tr key={don.ParticipantID}>
-                                    <td>{don.ParticipantID}</td>
-                                    <td>{don.FullName}</td>
-                                    <td>{don.FirstName}</td>
-                                    <td>{don.LastName}</td>
-                                    <td>{don.Email}</td>
-                                    <td>{don.Address1}</td>
-                                    <td>{don.Address2}</td>
-                                    <td>{don.PostCode}</td>
-                                    <td>{don.DonorType}</td>
-                                    <td>{don.Notes}</td>
-                                    <td>{don.Phone}</td>
-                                    <td>{don.InvolveNo}</td>
+                            {this.props.parsList.map((par)=>
+                                <tr key={par.ParticipationID}>
+                                    <td>{par.ParticipationID}</td>
+                                    <td>{par.FullName}</td>
+                                    <td>{par.DonationType}</td>
+                                    <td>{par.TotalDonated}</td>
+                                    <td>{par.PaymentRecieved}</td>
+                                    <td>{par.DropOffTime}</td>
+                                    <td>{par.Email}</td>
+                                    <td>{par.Phone}</td>
                                     <td>
                                     <Dropdown>
                                         <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -215,47 +163,62 @@ export class NewDonors extends Component {
 
                                             {/* Edit Donor Modal */}
 
-                                            <Dropdown.Item
-                                                onClick={()=>this.setState({editModalShow:true,
-                                                    donid:don.DonorID,
-                                                    donfullname:don.FullName,
-                                                    donfirstname:don.FirstName,
-                                                    donlastname:don.LastName,
-                                                    donemail:don.Email,
-                                                    donaddress1:don.Address1,
-                                                    donaddress2:don.Address2,
-                                                    donpostcode:don.PostCode,
-                                                    dondonortype:don.DonorType,
-                                                    donnotes:don.Notes,
-                                                    donphone:don.Phone,
-                                                    doninvolveno:don.InvolveNo
-                                                    })}
-                                            >
-                                                Edit
+                                            <Dropdown.Item onClick={() => 
+                                                    {this.setState({
+                                                        editParticipationShow:true,
+                                                        parid:par.ParticipationID,
+                                                        donid:par.DonorID,
+                                                        collid:par.CollectionID,
+                                                        whoid:par.WholesaleID,
+                                                        donfullname:par.FullName,
+                                                        donemail:par.Email,
+                                                        donaddress1:par.Address1,
+                                                        donaddress2:par.Address2,
+                                                        donpostcode:par.PostCode,
+                                                        donnotes:par.Notes,
+                                                        donphone:par.Phone,
+                                                        pardontype:par.DonationType,
+                                                        partotdon:par.TotalDonated,
+                                                        partime:dayjs(`2022-04-07 T${par.DropOffTime}`),
+                                                        parrec:par.PaymentRecieved
+                                                    }); 
+                                                    typeChanger(par.DonationType); 
+                                                    handleChange(dayjs(`2022-04-07 T${par.DropOffTime}`));
+                                                    totDonChange(par.TotalDonated);
+                                                    payRecChange(par.PaymentRecieved)}}>
+                                                More Information...
                                             </Dropdown.Item>
-
-                                            <EditDonorModal show={this.state.editModalShow}
-                                            onHide={editModalClose}
-                                            edit={this.handleEditSubmit}
-                                            donid={donid}
-                                            donfirstname={donfirstname}
-                                            donlastname={donlastname}
-                                            donfullname={donfullname}
-                                            donemail={donemail}
-                                            donaddress1={donaddress1}
-                                            donaddress2={donaddress2}
-                                            donpostcode={donpostcode}
-                                            dondonortype={dondonortype}
-                                            donnotes={donnotes}
-                                            donphone={donphone}
-                                            doninvolveno={doninvolveno}
+                                            <EditParticipationModal show={this.state.editParticipationShow}
+                                                onHide={editParticipationClose}
+                                                editpart={this.handleEditParticipant}
+                                                parid={parid}
+                                                donid={donid}
+                                                collid={collid}
+                                                whoid={whoid}
+                                                donfullname={donfullname}
+                                                donemail={donemail}
+                                                donaddress1={donaddress1}
+                                                donaddress2={donaddress2}
+                                                donpostcode={donpostcode}
+                                                donnotes={donnotes}
+                                                donphone={donphone}
+                                                pardontype={pardontype}
+                                                partotdon={partotdon}
+                                                partime={partime}
+                                                parrec={parrec}
+                                                value={this.state.value}
+                                                donationTypeVal={this.state.donationTypeVal}
+                                                typeChanger={typeChanger}
+                                                handleChange={handleChange}
+                                                totalDonatedVal={this.state.totalDonatedVal}
+                                                paymentRecievedVal={this.state.paymentRecievedVal}
+                                                totDonChange={totDonChange}
+                                                payRecChange={payRecChange}
                                             />
-
                                             {/* Delete Donor */}
 
                                             <Dropdown.Item
-                                                onClick={()=>this.handleDelete(don.DonorID)}
-                                            >
+                                                onClick={()=>this.handleDelete(par.ParticipationID, par.TotalDonated, par.CollectionID, par.WholesaleID)}>
                                                 Delete
                                             </Dropdown.Item>
                                         </Dropdown.Menu>
@@ -273,8 +236,9 @@ export class NewDonors extends Component {
 // Reducer
 
 const mapStateToProps = (state) => ({
-    dons: state.participants.pars,
-    result: state.participants.result
+    parsList: state.participants.parsList,
+    result: state.participants.result,
+    colls: state.collections.colls
 });
 
-export default connect(mapStateToProps, { getDonors, searchDonors, deleteDonor, editDonor })(NewDonors)
+export default connect(mapStateToProps, { getCollections, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants })(ParticipationPage)

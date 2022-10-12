@@ -8,11 +8,32 @@ import {
     DELETE_PARTICIPATION_SUCCESS,
     DELETE_PARTICIPATION_FAIL,
     PARTICIPATION_EXISTS,
-    PARTICIPATION_NOT_EXISTS
+    PARTICIPATION_NOT_EXISTS,
+    PARTICIPATION_LIST_SUCCESSFUL,
+    PARTICIPATION_LIST_FAIL
 } from '../actions/types';
 
 const initialState = { 
     pars: [],
+    parsList: [
+        {
+            "ParticipationID": "N/A",
+            "DonorID": "N/A",
+            "WholesaleID": "N/A",
+            "CollectionID": "N/A",
+            "FullName": "N/A",
+            "Email": "N/A",
+            "Phone": "N/A",
+            "Notes": "N/A",
+            "Address1": "N/A",
+            "Address2": "N/A",
+            "PostCode": "N/A",
+            "DonationType": "N/A",
+            "TotalDonated": "N/A",
+            "DropOffTime": "N/A",
+            "PaymentRecieved": "N/A"
+        }
+    ],
     result: '',
     isAuthenticated: null
 };
@@ -20,6 +41,19 @@ const initialState = {
 export default function(state = initialState, action) {
     const { type, payload } = action;
     switch(type) {
+        case PARTICIPATION_LIST_SUCCESSFUL:
+            return {
+                ...state,
+                parsList: payload,
+                result: payload
+            }
+
+        case PARTICIPATION_LIST_FAIL:
+            return {
+                ...state,
+                parsList: [],
+                result: payload
+            }
 
         case PARTICIPATION_SUCCESS:
             return {

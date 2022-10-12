@@ -14,7 +14,6 @@ import { getCollections, searchCollections, deleteCollection, editCollection, ad
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
 import { getDonors } from "../../actions/donors";
 import { addParticipant, getParticipants, editParticipant, getCurrentParticipants } from "../../actions/participation";
-import moment from "moment/moment";
 
 export class NewCollection extends Component{
 
@@ -210,24 +209,30 @@ export class NewCollection extends Component{
         }
     };
 
+    // Get Wholesale
+
     handleGetWholesale = (collid) => {
         let collId = collid
         this.props.getWholesale(collId)
         this.props.getDonors()
     };
 
+    // Edit Wholesale
+
     handleEditWholesale = (e) => {
         e.preventDefault()
 
         let wholId = e.target.WholesaleID.value;
-        let totalDonated = e.target.WholesaleID.value;
-        let totalSpent = e.target.WholesaleID.value;
-        let collId = e.target.WholesaleID.value;
-        let newDonationVal = e.target.WholesaleID.value;
-        let wholesaleReceipt = e.target.WholesaleID.value;
+        let totalDonated = e.target.TotalDonated.value;
+        let totalSpent = e.target.TotalSpent.value;
+        let collId = e.target.CollectionID.value;
+        let newDonationVal = e.target.AddDonation.value;
+        let wholesaleReceipt = e.target.Receipt.value;
 
         this.props.editWholesale(wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt)
     };
+
+    // Add Participant
 
     handleAddParticipant = (CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, WholesaleID) => {
         
@@ -242,8 +247,10 @@ export class NewCollection extends Component{
         let droTim = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(time)
         let CollID = colId
         let DonID = donId
-        
-        //console.log("CollectionID: ", CollID, "DonorID: ", DonID, "PaymentRec: ", payRec, "DonorType: ", donTyp, "TotalDon: ", totDon, "DropOffTime: ", droTim, "DonorID: ", donId, "CollectionID: ", colId, "WholesaleID: ", whoId)
+
+        // Checks if Donor already Participant in collection, 
+        // - If yes, new participant is not added 
+        // - if no, new participant is added + if cash donation wholesale is updated
         
         this.props.getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, donId, colId, whoId)
     };
@@ -302,7 +309,7 @@ export class NewCollection extends Component{
                                 <th>Date</th>
                                 <th>Type</th>
                                 <th>Total Weight</th>
-                                <th>Total Cost</th>
+                                <th>Estimated Cost</th>
                                 <th>Photo</th>
                                 <th>Spreadsheet</th>
                             </tr>
@@ -385,7 +392,8 @@ export class NewCollection extends Component{
                                                         editParticipationShow:true,
                                                         collid:coll.CollectionID,
                                                         whoid:this.props.whol[0].WholesaleID,
-                                                        dons:this.props.dons
+                                                        dons:this.props.dons,
+                                                        colldate:coll.CollectionDate
                                                     })}
                                                 >
                                                     Participation
@@ -396,6 +404,7 @@ export class NewCollection extends Component{
                                                 collid={collid}
                                                 whoid={whoid}
                                                 dons={dons}
+                                                colldate={colldate}
                                                 />
                                             </Dropdown.Menu>
                                         </Dropdown>

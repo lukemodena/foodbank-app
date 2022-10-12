@@ -14,8 +14,8 @@ export class AddCollectionForm extends Component{
         this.state={
             CollectionDate:"",
             Type:"",
-            TotalWeight:"",
-            TotalCost:""
+            TotalWeight:"0",
+            TotalCost:"0"
         }
     };
 
@@ -68,12 +68,12 @@ export class AddCollectionForm extends Component{
                         </Form.Select>
                     </Form.Group> 
                     <Form.Group controlId='TotalWeight'>
-                        <Form.Label>Total Weight</Form.Label>
-                        <Form.Control type='text' name='TotalWeight' required placeholder='TotalWeight' onChange={this.onChange} value={this.state.TotalWeight}/>
+                        <Form.Label>Total Weight (kg)</Form.Label>
+                        <Form.Control type='text' name='TotalWeight' required placeholder='TotalWeight' onChange={this.onChange} value={this.state.TotalWeight} />
                     </Form.Group>
                     <Form.Group controlId='TotalCost'>
-                        <Form.Label>Total Cost</Form.Label>
-                        <Form.Control type='text' name='TotalCost' required placeholder='TotalCost' onChange={this.onChange} value={this.state.TotalCost}/>
+                        <Form.Label>Total Cost (£)</Form.Label>
+                        <Form.Control type='text' name='TotalCost' required placeholder='TotalCost' onChange={this.onChange} value={this.state.TotalCost} />
                     </Form.Group>
                     <Form.Group>
                         <Button variant='primary' type='submit'>
