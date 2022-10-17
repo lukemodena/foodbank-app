@@ -31,6 +31,7 @@ export const getCollections = () => async dispatch => {
         const config ={
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`,
                 'Accept': 'application/json'
             }
         };
@@ -62,6 +63,7 @@ export const searchCollections = (monthType, searchInputStart, searchInputEnd) =
                 const config ={
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Token ${localStorage.getItem('token')}`,
                         'Accept': 'application/json'
                     }
                 };
@@ -82,6 +84,7 @@ export const searchCollections = (monthType, searchInputStart, searchInputEnd) =
                 const config ={
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Token ${localStorage.getItem('token')}`,
                         'Accept': 'application/json'
                     }
                 };
@@ -157,6 +160,7 @@ export const addCollection = (date, type, totalWeight, totalCost, photo, spreads
         const config ={
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`,
                 'Accept': 'application/json'
             }
         };
@@ -288,7 +292,8 @@ export const newCollectionPhoto = (file, photo, collectionId, date, type, totalW
     const formData = new FormData();
     const config = {
         headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Token ${localStorage.getItem('token')}`,
         }
     };
     formData.append(
@@ -323,7 +328,8 @@ export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type
         );
         const config = {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Token ${localStorage.getItem('token')}`,
             }
         };
         const body = formData;

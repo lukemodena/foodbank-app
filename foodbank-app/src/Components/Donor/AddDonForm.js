@@ -140,7 +140,7 @@ export class AddDonorForm extends Component{
                         <Form.Control type='text' name='Notes' required placeholder='Enter any notes...' onChange={this.onChange} value={this.state.Notes}/>
                     </Form.Group>
                     <Form.Group controlId='Phone'>
-                        <Form.Label>Phone</Form.Label>
+                        <Form.Label>Phone Number</Form.Label>
                         <Form.Control type='text' name='Phone' required placeholder='Enter phone number...' onChange={this.onChange} value={this.state.Phone}/>
                     </Form.Group>
                     <Form.Group>
