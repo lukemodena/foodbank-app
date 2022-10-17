@@ -64,6 +64,22 @@
   padding: 1px 6px;
 }
 
+.participation-dropdownFilter {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.participation-dropdownFilterButton {
+  transform: translate(0px, 0px);
+  position: absolute;
+  width: 175.5px;
+  height: 27.07px;
+  color: #000;
+  border: 0.5px solid #C7C7C7;
+  box-sizing: border-box;
+  padding: 1px 6px;
+}
+
 /* Edit Button */
 .editButton {
   background-color: #f0f0f0;
@@ -95,7 +111,7 @@
   border-radius: .2rem;
 }
 
-/* Add Button */
+/* Donor Add Button */
 .addButton {
   transform: translate(451px, 5px);
   position: absolute;
@@ -123,6 +139,8 @@
   color: white;
 }
 
+/* Donor Search */
+
 .searchBar {
   position: absolute;
   transform: translate(183.5px, 0px);
@@ -142,14 +160,30 @@
   border-radius: .2rem .2rem .2rem .2rem;
 }
 
+.searchButton-Icon {
+  transform: translate(-0.5px, -2.5px);
+  width: 25.706px;
+  height: 25.706px;
+  background-color: rgba(0, 0, 0, 0);
+  border: #C7C7C7;
+  color: #000;
+  padding: 1px 1px;
+  border-radius: .2rem;
+  transition: 0.15s;
+}
+
 .searchBarSubmit {
-  transform: translate(185.5px, 0px);
+  transform: translate(218.5px, 0px);
   height: 27.05px;
+  width: 27.07px;
   position: absolute;
+  background-color: rgba(0, 0, 0, 0);
+  color: #000;
+  padding: 1px 1px;
   border-top: 0.5px solid #C7C7C7;
   border-right: 0.5px solid #C7C7C7;
   border-bottom: 0.5px solid #C7C7C7;
-  border-left: 0.5px solid #C7C7C7;
+  border-left: 0px solid #C7C7C7;
   border-radius: 0rem .2rem .2rem 0rem;
   z-index: 0;
   transition: 0.15s;
@@ -159,6 +193,49 @@
   background-color: #6c757d;
   border-color: #6c757d;
   color: white;
+}
+
+/* Collection Add Button */
+
+.date-addButton {
+  transform: translate(451px, 5px);
+  position: absolute;
+  width: 27.07px;
+  height: 27.07px;
+  background-color: #f0f0f0;
+  border: 0.5px solid #C7C7C7;
+  padding: 1px 1px;
+  border-radius: .2rem;
+}
+
+.date-addButton-Icon {
+  transform: translate(0.5px, -2px);
+  width: 13.535px;
+  height: 13.535px;
+  background-color: rgba(0, 0, 0, 0);
+  border: #C7C7C7;
+  color: #000;
+  padding: 1px 1px;
+  border-radius: .2rem;
+  transition: 0.15s;
+}
+
+.date-addButton:hover > .addButton-Icon {
+  color: white;
+}
+
+/* Collection Search */
+
+.date-searchButton-Icon {
+  transform: translate(0.5px, -2px);
+  width: 25.706px;
+  height: 25.706px;
+  background-color: rgba(0, 0, 0, 0);
+  border: #C7C7C7;
+  color: #000;
+  padding: 1px 1px;
+  border-radius: .2rem;
+  transition: 0.15s;
 }
 
 .date-searchBar {
@@ -192,12 +269,16 @@
 
 .date-searchBarSubmit {
   transform: translate(185.5px, 0px);
-  height: 27.05px;
+  height: 27.07px;
+  width: 27.07px;
   position: absolute;
+  background-color: rgba(0, 0, 0, 0);
+  color: #000;
+  padding: 1px 1px;
   border-top: 0.5px solid #C7C7C7;
   border-right: 0.5px solid #C7C7C7;
   border-bottom: 0.5px solid #C7C7C7;
-  border-left: 0.5px solid #C7C7C7;
+  border-left: 0px solid #C7C7C7;
   border-radius: 0rem .2rem .2rem 0rem;
   z-index: 0;
   transition: 0.15s;
@@ -206,6 +287,7 @@
 .date-searchBarSubmit:hover {
   background-color: #6c757d;
   border-color: #6c757d;
+  border-left: 0px;
   color: white;
 }
 
@@ -215,6 +297,13 @@
   }
   .dropdownFilterButton {
     width: 50%;
+  }
+
+  .participation-dropdownFilter {
+    width: 140.7px;
+  }
+  .participation-dropdownFilterButton {
+    width: 140.7px;
   }
 
   .searchBarInput {
@@ -242,6 +331,10 @@
   .addButton {
     transform: translate(390.93px, 5px);
   }
+
+  .date-addButton {
+    transform: translate(390.93px, 5px);
+  }
 }
 
 @media (max-width: 415px) {
@@ -250,6 +343,13 @@
   }
   .dropdownFilterButton {
     width: 50%;
+  }
+
+  .participation-dropdownFilter {
+    width: 140.7px;
+  }
+  .participation-dropdownFilterButton {
+    width: 140.7px;
   }
 
   .searchBarInput {
@@ -276,6 +376,10 @@
   .addButton {
     transform: translate(370.93px, 5px);
   }
+
+  .date-addButton {
+    transform: translate(370.93px, 5px);
+  }
 }
 
 
@@ -285,6 +389,13 @@
   }
   .dropdownFilterButton {
     width: 50%;
+  }
+
+  .participation-dropdownFilter {
+    width: 140.7px;
+  }
+  .participation-dropdownFilterButton {
+    width: 140.7px;
   }
 
   .searchBarInput {
@@ -309,43 +420,71 @@
   .date-searchBarSubmit {
     transform: translate(60.5px, 0px);
   }
+
   .addButton {
+    transform: translate(319px, 5px);
+  }
+
+  .date-addButton {
     transform: translate(319px, 5px);
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 391px) {
   .dropdownFilter {
-    width: 90.7px;
+    width: 140.7px;
   }
   .dropdownFilterButton {
-    width: 90.7px;
+    width: 140.7px;
+  }
+
+  .participation-dropdownFilter {
+    width: 140.7px;
+  }
+  .participation-dropdownFilterButton {
+    width: 140.7px;
   }
 
   .searchBarInput {
     width: 170.5px;
-    transform: translate(-88.5px, 0px);
+    transform: translate(-38.5px, 0px);
   }
 
   .searchBarSubmit {
-    transform: translate(21.5px, 0px);
+    transform: translate(105.5px, 0px);
   }
 
   .date-searchBarInput-start {
     width: 56.25px;
-    transform: translate(-88.5px, 0px);
+    transform: translate(-38.5px, 0px);
   }
 
   .date-searchBarInput-end {
     width: 56.25px;
-    transform: translate(-32.25px, 0px);
+    transform: translate(17.75px, 0px);
   }
 
   .date-searchBarSubmit {
-    transform: translate(22.5px, 0px);
+    transform: translate(72.5px, 0px);
+  }
+
+  .searchButton-Icon {
+    transform: translate(-0.5px, -0.1px);
+  }
+
+  .date-searchButton-Icon {
+    transform: translate(0.5px, -0.1px);
   }
 
   .addButton {
-    transform: translate(282.5px, 5px);
+    transform: translate(332.5px, 5px);
+  }
+
+  .date-addButton {
+    transform: translate(299px, 5px);
+  }
+
+  .totalButton {
+    transform: translate(330px, 5px);
   }
 }

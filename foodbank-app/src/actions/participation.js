@@ -36,7 +36,7 @@ export const getParticipantList = (CollectionID) => async dispatch => {
             }
         };
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/listparticipants?collid=${CollectionID}`, config)
+            const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?collid=${CollectionID}`, config)
             dispatch({
                 type: PARTICIPATION_LIST_SUCCESSFUL,
                 payload: res.data
@@ -68,7 +68,7 @@ export const getParticipants = (CollectionID) => async dispatch => {
         };
         
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/searchparticipants?collid=${CollectionID}`, config)
+            const res = await axios.get(`${process.env.REACT_APP_API}searchparticipants?collid=${CollectionID}`, config)
             dispatch({
                 type: PARTICIPATION_SUCCESS,
                 payload: res.data
@@ -99,7 +99,7 @@ export const getCurrentParticipants = (CollectionID, DonorID, payRec, donTyp, to
         };
     
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/searchparticipants?collid=${CollectionID}&donid=${DonorID}`, config)
+            const res = await axios.get(`${process.env.REACT_APP_API}searchparticipants?collid=${CollectionID}&donid=${DonorID}`, config)
             if (`${res.data[0].DonorID}` === DonorID){
                 dispatch({
                     type: PARTICIPATION_EXISTS,
@@ -141,7 +141,7 @@ export const updateDonor = (donorId) => async dispatch => {
             }
         };
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/searchdonors?donid=${donorId}`, config)
+            const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?donid=${donorId}`, config)
             dispatch({
                 type: DONOR_ID_SEARCH_SUCCESS
             });
@@ -164,7 +164,7 @@ export const updateDonor = (donorId) => async dispatch => {
             };
     
             try {
-                const res = await axios.put('http://127.0.0.1:8000/donor', body, config);
+                const res = await axios.put(`${process.env.REACT_APP_API}donor`, body, config);
                 dispatch({
                     type: EDIT_DONOR_SUCCESS,
                     payload: res.data
@@ -203,7 +203,7 @@ export const updateWholesale = (CollectionID, wholesaleID, newDonationVal) => as
         };
         
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/searchwholesale?collid=${CollectionID}`, config)
+            const res = await axios.get(`${process.env.REACT_APP_API}searchwholesale?collid=${CollectionID}`, config)
             dispatch({
                 type: WHOLESALE_ID_SUCCESS
             });
@@ -219,7 +219,7 @@ export const updateWholesale = (CollectionID, wholesaleID, newDonationVal) => as
                 "CollectionID": `${res.data[0].CollectionID}`
             };
             try {
-                const res = await axios.put('http://127.0.0.1:8000/wholesale', body, config);
+                const res = await axios.put(`${process.env.REACT_APP_API}wholesale`, body, config);
                 dispatch({
                     type: EDIT_WHOLESALE_SUCCESS,
                     payload: res.data
@@ -271,7 +271,7 @@ export const addParticipant  = (payRec, donTyp, totDon, droTim, donId, colId, wh
         };
     
         try {
-            const res = await axios.post('http://127.0.0.1:8000/participants', body, config);
+            const res = await axios.post(`${process.env.REACT_APP_API}participants`, body, config);
             dispatch({
                 type: ADD_PARTICIPATION_SUCCESS,
                 payload: res.data
@@ -319,7 +319,7 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
         let donChange = parseFloat(DonationChange)
     
         try {
-            const res = await axios.post('http://127.0.0.1:8000/participants', body, config);
+            const res = await axios.post(`${process.env.REACT_APP_API}participants`, body, config);
             dispatch({
                 type: EDIT_PARTICIPATION_SUCCESS,
                 payload: res.data
@@ -356,7 +356,7 @@ export const updateWholesaleDelete = (wholesaleID, collectionID, DonationVal) =>
         };
         
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/searchwholesale?collid=${collectionID}`, config)
+            const res = await axios.get(`${process.env.REACT_APP_API}searchwholesale?collid=${collectionID}`, config)
             dispatch({
                 type: WHOLESALE_ID_SUCCESS
             });
@@ -372,7 +372,7 @@ export const updateWholesaleDelete = (wholesaleID, collectionID, DonationVal) =>
                 "CollectionID": `${res.data[0].CollectionID}`
             };
             try {
-                const res = await axios.put('http://127.0.0.1:8000/wholesale', body, config);
+                const res = await axios.put(`${process.env.REACT_APP_API}wholesale`, body, config);
                 dispatch({
                     type: EDIT_WHOLESALE_SUCCESS,
                     payload: res.data
@@ -410,7 +410,7 @@ export const deleteParticipant = (participantID, DonationVal, collectionID, whol
             }
         };
         try {
-            const res = await axios.delete(`http://127.0.0.1:8000/participants/${participantID}`, config);
+            const res = await axios.delete(`${process.env.REACT_APP_API}participants/${participantID}`, config);
             dispatch({
                 type: DELETE_PARTICIPATION_SUCCESS
             });

@@ -11,7 +11,7 @@ export class AddCollectionModal extends Component{
     };
 
     photofilename = "anonymous.png";
-    imagesrc = 'http://127.0.0.1:8000/media/'+this.photofilename;
+    imagesrc = `${process.env.REACT_APP_API}media/`+this.photofilename;
 
     render() {
 

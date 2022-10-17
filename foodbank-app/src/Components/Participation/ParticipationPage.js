@@ -84,6 +84,32 @@ export class ParticipationPage extends Component {
         }
     }
 
+    // Participant Type
+
+    handleParticipantType = (inputValue) => {
+        let participantType = inputValue;
+
+        if (participantType === "0") {
+            let type = "N/A"
+            return type
+        } else if (participantType === "1") {
+            let type = "Drop-Off"
+            return type
+        } else if (participantType === "2") {
+            let type = "Collection"
+            return type
+        } else if (participantType === "3") {
+            let type = "Cash Donation"
+            return type
+        } else if (participantType === "4") {
+            let type = "Online Order"
+            return type
+        } else {
+            let type = "N/A"
+            return type
+        }
+    };
+
     render() {
         const {parid, donid, whoid, collid, donfullname, donemail, donaddress1, donaddress2, donpostcode, donnotes, donphone, pardontype, partotdon, partime, parrec}=this.state;
         let editParticipationClose=()=>this.setState({editParticipationShow:false, refresh: "YES"});
@@ -112,8 +138,8 @@ export class ParticipationPage extends Component {
 
                         {/* Collection Filter */}
 
-                        <Dropdown className="dropdownFilter">
-                            <Dropdown.Toggle className="dropdownFilterButton" variant="outline-secondary" size="sm" id="dropdown-basic">
+                        <Dropdown className="participation-dropdownFilter">
+                            <Dropdown.Toggle className="participation-dropdownFilterButton" variant="outline-secondary" size="sm" id="dropdown-basic">
                                 {this.state.collectionDate}
                             </Dropdown.Toggle>
 
@@ -134,6 +160,7 @@ export class ParticipationPage extends Component {
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Options</th>
                                 <th>Name</th>
                                 <th>Donation Type</th>
                                 <th>Total Donated</th>
@@ -147,13 +174,6 @@ export class ParticipationPage extends Component {
                             {this.props.parsList.map((par)=>
                                 <tr key={par.ParticipationID}>
                                     <td>{par.ParticipationID}</td>
-                                    <td>{par.FullName}</td>
-                                    <td>{par.DonationType}</td>
-                                    <td>{par.TotalDonated}</td>
-                                    <td>{par.PaymentRecieved}</td>
-                                    <td>{par.DropOffTime}</td>
-                                    <td>{par.Email}</td>
-                                    <td>{par.Phone}</td>
                                     <td>
                                     <Dropdown>
                                         <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -224,6 +244,14 @@ export class ParticipationPage extends Component {
                                         </Dropdown.Menu>
                                     </Dropdown>
                                     </td>
+                                    <td>{par.FullName}</td>
+                                    <td>{this.handleParticipantType(par.DonationType)}</td>
+                                    <td>{par.TotalDonated}</td>
+                                    <td>{par.PaymentRecieved}</td>
+                                    <td>{par.DropOffTime}</td>
+                                    <td>{par.Email}</td>
+                                    <td>{par.Phone}</td>
+                                    
                                 </tr>)}
                         </tbody>
                     </Table>

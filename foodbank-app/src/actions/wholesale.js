@@ -26,7 +26,7 @@ export const getWholesale = (CollectionID) => async dispatch => {
         };
     
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/searchwholesale?collid=${CollectionID}`, config)
+            const res = await axios.get(`${process.env.REACT_APP_API}searchwholesale?collid=${CollectionID}`, config)
             dispatch({
                 type: WHOLESALE_SUCCESS,
                 payload: res.data
@@ -66,7 +66,7 @@ export const addWholesale = (remainder, collId) => async dispatch => {
         };
     
         try {
-            const res = await axios.post('http://127.0.0.1:8000/wholesale', body, config);
+            const res = await axios.post(`${process.env.REACT_APP_API}wholesale`, body, config);
             dispatch({
                 type: ADD_WHOLESALE_SUCCESS,
                 payload: res.data
@@ -111,7 +111,7 @@ export const editWholesale = (wholId, totalDonated, totalSpent, collId, newDonat
         };
     
         try {
-            const res = await axios.put('http://127.0.0.1:8000/wholesale', body, config);
+            const res = await axios.put(`${process.env.REACT_APP_API}wholesale`, body, config);
             dispatch({
                 type: EDIT_WHOLESALE_SUCCESS,
                 payload: res.data
@@ -142,7 +142,7 @@ export const deleteCollection = (wholesaleId) => async dispatch => {
             }
         };
         try {
-            const res = await axios.delete(`http://127.0.0.1:8000/wholesale/${wholesaleId}`, config);
+            const res = await axios.delete(`${process.env.REACT_APP_API}wholesale/${wholesaleId}`, config);
             dispatch({
                 type: DELETE_WHOLESALE_SUCCESS,
                 payload: res.data

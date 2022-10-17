@@ -30,7 +30,7 @@ export const getDonors = () => async dispatch => {
         };
     
         try {
-            const res = await axios.get('http://127.0.0.1:8000/searchdonors', config)
+            const res = await axios.get(`${process.env.REACT_APP_API}searchdonors`, config)
             dispatch({
                 type: DONORS_SUCCESS,
                 payload: res.data
@@ -64,7 +64,7 @@ export const searchDonors = (monthType, searchInput) => async dispatch => {
 
             if (searchInput == null || searchInput === ""){
                 try {
-                    const res = await axios.get('http://127.0.0.1:8000/searchdonors/threemonthdonortype', config)
+                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors/threemonthdonortype`, config)
                     dispatch({
                         type: DONOR_SEARCH_SUCCESS,
                         payload: res.data
@@ -77,7 +77,7 @@ export const searchDonors = (monthType, searchInput) => async dispatch => {
                 }
             } else {
                 try {
-                    const res = await axios.get(`http://127.0.0.1:8000/searchdonors?search=1&?search=3&fullname=${searchInput}`, config)
+                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?search=1&?search=3&fullname=${searchInput}`, config)
                     dispatch({
                         type: DONOR_SEARCH_SUCCESS,
                         payload: res.data
@@ -100,7 +100,7 @@ export const searchDonors = (monthType, searchInput) => async dispatch => {
                         }
                     };
 
-                    const res = await axios.get(`http://127.0.0.1:8000/searchdonors?search=${monthType}`, config)
+                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?search=${monthType}`, config)
                     dispatch({
                         type: DONOR_SEARCH_SUCCESS,
                         payload: res.data
@@ -121,7 +121,7 @@ export const searchDonors = (monthType, searchInput) => async dispatch => {
                         }
                     };
                     
-                    const res = await axios.get(`http://127.0.0.1:8000/searchdonors?search=${monthType}&fullname=${searchInput}`, config)
+                    const res = await axios.get(`${process.env.REACT_APP_API}searchdonors?search=${monthType}&fullname=${searchInput}`, config)
                     dispatch({
                         type: DONOR_SEARCH_SUCCESS,
                         payload: res.data
@@ -169,7 +169,7 @@ export const addDonor = (fullName, firstName, lastName, email, address1, address
         };
     
         try {
-            const res = await axios.post('http://127.0.0.1:8000/donor', body, config);
+            const res = await axios.post(`${process.env.REACT_APP_API}donor`, body, config);
             dispatch({
                 type: ADD_DONOR_SUCCESS,
                 payload: res.data
@@ -217,7 +217,7 @@ export const editDonor = (donorId, fullName, firstName, lastName, email, address
         };
     
         try {
-            const res = await axios.put('http://127.0.0.1:8000/donor', body, config);
+            const res = await axios.put(`${process.env.REACT_APP_API}donor`, body, config);
             dispatch({
                 type: EDIT_DONOR_SUCCESS,
                 payload: res.data
@@ -249,7 +249,7 @@ export const deleteDonor = (donorId) => async dispatch => {
             }
         };
         try {
-            const res = await axios.delete(`http://127.0.0.1:8000/donor/${donorId}`, config);
+            const res = await axios.delete(`${process.env.REACT_APP_API}donor/${donorId}`, config);
             dispatch({
                 type: DELETE_DONOR_SUCCESS,
                 payload: res.data

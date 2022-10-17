@@ -1,4 +1,6 @@
 import React,{useState} from 'react';
+import { Button } from 'react-bootstrap';
+import { BsArrowRightShort } from 'react-icons/bs';
 
 const SearchBar = ({callback}) => {
     const [innerValue, setInnerValue] = useState("");
@@ -15,7 +17,7 @@ const SearchBar = ({callback}) => {
             value={innerValue} 
             onChange={(e) => setInnerValue(e.target.value)} 
         />
-        <input className='searchBarSubmit' type="submit" value="Search" />
+        <Button variant="secondary" className='searchBarSubmit' type="submit" ><BsArrowRightShort className="searchButton-Icon"/></Button>
     </form>
   )
 }

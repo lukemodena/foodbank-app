@@ -14,10 +14,8 @@ import {HashRouter as Router, Route, Routes} from 'react-router-dom';
 
 import { Provider } from 'react-redux';
 import store from './store';
-import PrivateRoute from './Components/common/PrivateRoute';
 
 function App() {
-  let authenticated = window.localStorage.getItem('isAuthenticated');
   
   return (
     <Provider store={store}>
@@ -30,7 +28,6 @@ function App() {
             <Routes>
               <Route exact path='/' element={<Home/>}/>
               <Route path='/donor' element={<Donor/>}/>
-              {/* {authenticated && <Route path='/donor' element={<Donor/>}/>} */}
               <Route path='/collections' element={<Collection/>}/>
               <Route exact path='/login' element={<NewLogin/>}/>
               <Route exact path='/register' element={<Register/>}/>

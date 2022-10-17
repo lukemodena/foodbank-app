@@ -34,8 +34,7 @@ export function EditCollectionModal(props) {
                         <Col sm={6}>
                             <Form onSubmit={addphoto}>
                                 <Form.Group controlId='CollectionID'>
-                                    <Form.Label>Collection ID</Form.Label>
-                                    <Form.Control type='text' name='CollectionID' disabled placeholder='CollectionID' defaultValue={collid}/>
+                                    <Form.Control type='hidden' name='CollectionID' disabled placeholder='CollectionID' defaultValue={collid}/>
                                 </Form.Group>
 
                                 <Form.Group controlId='CollectionDate'>
@@ -60,8 +59,7 @@ export function EditCollectionModal(props) {
                                     <Form.Control type='text' name='TotalCost' required placeholder='TotalCost' defaultValue={colltotalcost}/>
                                 </Form.Group>
                                 <Form.Group controlId='CollectionPhoto'>
-                                    <Form.Label>Collection Photo Filename</Form.Label>
-                                    <Form.Control type='text' name='CollectionPhoto' disabled placeholder='CollectionID' defaultValue={collphoto}/>
+                                    <Form.Control type='hidden' name='CollectionPhoto' disabled placeholder='CollectionID' defaultValue={collphoto}/>
                                 </Form.Group>
                                 <Form.Group controlId='CollectionSpreadsheet'>
                                     <Form.Label>CollectionSpreadsheet</Form.Label>
@@ -82,7 +80,7 @@ export function EditCollectionModal(props) {
                         <Col sm={6}>
                             <Form>
                                 <Form.Group>
-                                    <Image width="200px" height="200px" src={'http://127.0.0.1:8000/media/'+collphoto}/>
+                                    <Image width="200px" height="200px" src={`${process.env.REACT_APP_API}media/photos/`+collphoto}/>
                                 </Form.Group>
 
                                 <Form.Group>

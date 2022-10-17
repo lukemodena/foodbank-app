@@ -25,7 +25,7 @@ export const checkAuthenticated = () => async dispatch => {
         };
 
         try {
-            const res = await axios.get('http://127.0.0.1:8000/api/auth/user', config)
+            const res = await axios.get(`${process.env.REACT_APP_API}api/auth/user`, config)
             dispatch({
                 type: AUTHENTICATED_SUCCESS,
                 payload: res.data
@@ -58,7 +58,7 @@ export const login = (username, password) => async dispatch => {
     };
 
     try {
-        const res = await axios.post('http://127.0.0.1:8000/api/auth/login', body, config);
+        const res = await axios.post(`${process.env.REACT_APP_API}api/auth/login`, body, config);
         dispatch({
             type: LOGIN_SUCCESS,
             payload: res.data
@@ -82,7 +82,7 @@ export const load_user = () => async dispatch => {
             }
         };
         try {
-            const res = await axios.get('http://127.0.0.1:8000/api/auth/user', config);
+            const res = await axios.get(`${process.env.REACT_APP_API}api/auth/user`, config);
             dispatch({
                 type: LOAD_USER_SUCCESS,
                 payload: res.data
@@ -109,7 +109,7 @@ export const logout = () => async dispatch => {
     };
 
     try {    
-        const res = await axios.post('http://127.0.0.1:8000/api/auth/logout', null, config);
+        const res = await axios.post(`${process.env.REACT_APP_API}api/auth/logout`, null, config);
         dispatch({ type: 'CLEAR_DONORS' });
         dispatch({ type: 'CLEAR_COLLECTIONS' });
         dispatch({

@@ -18,7 +18,7 @@ export class AddDonorForm extends Component{
             Address1:"",
             Address2:"",
             PostCode:"",
-            Notes:"",
+            Notes:"N/A",
             Phone:""
         }
     };
@@ -87,7 +87,7 @@ export class AddDonorForm extends Component{
             Address1:"",
             Address2:"",
             PostCode:"",
-            Notes:"",
+            Notes:"N/A",
             Phone:""
         })
     }
@@ -100,31 +100,30 @@ export class AddDonorForm extends Component{
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group controlId='FirstName'>
                         <Form.Label>First Name</Form.Label>
-                        <Form.Control type='text' name='FirstName' required placeholder='FirstName' onChange={this.handleFirstName} value={this.state.fname}/>
+                        <Form.Control type='text' name='FirstName' required placeholder='Enter first name...' onChange={this.handleFirstName} value={this.state.fname}/>
                     </Form.Group>
                     <Form.Group controlId='LastName'>
                         <Form.Label>Last Name</Form.Label>
-                        <Form.Control type='text' name='LastName' required placeholder='LastName' onChange={this.handleLastName} value={this.state.lname}/>
+                        <Form.Control type='text' name='LastName' required placeholder='Enter last name...' onChange={this.handleLastName} value={this.state.lname}/>
                     </Form.Group>
                     <Form.Group controlId='FullName'>
-                        <Form.Label>Full Name</Form.Label>
-                        <Form.Control type='text' name='FullName' disabled placeholder='FullName' value={this.state.fullname}/>
+                        <Form.Control type='hidden' name='FullName' disabled placeholder='FullName' value={this.state.fullname}/>
                     </Form.Group>
                     <Form.Group controlId='Email'>
                         <Form.Label>Email</Form.Label>
-                        <Form.Control type='email' name='Email' required placeholder='Email' onChange={this.onChange} value={this.state.Email}/>
+                        <Form.Control type='email' name='Email' required placeholder='Enter email...' onChange={this.onChange} value={this.state.Email}/>
                     </Form.Group>
                     <Form.Group controlId='Address1'>
                         <Form.Label>Address Line 1</Form.Label>
-                        <Form.Control type='text' name='Address1' required placeholder='Address1' onChange={this.onChange} value={this.state.Address1}/>
+                        <Form.Control type='text' name='Address1' required placeholder='Enter address line 1...' onChange={this.onChange} value={this.state.Address1}/>
                     </Form.Group>
                     <Form.Group controlId='Address2'>
                         <Form.Label>Address Line 2</Form.Label>
-                        <Form.Control type='text' name='Address2' required placeholder='Address2' onChange={this.onChange} value={this.state.Address2}/>
+                        <Form.Control type='text' name='Address2' required placeholder='Enter address line 2...' onChange={this.onChange} value={this.state.Address2}/>
                     </Form.Group>
                     <Form.Group controlId='PostCode'>
                         <Form.Label>Postal Code</Form.Label>
-                        <Form.Control type='text' name='PostCode' required placeholder='PostCode' onChange={this.onChange} value={this.state.PostCode}/>
+                        <Form.Control type='text' name='PostCode' required placeholder='Enter postcode...' onChange={this.onChange} value={this.state.PostCode}/>
                     </Form.Group>
                     <Form.Group controlId='DonorType'>
                         <Form.Label>Donor Type</Form.Label>
@@ -138,11 +137,11 @@ export class AddDonorForm extends Component{
                     </Form.Group>    
                     <Form.Group controlId='Notes'>
                         <Form.Label>Notes</Form.Label>
-                        <Form.Control type='text' name='Notes' required placeholder='Notes' onChange={this.onChange} value={this.state.Notes}/>
+                        <Form.Control type='text' name='Notes' required placeholder='Enter any notes...' onChange={this.onChange} value={this.state.Notes}/>
                     </Form.Group>
                     <Form.Group controlId='Phone'>
                         <Form.Label>Phone</Form.Label>
-                        <Form.Control type='text' name='Phone' required placeholder='Phone' onChange={this.onChange} value={this.state.Phone}/>
+                        <Form.Control type='text' name='Phone' required placeholder='Enter phone number...' onChange={this.onChange} value={this.state.Phone}/>
                     </Form.Group>
                     <Form.Group>
                         <Button variant='primary' type='submit'>

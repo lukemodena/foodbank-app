@@ -36,7 +36,7 @@ export const getCollections = () => async dispatch => {
         };
     
         try {
-            const res = await axios.get('http://127.0.0.1:8000/searchcollections', config)
+            const res = await axios.get(`${process.env.REACT_APP_API}searchcollections`, config)
             dispatch({
                 type: COLLECTIONS_SUCCESS,
                 payload: res.data
@@ -66,7 +66,7 @@ export const searchCollections = (monthType, searchInputStart, searchInputEnd) =
                     }
                 };
 
-                const res = await axios.get(`http://127.0.0.1:8000/searchcollections?type=${monthType}`, config)
+                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?type=${monthType}`, config)
                 dispatch({
                     type: COLLECTION_SEARCH_SUCCESS,
                     payload: res.data
@@ -86,7 +86,7 @@ export const searchCollections = (monthType, searchInputStart, searchInputEnd) =
                     }
                 };
                 
-                const res = await axios.get(`http://127.0.0.1:8000/searchcollections?startdate=${searchInputStart}&enddate=${searchInputEnd}&search=${monthType}`, config)
+                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?startdate=${searchInputStart}&enddate=${searchInputEnd}&search=${monthType}`, config)
                 dispatch({
                     type: COLLECTION_SEARCH_SUCCESS,
                     payload: res.data
@@ -130,7 +130,7 @@ export const addWholesale = (collId) => async dispatch => {
         };
     
         try {
-            const res = await axios.post('http://127.0.0.1:8000/wholesale', body, config);
+            const res = await axios.post(`${process.env.REACT_APP_API}wholesale`, body, config);
             dispatch({
                 type: ADD_WHOLESALE_SUCCESS,
                 payload: res.data
@@ -172,13 +172,13 @@ export const addCollection = (date, type, totalWeight, totalCost, photo, spreads
         };
     
         try {
-            const res = await axios.post('http://127.0.0.1:8000/collection', body, config);
+            const res = await axios.post(`${process.env.REACT_APP_API}collection`, body, config);
             dispatch({
                 type: ADD_COLLECTION_SUCCESS,
                 payload: res.data
             });
             try {
-                const res = await axios.get(`http://127.0.0.1:8000/searchcollections?startdate=${date}`, config);
+                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?startdate=${date}`, config);
                 dispatch({
                     type: COLLECTION_ID_SEARCH_SUCCESS,
                     payload: res.data[0].CollectionID
@@ -214,6 +214,7 @@ export const editCollection = (collectionId, date, type, totalWeight, totalCost,
         const config ={
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`,
                 'Accept': 'application/json'
             }
         };
@@ -229,7 +230,7 @@ export const editCollection = (collectionId, date, type, totalWeight, totalCost,
         };
     
         try {
-            const res = await axios.put('http://127.0.0.1:8000/collection', body, config);
+            const res = await axios.put(`${process.env.REACT_APP_API}collection`, body, config);
             dispatch({
                 type: EDIT_COLLECTION_SUCCESS,
                 payload: res.data
@@ -238,6 +239,7 @@ export const editCollection = (collectionId, date, type, totalWeight, totalCost,
         } catch (err) {
             dispatch({
                 type: EDIT_COLLECTION_FAIL
+
             });
             dispatch(alert('Failed'));
         }
@@ -256,11 +258,12 @@ export const deleteCollection = (collectionId) => async dispatch => {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`,
                 'Accept': 'application/json'
             }
         };
         try {
-            const res = await axios.delete(`http://127.0.0.1:8000/collection/${collectionId}`, config);
+            const res = await axios.delete(`${process.env.REACT_APP_API}collection/${collectionId}`, config);
             dispatch({
                 type: DELETE_COLLECTION_SUCCESS,
                 payload: res.data
@@ -279,6 +282,36 @@ export const deleteCollection = (collectionId) => async dispatch => {
     }
 };
 
+// ADD COLLECTION PHOTO (After Delete)
+
+export const newCollectionPhoto = (file, photo, collectionId, date, type, totalWeight, totalCost, spreadsheet) => async dispatch => {
+    const formData = new FormData();
+    const config = {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    };
+    formData.append(
+        "myFile",
+        file
+    );
+    const body = formData;
+    try {
+        const res = await axios.post(`${process.env.REACT_APP_API}Collection/FileHandle`, body, config);
+        dispatch({
+            type: COLLECTION_PHOTO_SUCCESS,
+            payload: res.data
+        });
+        dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet));
+    } catch (err) {
+        dispatch({
+            type: COLLECTION_PHOTO_FAIL
+        });
+    }
+}
+
+// EDIT COLLECTION (With Photo) - Delete photo (if exists) OR - Add new photo (if none exist)
+
 export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet) => async dispatch => {
 
     const formData = new FormData();
@@ -296,7 +329,7 @@ export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type
         const body = formData;
 
         try {
-            const res = await axios.post('http://127.0.0.1:8000/Collection/FileHandle', body, config);
+            const res = await axios.post(`${process.env.REACT_APP_API}Collection/FileHandle`, body, config);
             dispatch({
                 type: COLLECTION_PHOTO_SUCCESS,
                 payload: res.data
@@ -312,48 +345,30 @@ export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type
 
         // Confirm deletion of original photo, and delete request //
         if (window.confirm(confirmDel)) {
-            try {
-                const config = {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                };
-                const body = {
-                    "fileName": `${ogfile}`
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${localStorage.getItem('token')}`,
+                    'Accept': 'application/json'
                 }
-                const res = await axios.delete('http://127.0.0.1:8000/Collection/FileHandle', body, config);
+            };
+            const body = { 
+                data: JSON.stringify({
+                    "fileName":`${ogfile}`
+                })
+            };
+            try {
+                
+                const res = await axios.delete(`${process.env.REACT_APP_API}Collection/FileHandle`, body, config);
                 dispatch({
                     type: OLD_PHOTO_DELETE_SUCCESS,
                     payload: res.data
                 });
-                try {
-                    const config = {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    };
-
-                    formData.append(
-                        "myFile",
-                        file
-                    );
-                    
-                    const body = formData
-                    const res = await axios.post('http://127.0.0.1:8000/Collection/FileHandle', body, config);
-                    dispatch({
-                        type: COLLECTION_PHOTO_SUCCESS,
-                        payload: res.data
-                    });
-                    dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet));
-                } catch (err) {
-                    dispatch({
-                        type: COLLECTION_PHOTO_FAIL
-                    });
-                }
+                dispatch(newCollectionPhoto(file, photo, collectionId, date, type, totalWeight, totalCost, spreadsheet));
             } catch (err) {
                 dispatch({
-                    type: OLD_PHOTO_DELETE_FAIL
+                    type: OLD_PHOTO_DELETE_FAIL,
+                    payload: err
                 });
             }
         }

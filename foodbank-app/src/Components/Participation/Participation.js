@@ -9,7 +9,7 @@ import { TimePicker } from '@mui/x-date-pickers/';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 
-export function EditParticipationModal(props){
+export function AddParticipationModal(props){
     const {
         show,
         onHide,
@@ -99,7 +99,7 @@ export function EditParticipationModal(props){
                                         <option value="0">N/A</option>
                                         <option value="1">Drop-Off</option>
                                         <option value="2">Collection</option>
-                                        <option value="3">Money Donation</option>
+                                        <option value="3">Cash Donation</option>
                                         <option value="4">Online Order</option>
                                     </Form.Select>
                                 </Form.Group>

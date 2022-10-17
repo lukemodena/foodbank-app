@@ -1,4 +1,6 @@
-import React,{useState} from 'react'
+import React,{useState} from 'react';
+import { Button } from 'react-bootstrap';
+import { BsArrowRightShort } from 'react-icons/bs';
 
 const SearchBar = ({callback}) => {
     const [startDate, setStartDate] = useState("");
@@ -30,7 +32,7 @@ const SearchBar = ({callback}) => {
             onFocus={(e) => (e.target.type = "date")}
             onBlur={(e) => (e.target.type = "text")}
         />
-        <input className='date-searchBarSubmit' type="submit" value="Search" />
+        <Button variant="secondary" className='date-searchBarSubmit' type="submit" ><BsArrowRightShort className="date-searchButton-Icon"/></Button>
     </form>
   )
 }

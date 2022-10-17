@@ -7,13 +7,13 @@ import PropTypes from 'prop-types';
 
 import { AddCollectionModal } from "./AddCollModal";
 import { EditCollectionModal } from "./EditCollModal";
-import { EditParticipationModal } from "../Participation/Participation";
+import { AddParticipationModal } from "../Participation/Participation";
 import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
 
 import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto } from '../../actions/collections';
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
 import { getDonors } from "../../actions/donors";
-import { addParticipant, getParticipants, editParticipant, getCurrentParticipants } from "../../actions/participation";
+import { addParticipant, getCurrentParticipants } from "../../actions/participation";
 
 export class NewCollection extends Component{
 
@@ -36,7 +36,7 @@ export class NewCollection extends Component{
                     key: 0,
                     type: "All",
                     value: "0",
-                    filter: "All Collections"
+                    filter: "All"
                 },
                 {
                     key: 1,
@@ -53,7 +53,7 @@ export class NewCollection extends Component{
             ],
             photo: {
                 photofilename: "anonymous.png",
-                imagesrc: 'http://127.0.0.1:8000/media/anonymous.png',
+                imagesrc: `${process.env.REACT_APP_API}media/photos/anonymous.png`,
                 photofile: []
             }
 
@@ -77,9 +77,7 @@ export class NewCollection extends Component{
         whol: PropTypes.array.isRequired,
         pars: PropTypes.array.isRequired,
         addParticipant: PropTypes.func.isRequired,
-        getParticipants: PropTypes.func.isRequired,
-        editParticipant: PropTypes.func.isRequired, 
-        getCurrentParticipants: PropTypes.func.isRequired, 
+        getCurrentParticipants: PropTypes.func.isRequired
         };
 
 
@@ -101,7 +99,7 @@ export class NewCollection extends Component{
                 startDate: "",
                 endDate: "",
                 monthValue: "",
-                monthFilter:"All Collections",
+                monthFilter:"All",
                 colltotalcost: total
             });
         }
@@ -187,6 +185,7 @@ export class NewCollection extends Component{
             let spreadsheet = e.target.CollectionSpreadsheet.value;
 
             this.props.editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet);
+            this.setState({editModalShow:false, refresh:"YES"})
         } else {
             const formData = new FormData();
         
@@ -204,8 +203,22 @@ export class NewCollection extends Component{
                 file
             );
 
-
             this.props.addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet);
+            this.setState({editModalShow:false, refresh:"YES"})
+        }
+    };
+
+    // Collection Type
+
+    handleCollectionType = (inputValue) => {
+        let collectionType = inputValue;
+
+        if (collectionType === "1") {
+            let type = "Monthly"
+            return type
+        } else if (collectionType === "3") {
+            let type = "3 Months"
+            return type
         }
     };
 
@@ -260,7 +273,7 @@ export class NewCollection extends Component{
         const {collid, colldate, colltype, colltotalweight, colltotalcost, collphoto, collspreadsheet, whoid, whototaldonated, whototalspent, whoremainder, whoreceipt, dons}=this.state;
         let addModalClose=()=>this.setState({addModalShow:false, refresh: "YES"});
         let editModalClose=()=>this.setState({editModalShow:false, refresh: "YES"});
-        let editParticipationClose=()=>this.setState({editParticipationShow:false, refresh: "YES"});
+        let addParticipationClose=()=>this.setState({addParticipationShow:false, refresh: "YES"});
         let editWholesaleClose=()=>this.setState({editWholesaleShow:false, refresh: "YES"});
 
         return(
@@ -288,9 +301,9 @@ export class NewCollection extends Component{
 
                         {/* Add New Collection Modal */}
 
-                        <Button variant="secondary" className="addButton"
+                        <Button variant="secondary" className="date-addButton"
                         onClick={()=>this.setState({addModalShow:true})}>
-                            <BsPlusLg className="addButton-Icon"/>
+                            <BsPlusLg className="date-addButton-Icon"/>
                         </Button>
                         <AddCollectionModal show={this.state.addModalShow}
                         onHide={addModalClose}/>
@@ -306,6 +319,7 @@ export class NewCollection extends Component{
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Options</th>
                                 <th>Date</th>
                                 <th>Type</th>
                                 <th>Total Weight</th>
@@ -318,12 +332,6 @@ export class NewCollection extends Component{
                             {this.props.colls.map(coll=>
                                 <tr key={coll.CollectionID}>
                                     <td>{coll.CollectionID}</td>
-                                    <td>{coll.CollectionDate}</td>
-                                    <td>{coll.Type}</td>
-                                    <td>{coll.TotalWeight}</td>
-                                    <td>{coll.TotalCost}</td>
-                                    <td>{coll.CollectionPhoto}</td>
-                                    <td>{coll.CollectionSpreadsheet}</td>
                                     <td>
                                         
                                         <Dropdown onToggle={() => this.handleGetWholesale(coll.CollectionID)}>
@@ -374,7 +382,7 @@ export class NewCollection extends Component{
                                                         whoreceipt:this.props.whol[0].WholesaleReceipt
                                                     })}
                                                 >
-                                                    Wholesale
+                                                    Manage Wholesale
                                                 </Dropdown.Item>
                                                 <EditWholesaleModal show={this.state.editWholesaleShow}
                                                 onHide={editWholesaleClose}
@@ -389,17 +397,17 @@ export class NewCollection extends Component{
 
                                                 <Dropdown.Item onClick={() => 
                                                     this.setState({
-                                                        editParticipationShow:true,
+                                                        addParticipationShow:true,
                                                         collid:coll.CollectionID,
                                                         whoid:this.props.whol[0].WholesaleID,
                                                         dons:this.props.dons,
                                                         colldate:coll.CollectionDate
                                                     })}
                                                 >
-                                                    Participation
+                                                    Add Participant
                                                 </Dropdown.Item>
-                                                <EditParticipationModal show={this.state.editParticipationShow}
-                                                onHide={editParticipationClose}
+                                                <AddParticipationModal show={this.state.addParticipationShow}
+                                                onHide={addParticipationClose}
                                                 addpart={this.handleAddParticipant}
                                                 collid={collid}
                                                 whoid={whoid}
@@ -411,6 +419,12 @@ export class NewCollection extends Component{
 
                                         
                                     </td>
+                                    <td>{coll.CollectionDate}</td>
+                                    <td>{this.handleCollectionType(coll.Type)}</td>
+                                    <td>{coll.TotalWeight}</td>
+                                    <td>{coll.TotalCost}</td>
+                                    <td>{coll.CollectionPhoto}</td>
+                                    <td>{coll.CollectionSpreadsheet}</td>
                                 </tr>)}
                         </tbody>
                     </Table>
@@ -431,4 +445,4 @@ const mapStateToProps = (state) => ({
     total: state.collections.total
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors, getParticipants, addParticipant, editParticipant, getCurrentParticipants})(NewCollection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors, addParticipant, getCurrentParticipants })(NewCollection)

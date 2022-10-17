@@ -130,7 +130,27 @@ export class NewDonors extends Component {
 
         this.props.editDonor(donorId, fullName, firstName, lastName, email, address1, address2, postCode, donorType, notes, phone, involveNo);
         this.setState({editModalShow:false, refresh: "YES"});
-    }
+    };
+
+    // Donor Type
+
+    handleDonorType = (inputValue) => {
+        let donorType = inputValue;
+
+        if (donorType === "1") {
+            let type = "Monthly"
+            return type
+        } else if (donorType === "1,spec") {
+            let type = "Monthly (Special)"
+            return type
+        } else if (donorType === "3") {
+            let type = "3 Months"
+            return type
+        } else if (donorType === "3,spec") {
+            let type = "3 Months (Special)"
+            return type
+        }
+    };
 
     render() {
         const {donid, donfullname, donfirstname, donlastname, donemail, donaddress1, donaddress2, donpostcode, dondonortype, donnotes, donphone, doninvolveno}=this.state;
@@ -181,9 +201,8 @@ export class NewDonors extends Component {
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Options</th>
                                 <th>Name</th>
-                                <th>Forname</th>
-                                <th>Surname</th>
                                 <th>Email</th>
                                 <th>Address 1</th>
                                 <th>Address 2</th>
@@ -192,24 +211,12 @@ export class NewDonors extends Component {
                                 <th>Notes</th>
                                 <th>Phone</th>
                                 <th>Times Donated</th>
-                                <th>Options</th>
                             </tr>
                         </thead>
                         <tbody>
                             {this.props.dons.map((don)=>
                                 <tr key={don.DonorID}>
                                     <td>{don.DonorID}</td>
-                                    <td>{don.FullName}</td>
-                                    <td>{don.FirstName}</td>
-                                    <td>{don.LastName}</td>
-                                    <td>{don.Email}</td>
-                                    <td>{don.Address1}</td>
-                                    <td>{don.Address2}</td>
-                                    <td>{don.PostCode}</td>
-                                    <td>{don.DonorType}</td>
-                                    <td>{don.Notes}</td>
-                                    <td>{don.Phone}</td>
-                                    <td>{don.InvolveNo}</td>
                                     <td>
                                     <Dropdown>
                                         <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -265,6 +272,15 @@ export class NewDonors extends Component {
                                         </Dropdown.Menu>
                                     </Dropdown>
                                     </td>
+                                    <td>{don.FullName}</td>
+                                    <td>{don.Email}</td>
+                                    <td>{don.Address1}</td>
+                                    <td>{don.Address2}</td>
+                                    <td>{don.PostCode}</td>
+                                    <td>{this.handleDonorType(don.DonorType)}</td>
+                                    <td>{don.Notes}</td>
+                                    <td>{don.Phone}</td>
+                                    <td>{don.InvolveNo}</td>
                                 </tr>)}
                         </tbody>
                     </Table>
