@@ -36,11 +36,20 @@ export const getParticipantList = (CollectionID, FullName, Type) => async dispat
             }
         };
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?collid=${CollectionID}&fullname=${FullName}&type=${Type}`, config)
-            dispatch({
-                type: PARTICIPATION_LIST_SUCCESSFUL,
-                payload: res.data
-            });
+            if (CollectionID === ""){
+                const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?fullname=${FullName}`, config)
+                dispatch({
+                    type: PARTICIPATION_LIST_SUCCESSFUL,
+                    payload: res.data
+                });
+            } else {
+                const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?collid=${CollectionID}&fullname=${FullName}&type=${Type}`, config)
+                dispatch({
+                    type: PARTICIPATION_LIST_SUCCESSFUL,
+                    payload: res.data
+                });
+            }
+            
         } catch (err) {
             dispatch({
                 type: PARTICIPATION_LIST_FAIL
