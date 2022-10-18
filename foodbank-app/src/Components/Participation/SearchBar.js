@@ -16,6 +16,7 @@ const SearchBar = ({callback}) => {
             className='participation-searchBarInput' 
             value={innerValue} 
             onChange={(e) => setInnerValue(e.target.value)} 
+            placeholder="Search..."
         />
         <Button variant="secondary" className='participation-searchBarSubmit' type="submit" ><BsArrowRightShort className="participation-searchButton-Icon"/></Button>
     </form>
