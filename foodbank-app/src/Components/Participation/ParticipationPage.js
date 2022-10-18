@@ -26,7 +26,7 @@ export class ParticipationPage extends Component {
         this.state={
             refresh: "NO",
             collectionDate:"Select Collection",
-            collectionID:"Not Specified",
+            collectionID:"",
             value: dayjs('2022-04-07 T00:00:00'),
             donationTypeVal: null,
             totalDonatedVal: "0",
