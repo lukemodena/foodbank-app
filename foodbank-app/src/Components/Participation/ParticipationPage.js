@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
-import {Table, Dropdown, Row} from 'react-bootstrap';
+import {Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import dayjs from 'dayjs';
+import { BsPlusLg } from "react-icons/bs";
 
 import PropTypes from 'prop-types';
 
+import { AddParticipationModal } from './AddParticipationModal';
 import { EditParticipationModal } from './EditParticipationModal';
+import SearchBar from './SearchBar';
 
+import { getDonors } from '../../actions/donors';
 import { getCollections } from '../../actions/collections';
 import { getParticipantList, editParticipant, deleteParticipant, getCurrentParticipants } from '../../actions/participation';
+import { getWholesale } from '../../actions/wholesale';
 
 // MAIN DONORS PAGE //
 
@@ -22,10 +27,47 @@ export class ParticipationPage extends Component {
             refresh: "NO",
             collectionDate:"Select Collection",
             collectionID:"Not Specified",
-            value: dayjs('2022-04-07'),
+            value: dayjs('2022-04-07 T00:00:00'),
             donationTypeVal: null,
             totalDonatedVal: "0",
-            paymentRecievedVal: "false"
+            paymentRecievedVal: "false",
+            showAddButton: false,
+            dons: [],
+            searchValue: "",
+            typeValue: "",
+            typeFilter:"All",
+            monthOptions: [
+                {
+                    key: 0,
+                    type: "All",
+                    value: "",
+                    filter: "All"
+                },
+                {
+                    key: 1,
+                    type: "Drop-Off",
+                    value: "1",
+                    filter: "Drop-Off"
+                },
+                {
+                    key: 2,
+                    type: "Collection",
+                    value: "2",
+                    filter: "Collection"
+                },
+                {
+                    key: 3,
+                    type: "Cash Donation",
+                    value: "3",
+                    filter: "Cash Donation"
+                },
+                {
+                    key: 4,
+                    type: "Online Order",
+                    value: "4",
+                    filter: "Online Order"
+                }
+            ],
         }
     }
 
@@ -34,23 +76,33 @@ export class ParticipationPage extends Component {
     static propTypes = {
         parsList: PropTypes.array.isRequired,
         colls: PropTypes.array.isRequired,
+        dons: PropTypes.array.isRequired,
+
         getCollections: PropTypes.func.isRequired,
         getParticipantList: PropTypes.func.isRequired,
         deleteParticipant: PropTypes.func.isRequired,
         editParticipant: PropTypes.func.isRequired,
-        getCurrentParticipants: PropTypes.func.isRequired
+        getCurrentParticipants: PropTypes.func.isRequired,
+        getDonors: PropTypes.func.isRequired,
+        getWholesale:PropTypes.func.isRequired,
+        whol: PropTypes.array.isRequired
       };
 
     // Handle Data Request (Initial + Refresh)
 
     componentDidMount() {
         this.props.getCollections();
+        this.props.getDonors();
     }
 
     componentDidUpdate() {
         if (this.state.refresh === "YES") {
             let collection = this.state.collectionID;
-            this.props.getParticipantList(collection);
+            let searchInput =this.state.searchValue;
+            let type = this.state.typeValue;
+            this.props.getParticipantList(collection, searchInput, type);
+            this.props.getWholesale(collection)
+            this.props.getDonors();
             this.setState({
                 refresh:"NO"
             });
@@ -61,12 +113,55 @@ export class ParticipationPage extends Component {
 
     handleFilter = (CollectionID, CollectionDate) => {
         let collection = CollectionID;
-        this.props.getParticipantList(collection);
+        let searchInput =this.state.searchValue;
+        let type = this.state.typeValue;
+        this.props.getWholesale(collection)
+        this.props.getParticipantList(collection, searchInput, type);
         this.setState({
             collectionDate: CollectionDate,
-            collectionID: collection
+            collectionID: collection,
+            showAddButton: true
         });
     }
+
+    // Participant Type Filter
+
+    handleTypeFilter = (value, filter) => {
+        let type = value;
+        let collection = this.state.collectionID;
+        let searchInput = this.state.searchValue;
+        
+        this.props.getParticipantList(collection, searchInput, type);
+
+        this.setState({
+            typeValue: type,
+            typeFilter: filter
+        });
+        
+    }
+
+    // Add Participant
+
+    handleAddParticipant = (CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, WholesaleID) => {
+        
+        let colId = CollectionID
+        let donId = DonorID
+        let payRec = PaymentRecieved
+        let donTyp = DonationType
+        let totDon = TotalDonated
+        let time = DropOffTime
+        let whoId = WholesaleID
+
+        let droTim = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(time)
+        let CollID = colId
+        let DonID = donId
+
+        // Checks if Donor already Participant in collection, 
+        // - If yes, new participant is not added 
+        // - if no, new participant is added + if cash donation wholesale is updated
+        
+        this.props.getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, donId, colId, whoId)
+    };
 
     // Edit Participant
 
@@ -83,6 +178,17 @@ export class ParticipationPage extends Component {
             this.setState({refresh:"YES"})
         }
     }
+
+    // Participation Search
+
+    handleSearch = (searchValue) => {
+        let collection = this.state.collectionID;
+        let searchInput = searchValue;
+        this.setState({searchValue: searchInput});
+        let type = this.state.typeValue;
+        this.props.getParticipantList(collection, searchInput, type);
+    }
+    
 
     // Participant Type
 
@@ -110,8 +216,26 @@ export class ParticipationPage extends Component {
         }
     };
 
+    // Participant Payment
+
+    handleParticipantPayment = (inputValue) => {
+        let participantPayment = inputValue;
+
+        if (participantPayment === "true") {
+            let recieved = "Yes"
+            return recieved
+        } else if (participantPayment === "false") {
+            let recieved = "No"
+            return recieved
+        } else {
+            let recieved = "N/A"
+            return recieved
+        }
+    };
+
     render() {
-        const {parid, donid, whoid, collid, donfullname, donemail, donaddress1, donaddress2, donpostcode, donnotes, donphone, pardontype, partotdon, partime, parrec}=this.state;
+        const {parid, donid, whoid, collid, colldate, donfullname, donemail, donaddress1, donaddress2, donpostcode, donnotes, donphone, pardontype, partotdon, partime, parrec, dons}=this.state;
+        let addParticipationClose=()=>this.setState({addParticipationShow:false, refresh: "YES"});
         let editParticipationClose=()=>this.setState({editParticipationShow:false, refresh: "YES"});
 
         const typeChanger = (inputValue) => {
@@ -136,9 +260,10 @@ export class ParticipationPage extends Component {
                 <div style={{margin:"auto"}}>
                     <Row>
 
-                        {/* Collection Filter */}
-
                         <Dropdown className="participation-dropdownFilter">
+
+                            {/* Collection Filter */}
+
                             <Dropdown.Toggle className="participation-dropdownFilterButton" variant="outline-secondary" size="sm" id="dropdown-basic">
                                 {this.state.collectionDate}
                             </Dropdown.Toggle>
@@ -149,6 +274,46 @@ export class ParticipationPage extends Component {
                                 ))}
                             </Dropdown.Menu>
                         </Dropdown>
+
+                        {/* Participant Type Filter */}
+                        <Dropdown className="participation-dropdownFilter">
+
+                            <Dropdown.Toggle className="participationType-dropdownFilterButton" variant="outline-secondary" size="sm" id="dropdown-basic">
+                                {this.state.typeFilter}
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                                {this.state.monthOptions.map((option) => (
+                                    <Dropdown.Item key={option.key} onClick={() => this.handleTypeFilter(option.value, option.filter)} href="#/participants">{option.type}</Dropdown.Item>
+                                ))}
+                            </Dropdown.Menu>
+                        </Dropdown>
+
+                        {/* Participant Search */}
+
+                        {(this.state.showAddButton === true) &&<SearchBar callback={(searchValue) => this.handleSearch(searchValue)}/>}
+
+                        {/* Add New Participant Modal */}
+
+                        {(this.state.showAddButton === true) &&<Button variant="secondary" className="participant-addButton"
+                        onClick={()=>this.setState({
+                            addParticipationShow:true,
+                            collid:this.state.collectionID,
+                            whoid:this.props.whol[0].WholesaleID,
+                            dons:this.props.dons,
+                            colldate:this.state.collectionDate
+                        })}>
+                            <BsPlusLg className="participant-addButton-Icon"/>
+                        </Button>}
+                        <AddParticipationModal 
+                            show={this.state.addParticipationShow}
+                            onHide={addParticipationClose}
+                            addpart={this.handleAddParticipant}
+                            collid={collid}
+                            whoid={whoid}
+                            dons={dons}
+                            colldate={colldate}
+                        />
 
                     </Row>
 
@@ -247,7 +412,7 @@ export class ParticipationPage extends Component {
                                     <td>{par.FullName}</td>
                                     <td>{this.handleParticipantType(par.DonationType)}</td>
                                     <td>{par.TotalDonated}</td>
-                                    <td>{par.PaymentRecieved}</td>
+                                    <td>{this.handleParticipantPayment(par.PaymentRecieved)}</td>
                                     <td>{par.DropOffTime}</td>
                                     <td>{par.Email}</td>
                                     <td>{par.Phone}</td>
@@ -266,7 +431,9 @@ export class ParticipationPage extends Component {
 const mapStateToProps = (state) => ({
     parsList: state.participants.parsList,
     result: state.participants.result,
-    colls: state.collections.colls
+    colls: state.collections.colls,
+    dons: state.donors.dons,
+    whol: state.wholesale.whol
 });
 
-export default connect(mapStateToProps, { getCollections, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants })(ParticipationPage)
+export default connect(mapStateToProps, { getCollections, getWholesale, getParticipantList, deleteParticipant, editParticipant, getCurrentParticipants, getDonors })(ParticipationPage)

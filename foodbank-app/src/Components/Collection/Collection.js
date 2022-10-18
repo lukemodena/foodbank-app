@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 import { AddCollectionModal } from "./AddCollModal";
 import { EditCollectionModal } from "./EditCollModal";
-import { AddParticipationModal } from "../Participation/Participation";
+import { AddParticipationModal } from "../Participation/AddParticipationModal";
 import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
 
 import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto } from '../../actions/collections';
@@ -324,7 +324,6 @@ export class NewCollection extends Component{
                                 <th>Type</th>
                                 <th>Total Weight</th>
                                 <th>Estimated Cost</th>
-                                <th>Photo</th>
                                 <th>Spreadsheet</th>
                             </tr>
                         </thead>
@@ -423,7 +422,6 @@ export class NewCollection extends Component{
                                     <td>{this.handleCollectionType(coll.Type)}</td>
                                     <td>{coll.TotalWeight}</td>
                                     <td>{coll.TotalCost}</td>
-                                    <td>{coll.CollectionPhoto}</td>
                                     <td>{coll.CollectionSpreadsheet}</td>
                                 </tr>)}
                         </tbody>

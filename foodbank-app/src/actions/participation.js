@@ -26,7 +26,7 @@ import {
 
 // GET PARTICIPANT LIST
 
-export const getParticipantList = (CollectionID) => async dispatch => {
+export const getParticipantList = (CollectionID, FullName, Type) => async dispatch => {
     if (localStorage.getItem('token')) {
         const config ={
             headers: {
@@ -36,7 +36,7 @@ export const getParticipantList = (CollectionID) => async dispatch => {
             }
         };
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?collid=${CollectionID}`, config)
+            const res = await axios.get(`${process.env.REACT_APP_API}listparticipants?collid=${CollectionID}&fullname=${FullName}&type=${Type}`, config)
             dispatch({
                 type: PARTICIPATION_LIST_SUCCESSFUL,
                 payload: res.data
@@ -194,7 +194,7 @@ export const updateDonor = (donorId) => async dispatch => {
 export const updateWholesale = (CollectionID, wholesaleID, newDonationVal) => async dispatch => {
 
     if (localStorage.getItem('token')){
-        const config ={
+        const conf = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Token ${localStorage.getItem('token')}`,
@@ -203,13 +203,21 @@ export const updateWholesale = (CollectionID, wholesaleID, newDonationVal) => as
         };
         
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API}searchwholesale?collid=${CollectionID}`, config)
+            const res = await axios.get(`${process.env.REACT_APP_API}searchwholesale?collid=${CollectionID}`, conf)
             dispatch({
                 type: WHOLESALE_ID_SUCCESS
             });
             let currentTotal = parseFloat(res.data[0].TotalDonated) + parseFloat(newDonationVal);
             let remainder = currentTotal - parseFloat(res.data[0].TotalSpent);
 
+            const config ={
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${localStorage.getItem('token')}`,
+                    'Accept': 'application/json'
+                }
+            };
+            
             const body = {
                 "WholesaleID": `${wholesaleID}`,
                 "TotalDonated": `${currentTotal}`,
@@ -277,7 +285,9 @@ export const addParticipant  = (payRec, donTyp, totDon, droTim, donId, colId, wh
                 payload: res.data
             });
             dispatch(updateDonor(donId));
-            dispatch(updateWholesale(colId, whoId, totDon));
+            if (totDon !== "0"){ 
+                dispatch(updateWholesale(colId, whoId, totDon));
+            };
         } catch (err) {
             dispatch({
                 type: ADD_PARTICIPATION_FAIL

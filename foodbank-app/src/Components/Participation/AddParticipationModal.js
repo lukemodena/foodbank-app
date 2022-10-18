@@ -20,7 +20,7 @@ export function AddParticipationModal(props){
         colldate
     } = props
 
-    const [value, setValue] = React.useState(dayjs('2022-04-07'));
+    const [value, setValue] = React.useState(dayjs('2022-04-07 T00:00:00'));
     const handleChange = (newValue) => {
         setValue(newValue);
       };
@@ -51,7 +51,7 @@ export function AddParticipationModal(props){
         let DropOffTime = value;
         let WholesaleID = e.target.WholesaleID.value;
 
-        setValue('2022-04-07'); 
+        setValue('2022-04-07 T00:00:00'); 
         setDonationTypeVal(''); 
         setTotalDonatedVal('0'); 
         setPaymentRecievedVal('false');
@@ -66,13 +66,12 @@ export function AddParticipationModal(props){
             size='lg'
             aria-labelledby='contained-modal-title-vcenter'
             centered>
-                <Modal.Header closeButton onClick={() => {setValue('2022-04-07'); setDonationTypeVal(''); setTotalDonatedVal('0'); setPaymentRecievedVal('false'); onHide()}}>
+                <Modal.Header closeButton onClick={() => {setValue('2022-04-07 T00:00:00'); setDonationTypeVal(''); setTotalDonatedVal('0'); setPaymentRecievedVal('false'); onHide()}}>
                     <Modal.Title id='contained-modal-title-vcenter'>
                         Add Participating Donor: (Collection {colldate})
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-        
                     <Row>
                         <Col sm={6}>
                             <Form onSubmit={handleSubmit}>
@@ -144,7 +143,7 @@ export function AddParticipationModal(props){
                     Participant List    
                 </Button> */}
                 <Modal.Footer>
-                    <Button variant='danger' onClick={() => {setValue('2022-04-07'); setDonationTypeVal(''); setTotalDonatedVal('0'); setPaymentRecievedVal('false'); onHide()}}>Close</Button>
+                    <Button variant='danger' onClick={() => {setValue('2022-04-07 T00:00:00'); setDonationTypeVal(''); setTotalDonatedVal('0'); setPaymentRecievedVal('false'); onHide()}}>Close</Button>
                 </Modal.Footer>
             </Modal>
         </div>
