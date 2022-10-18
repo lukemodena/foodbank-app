@@ -34,7 +34,7 @@ export function EditDonorModal(props) {
                 <Modal.Header closeButton onClick={onHide}>
                     <Modal.Title id='contained-modal-title-vcenter'>
                         Edit Donor: 
-                        {donfullname} has participated in the collection {doninvolveno} times.
+                        <p>{donfullname} has participated in the collection {doninvolveno} times.</p>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
