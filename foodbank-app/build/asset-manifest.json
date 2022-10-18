@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/static/css/main.3072eeeb.css",
-    "main.js": "/static/js/main.af34057b.js",
+    "main.js": "/static/js/main.a5e4f8fe.js",
     "static/js/787.34e0e926.chunk.js": "/static/js/787.34e0e926.chunk.js",
     "static/media/FoodReachLogo.png": "/static/media/FoodReachLogo.67440e2c187a56cfe908.png",
     "index.html": "/index.html",
     "main.3072eeeb.css.map": "/static/css/main.3072eeeb.css.map",
-    "main.af34057b.js.map": "/static/js/main.af34057b.js.map",
+    "main.a5e4f8fe.js.map": "/static/js/main.a5e4f8fe.js.map",
     "787.34e0e926.chunk.js.map": "/static/js/787.34e0e926.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.3072eeeb.css",
-    "static/js/main.af34057b.js"
+    "static/js/main.a5e4f8fe.js"
   ]
 }
