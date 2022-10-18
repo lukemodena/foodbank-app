@@ -276,7 +276,7 @@ export class ParticipationPage extends Component {
                         </Dropdown>
 
                         {/* Participant Type Filter */}
-                        <Dropdown className="participation-dropdownFilter">
+                        {(this.state.showAddButton === true) &&<Dropdown className="participation-dropdownFilter">
 
                             <Dropdown.Toggle className="participationType-dropdownFilterButton" variant="outline-secondary" size="sm" id="dropdown-basic">
                                 {this.state.typeFilter}
@@ -287,7 +287,7 @@ export class ParticipationPage extends Component {
                                     <Dropdown.Item key={option.key} onClick={() => this.handleTypeFilter(option.value, option.filter)} href="#/participants">{option.type}</Dropdown.Item>
                                 ))}
                             </Dropdown.Menu>
-                        </Dropdown>
+                        </Dropdown>}
 
                         {/* Participant Search */}
 
