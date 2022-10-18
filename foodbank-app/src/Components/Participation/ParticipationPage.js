@@ -291,7 +291,7 @@ export class ParticipationPage extends Component {
 
                         {/* Participant Search */}
 
-                        {(this.state.showAddButton === true) &&<SearchBar callback={(searchValue) => this.handleSearch(searchValue)}/>}
+                        <SearchBar callback={(searchValue) => this.handleSearch(searchValue)}/>
 
                         {/* Add New Participant Modal */}
 
