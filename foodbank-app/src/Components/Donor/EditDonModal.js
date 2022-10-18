@@ -33,7 +33,8 @@ export function EditDonorModal(props) {
             centered>
                 <Modal.Header closeButton onClick={onHide}>
                     <Modal.Title id='contained-modal-title-vcenter'>
-                        Edit Donor: {donfullname}
+                        Edit Donor: 
+                        {donfullname} has participated in the collection {doninvolveno} times.
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -89,8 +90,7 @@ export function EditDonorModal(props) {
                                     <Form.Control type='text' name='Phone' required placeholder='Enter phone number...' defaultValue={donphone} />
                                 </Form.Group>
                                 <Form.Group controlId='InvolveNo'>
-                                    <Form.Label>No. of times participated in donation:</Form.Label>
-                                    <Form.Control type='text' name='InvolveNo' disabled placeholder='InvolveNo' defaultValue={doninvolveno} />
+                                    <Form.Control type='hidden' name='InvolveNo' disabled placeholder='InvolveNo' defaultValue={doninvolveno} />
                                 </Form.Group>
                                 <Form.Group>
                                     <Button variant='primary' type='submit'>
