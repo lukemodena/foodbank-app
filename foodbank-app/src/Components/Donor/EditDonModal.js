@@ -34,10 +34,10 @@ export function EditDonorModal(props) {
                 <Modal.Header closeButton onClick={onHide}>
                     <Modal.Title id='contained-modal-title-vcenter'>
                         Edit Donor: 
-                        <p>{donfullname} has participated in the collection {doninvolveno} times.</p>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <p style={{fontSize: "15px", fontStyle: "italic"}}>{donfullname} has participated in the collection <strong>{doninvolveno}</strong> times.</p>
                     <Row>
                         <Col sm={6}>
                             <Form onSubmit={edit}>
