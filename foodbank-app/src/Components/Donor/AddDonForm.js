@@ -131,8 +131,7 @@ export class AddDonorForm extends Component{
                             <option>Please select donor type...</option>
                             <option value="1">1 Month</option>
                             <option value="3">3 Months</option>
-                            <option value="1,spec">1 Month SPECIAL</option>
-                            <option value="3,spec">3 Months SPECIAL</option>
+                            <option value="0">Other</option>
                         </Form.Select>
                     </Form.Group>    
                     <Form.Group controlId='Notes'>

@@ -27,7 +27,7 @@ function App() {
 
             <Routes>
               <Route exact path='/' element={<Home/>}/>
-              <Route path='/donor' element={<Donor/>}/>
+              <Route path='/contacts' element={<Donor/>}/>
               <Route path='/collections' element={<Collection/>}/>
               <Route exact path='/login' element={<NewLogin/>}/>
               <Route exact path='/register' element={<Register/>}/>

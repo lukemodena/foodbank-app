@@ -36,8 +36,8 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
 
     const authLinks = () => (
         <Fragment>
-            <NavLink className="d-inline p-2 bg-light text-black" to="/donor">
-                Donors
+            <NavLink className="d-inline p-2 bg-light text-black" to="/contacts">
+                Contacts
             </NavLink>
             <NavLink className="d-inline p-2 bg-light text-black" to="/collections">
                 Collections
@@ -57,6 +57,7 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
             <Navbar className="navBar" bg="light" expand="lg" style={{borderBottom:"0.5px solid rgb(199, 199, 199)"}}>
                 <div className="container">
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+                    {/* {(window.location.href.indexOf("contacts"))&&<h1 className='display-4'>CONTACTS</h1>} */}
                     <Navbar.Brand href="/">
                         <img src={FoodReachLogo} className="navBar-logo" style={{padding:"4px", width:"60px", height:"60px"}}/>
                     </Navbar.Brand>
@@ -65,10 +66,11 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
                             <NavLink className="d-inline p-2 bg-light text-black" to="/">
                                 Home
                             </NavLink>
-                
+                            
                             {isAuthenticated ? authLinks() : guestLinks()}
                         </Nav>
                     </Navbar.Collapse>
+                    
                 </div>
             </Navbar>
         </Fragment>

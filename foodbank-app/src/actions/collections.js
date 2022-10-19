@@ -20,7 +20,9 @@ import {
     COLLECTION_ID_SEARCH_SUCCESS,
     COLLECTION_ID_SEARCH_FAIL,
     ADD_WHOLESALE_SUCCESS,
-    ADD_WHOLESALE_FAIL
+    ADD_WHOLESALE_FAIL,
+    COLLECTION_STATUS_SUCCESS,
+    COLLECTION_STATUS_FAIL
 } from './types';
 
 // PULL COLLECTION
@@ -152,9 +154,96 @@ export const addWholesale = (collId) => async dispatch => {
     }
 };
 
+// CHECK STATUS (ADD)
+
+export const checkStatusAdd = (status) => async dispatch => {
+    if (localStorage.getItem('token')){
+        const config ={
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`,
+                'Accept': 'application/json'
+            }
+        };
+        try{ 
+            const res = await axios.get(`${process.env.REACT_APP_API}collectionstatus?status=${status}`, config);
+            dispatch({
+                type: COLLECTION_STATUS_SUCCESS,
+                payload: res.data
+            });
+            const collectionId = await res.data[0].CollectionID
+            const date = await res.data[0].CollectionDate
+            const type = await res.data[0].Type
+            const totalWeight = await res.data[0].TotalWeight
+            const totalCost = await res.data[0].TotalCost
+            const photo = await res.data[0].CollectionPhoto
+            const spreadsheet = await res.data[0].CollectionSpreadsheet
+            const newstatus = "ARCHIVED"
+            
+            dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, newstatus));
+            
+
+        } catch(err) {
+            dispatch({
+                type: COLLECTION_STATUS_FAIL,
+                payload: err
+            });
+        }
+    } else {
+        dispatch({
+            type: COLLECTION_STATUS_FAIL
+        });
+        dispatch(alert('Insufficient Credentials'));
+    }
+}
+
+// CHECK STATUS (EDIT)
+
+export const checkStatusEdit = (status, collid) => async dispatch => {
+    if (localStorage.getItem('token')){
+        const config ={
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`,
+                'Accept': 'application/json'
+            }
+        };
+        try{ 
+            const res = await axios.get(`${process.env.REACT_APP_API}collectionstatus?status=${status}`, config);
+            dispatch({
+                type: COLLECTION_STATUS_SUCCESS,
+                payload: res.data
+            });
+            const collectionId = await res.data[0].CollectionID
+            const date = await res.data[0].CollectionDate
+            const type = await res.data[0].Type
+            const totalWeight = await res.data[0].TotalWeight
+            const totalCost = await res.data[0].TotalCost
+            const photo = await res.data[0].CollectionPhoto
+            const spreadsheet = await res.data[0].CollectionSpreadsheet
+            const newstatus = "ARCHIVED"
+
+            if (parseInt(collid) !== collectionId) {
+                dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, newstatus));
+            }
+
+        } catch(err) {
+            dispatch({
+                type: COLLECTION_STATUS_FAIL,
+                payload: err
+            });
+        }
+    } else {
+        dispatch({
+            type: COLLECTION_STATUS_FAIL
+        });
+        dispatch(alert('Insufficient Credentials'));
+    }
+}
+
 // ADD COLLECTION
 
-export const addCollection = (date, type, totalWeight, totalCost, photo, spreadsheet) => async dispatch => {
+export const addCollection = (date, type, totalWeight, totalCost, photo, spreadsheet, status) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -172,7 +261,8 @@ export const addCollection = (date, type, totalWeight, totalCost, photo, spreads
             "TotalWeight": `${totalWeight}`,
             "TotalCost": `${totalCost}`,
             "CollectionPhoto": `${photo}`,
-            "CollectionSpreadsheet": `${spreadsheet}`
+            "CollectionSpreadsheet": `${spreadsheet}`,
+            "CollectionStatus": `${status}`
         };
     
         try {
@@ -212,7 +302,7 @@ export const addCollection = (date, type, totalWeight, totalCost, photo, spreads
 
 // EDIT COLLECTION
 
-export const editCollection = (collectionId, date, type, totalWeight, totalCost, photo, spreadsheet) => async dispatch => {
+export const editCollection = (collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -230,7 +320,8 @@ export const editCollection = (collectionId, date, type, totalWeight, totalCost,
             "TotalWeight": `${totalWeight}`,
             "TotalCost": `${totalCost}`,
             "CollectionPhoto": `${photo}`,
-            "CollectionSpreadsheet": `${spreadsheet}`
+            "CollectionSpreadsheet": `${spreadsheet}`,
+            "CollectionStatus": `${status}`
         };
     
         try {
@@ -288,7 +379,7 @@ export const deleteCollection = (collectionId) => async dispatch => {
 
 // ADD COLLECTION PHOTO (After Delete)
 
-export const newCollectionPhoto = (file, photo, collectionId, date, type, totalWeight, totalCost, spreadsheet) => async dispatch => {
+export const newCollectionPhoto = (file, photo, collectionId, date, type, totalWeight, totalCost, spreadsheet, status) => async dispatch => {
     const formData = new FormData();
     const config = {
         headers: {
@@ -307,7 +398,7 @@ export const newCollectionPhoto = (file, photo, collectionId, date, type, totalW
             type: COLLECTION_PHOTO_SUCCESS,
             payload: res.data
         });
-        dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet));
+        dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status));
     } catch (err) {
         dispatch({
             type: COLLECTION_PHOTO_FAIL
@@ -317,7 +408,7 @@ export const newCollectionPhoto = (file, photo, collectionId, date, type, totalW
 
 // EDIT COLLECTION (With Photo) - Delete photo (if exists) OR - Add new photo (if none exist)
 
-export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet) => async dispatch => {
+export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status) => async dispatch => {
 
     const formData = new FormData();
 
@@ -340,7 +431,7 @@ export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type
                 type: COLLECTION_PHOTO_SUCCESS,
                 payload: res.data
             });
-            dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet));
+            dispatch(editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status));
         } catch (err) {
             dispatch({
                 type: COLLECTION_PHOTO_FAIL

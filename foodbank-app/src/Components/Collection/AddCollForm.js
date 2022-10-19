@@ -3,7 +3,7 @@ import { Button, Form } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addCollection } from '../../actions/collections';
+import { addCollection, checkStatusAdd } from '../../actions/collections';
 
 
 export class AddCollectionForm extends Component{
@@ -15,12 +15,14 @@ export class AddCollectionForm extends Component{
             CollectionDate:"",
             Type:"",
             TotalWeight:"0",
-            TotalCost:"0"
+            TotalCost:"0",
+            Status:"PLANNED"
         }
     };
 
     static propTypes = {
         addCollection: PropTypes.func.isRequired,
+        checkStatusAdd: PropTypes.func.isRequired
     };
 
     // Form Manager
@@ -37,15 +39,30 @@ export class AddCollectionForm extends Component{
         let totalCost = e.target.TotalCost.value;
         let photo = "anonymous.png";
         let spreadsheet = "No Spreadsheet";
+        let status = e.target.CollectionStatus.value;
 
-        this.props.addCollection(date, type, totalWeight, totalCost, photo, spreadsheet);
+        if (status === "ACTIVE") {
+            this.props.checkStatusAdd(status)
+            this.props.addCollection(date, type, totalWeight, totalCost, photo, spreadsheet, status);
 
-        this.setState({
-            CollectionDate:"",
-            Type:"",
-            TotalWeight:"",
-            TotalCost:""
-        })
+            this.setState({
+                CollectionDate:"",
+                Type:"",
+                TotalWeight:"",
+                TotalCost:"",
+                Status:"PLANNED"
+            })
+        } else {
+            this.props.addCollection(date, type, totalWeight, totalCost, photo, spreadsheet, status);
+            
+            this.setState({
+                CollectionDate:"",
+                Type:"",
+                TotalWeight:"",
+                TotalCost:"",
+                Status:"PLANNED"
+            })
+        }
     }
 
     render() {
@@ -67,6 +84,16 @@ export class AddCollectionForm extends Component{
                             <option value="0">CANCELLED</option>
                         </Form.Select>
                     </Form.Group> 
+                    <Form.Group controlId='CollectionStatus'>
+                        <Form.Label>Collection Status</Form.Label>
+                        <Form.Select aria-label="CollectionStatus" required name='CollectionStatus' placeholder='CollectionStatus' defaultValue={this.state.Status}>
+                            <option>Please select collection status...</option>
+                            <option value="PLANNED">Planned</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="ARCHIVED">Archived</option>
+                            <option value="CANCELLED">Cancelled</option>
+                        </Form.Select>
+                    </Form.Group>
                     <Form.Group controlId='TotalWeight'>
                         <Form.Label>Total Weight (kg)</Form.Label>
                         <Form.Control type='text' name='TotalWeight' required placeholder='TotalWeight' onChange={this.onChange} value={this.state.TotalWeight} />
@@ -88,4 +115,4 @@ export class AddCollectionForm extends Component{
 
 // Reducer
 
-export default connect(null, { addCollection })(AddCollectionForm)
+export default connect(null, { addCollection, checkStatusAdd })(AddCollectionForm)

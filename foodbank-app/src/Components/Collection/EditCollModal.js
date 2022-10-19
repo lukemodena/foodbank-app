@@ -14,7 +14,8 @@ export function EditCollectionModal(props) {
         colltotalweight,
         colltotalcost,
         collphoto,
-        collspreadsheet
+        collspreadsheet,
+        collstatus
     } = props
     return (
         <div className='container'>
@@ -57,6 +58,16 @@ export function EditCollectionModal(props) {
                                 <Form.Group controlId='TotalCost'>
                                     <Form.Label>Total Cost</Form.Label>
                                     <Form.Control type='text' name='TotalCost' required placeholder='TotalCost' defaultValue={colltotalcost}/>
+                                </Form.Group>
+                                <Form.Group controlId='CollectionStatus'>
+                                    <Form.Label>Collection Status</Form.Label>
+                                    <Form.Select aria-label="CollectionStatus" required name='CollectionStatus' placeholder='CollectionStatus' defaultValue={collstatus}>
+                                        <option>Please select collection status...</option>
+                                        <option value="PLANNED">Planned</option>
+                                        <option value="ACTIVE">Active</option>
+                                        <option value="ARCHIVED">Archived</option>
+                                        <option value="CANCELLED">Cancelled</option>
+                                    </Form.Select>
                                 </Form.Group>
                                 <Form.Group controlId='CollectionPhoto'>
                                     <Form.Control type='hidden' name='CollectionPhoto' disabled placeholder='CollectionID' defaultValue={collphoto}/>

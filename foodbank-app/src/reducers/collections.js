@@ -19,13 +19,16 @@ import {
     COLLECTION_ID_SEARCH_FAIL,
     AUTHENTICATED_SUCCESS,
     AUTHENTICATED_FAIL,
+    COLLECTION_STATUS_SUCCESS,
+    COLLECTION_STATUS_FAIL
 } from '../actions/types';
 
 const initialState = { 
     colls: [],
     result: '',
     total: 0,
-    isAuthenticated: null
+    isAuthenticated: null,
+    statusCol: []
 };
 // eslint-disable-next-line
 export default function(state = initialState, action) {
@@ -149,6 +152,16 @@ export default function(state = initialState, action) {
         case COLLECTION_ID_SEARCH_FAIL:
             return {
                 ...state
+            }
+        case COLLECTION_STATUS_SUCCESS:
+            return {
+                ...state,
+                statusCol: payload
+            }
+        case COLLECTION_STATUS_FAIL:
+            return {
+                ...state,
+                result: payload
             }
 
     default:

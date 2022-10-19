@@ -10,7 +10,7 @@ import { EditCollectionModal } from "./EditCollModal";
 import { AddParticipationModal } from "../Participation/AddParticipationModal";
 import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
 
-import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto } from '../../actions/collections';
+import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, checkStatusEdit } from '../../actions/collections';
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
 import { getDonors } from "../../actions/donors";
 import { addParticipant, getCurrentParticipants } from "../../actions/participation";
@@ -77,7 +77,8 @@ export class NewCollection extends Component{
         whol: PropTypes.array.isRequired,
         pars: PropTypes.array.isRequired,
         addParticipant: PropTypes.func.isRequired,
-        getCurrentParticipants: PropTypes.func.isRequired
+        getCurrentParticipants: PropTypes.func.isRequired,
+        checkStatusEdit: PropTypes.func.isRequired
         };
 
 
@@ -183,9 +184,18 @@ export class NewCollection extends Component{
             let totalCost = e.target.TotalCost.value;
             let photo = e.target.CollectionPhoto.value;
             let spreadsheet = e.target.CollectionSpreadsheet.value;
+            let status = e.target.CollectionStatus.value;
 
-            this.props.editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet);
-            this.setState({editModalShow:false, refresh:"YES"})
+            if (status === "ACTIVE"){
+                this.props.checkStatusEdit(status, collectionId)
+
+                this.props.editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status);
+                this.setState({editModalShow:false, refresh:"YES"})
+            } else {
+                this.props.editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status);
+                this.setState({editModalShow:false, refresh:"YES"})
+            }
+
         } else {
             const formData = new FormData();
         
@@ -197,14 +207,22 @@ export class NewCollection extends Component{
             let totalCost = e.target.TotalCost.value;
             let ogfile = e.target.CollectionPhoto.value;
             let spreadsheet = e.target.CollectionSpreadsheet.value;
+            let status = e.target.CollectionStatus.value;
 
             formData.append(
                 "myFile",
                 file
             );
 
-            this.props.addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet);
-            this.setState({editModalShow:false, refresh:"YES"})
+            if (status === "ACTIVE"){
+                this.props.checkStatusEdit(status, collectionId)
+
+                this.props.addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status);
+                this.setState({editModalShow:false, refresh:"YES"})
+            } else {
+                this.props.addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status);
+                this.setState({editModalShow:false, refresh:"YES"})
+            }
         }
     };
 
@@ -270,7 +288,7 @@ export class NewCollection extends Component{
 
     
     render(){
-        const {collid, colldate, colltype, colltotalweight, colltotalcost, collphoto, collspreadsheet, whoid, whototaldonated, whototalspent, whoremainder, whoreceipt, dons}=this.state;
+        const {collid, colldate, colltype, colltotalweight, colltotalcost, collphoto, collspreadsheet, collstatus, whoid, whototaldonated, whototalspent, whoremainder, whoreceipt, dons}=this.state;
         let addModalClose=()=>this.setState({addModalShow:false, refresh: "YES"});
         let editModalClose=()=>this.setState({editModalShow:false, refresh: "YES"});
         let addParticipationClose=()=>this.setState({addParticipationShow:false, refresh: "YES"});
@@ -348,7 +366,8 @@ export class NewCollection extends Component{
                                                     colltotalcost:coll.TotalCost,
                                                     collphoto:coll.CollectionPhoto,
                                                     collphotourl:`http://127.0.0.1:8000/media/${coll.CollectionPhoto}`,
-                                                    collspreadsheet:coll.CollectionSpreadsheet
+                                                    collspreadsheet:coll.CollectionSpreadsheet,
+                                                    collstatus:coll.CollectionStatus
                                                     })}
                                                 >
                                                         Edit
@@ -364,6 +383,7 @@ export class NewCollection extends Component{
                                                 colltotalcost={colltotalcost}
                                                 collphoto={collphoto}
                                                 collspreadsheet={collspreadsheet}
+                                                collstatus={collstatus}
                                                 />
                                                 <Dropdown.Item
                                                 onClick={()=>this.handleDelete(coll.CollectionID)}>
@@ -443,4 +463,4 @@ const mapStateToProps = (state) => ({
     total: state.collections.total
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors, addParticipant, getCurrentParticipants })(NewCollection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors, addParticipant, getCurrentParticipants, checkStatusEdit})(NewCollection)

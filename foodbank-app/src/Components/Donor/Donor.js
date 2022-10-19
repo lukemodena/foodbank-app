@@ -19,34 +19,35 @@ export class NewDonors extends Component {
     constructor(props){
         super(props);
         this.state={
+            page: "Contacts",
             refresh: "NO",
             searchValue: "",
             monthValue: "",
-            monthFilter:"All Donors",
+            monthFilter:"All Contacts",
             monthOptions: [
                 {
                     key: 0,
                     type: "All",
                     value: "",
-                    filter: "All Donors"
+                    filter: "All Contacts"
                 },
                 {
                     key: 1,
                     type: "Monthly",
                     value: "1",
-                    filter: "Monthly Donors"
+                    filter: "Monthly Contacts"
                 },
                 {
                     key: 2,
                     type: "3 Months",
                     value: "3",
-                    filter: "3 Months Donors"
+                    filter: "3 Months Contacts"
                 },
                 {
                     key: 3,
-                    type: "Special",
-                    value: "spec",
-                    filter: "Special Donors"
+                    type: "Other",
+                    value: "0",
+                    filter: "Other Contacts"
                 }
             ],
 
@@ -76,7 +77,7 @@ export class NewDonors extends Component {
                 refresh:"NO",
                 searchValue: "",
                 monthValue: "",
-                monthFilter:"All Donors",
+                monthFilter:"All Contacts",
             });
         }
     }
@@ -140,14 +141,11 @@ export class NewDonors extends Component {
         if (donorType === "1") {
             let type = "Monthly"
             return type
-        } else if (donorType === "1,spec") {
-            let type = "Monthly (Special)"
-            return type
         } else if (donorType === "3") {
             let type = "3 Months"
             return type
-        } else if (donorType === "3,spec") {
-            let type = "3 Months (Special)"
+        } else if (donorType === "0") {
+            let type = "Other"
             return type
         }
     };
@@ -173,7 +171,7 @@ export class NewDonors extends Component {
 
                             <Dropdown.Menu>
                                 {this.state.monthOptions.map((option) => (
-                                    <Dropdown.Item key={option.key} onClick={() => this.handleFilter(option.value, option.filter)} href="#/donor">{option.type}</Dropdown.Item>
+                                    <Dropdown.Item key={option.key} onClick={() => this.handleFilter(option.value, option.filter)} href="#/contacts">{option.type}</Dropdown.Item>
                                 ))}
                             </Dropdown.Menu>
                         </Dropdown>
