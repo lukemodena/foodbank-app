@@ -254,12 +254,10 @@ export const deleteDonor = (donorId) => async dispatch => {
                 type: DELETE_DONOR_SUCCESS,
                 payload: res.data
             });
-            dispatch(alert('Donor Deleted'));
         } catch (err) {
             dispatch({
                 type: DELETE_DONOR_FAIL
             });
-            dispatch(alert('Delete Fail'));
         }
     } else {
         dispatch({

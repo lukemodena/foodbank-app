@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { AddDonorModal } from "./AddDonModal";
 import { EditDonorModal } from './EditDonModal';
 import SearchBar from "./SearchBar";
+import { SuccessModal } from '../common/SuccessModal';
 
 import { getDonors, searchDonors, deleteDonor, editDonor } from '../../actions/donors';
 
@@ -50,7 +51,6 @@ export class NewDonors extends Component {
                     filter: "Other Contacts"
                 }
             ],
-
         }
     }
 
@@ -108,6 +108,8 @@ export class NewDonors extends Component {
     handleDelete = (donId) => {
         if(window.confirm('Are you sure?')){
             this.props.deleteDonor(donId);
+
+            this.setState({successDeleteModalShow:true});
         }
     }
 
@@ -130,7 +132,8 @@ export class NewDonors extends Component {
         let involveNo = e.target.InvolveNo.value
 
         this.props.editDonor(donorId, fullName, firstName, lastName, email, address1, address2, postCode, donorType, notes, phone, involveNo);
-        this.setState({editModalShow:false, refresh: "YES"});
+
+        this.setState({successModalShow:true});
     };
 
     // Donor Type
@@ -151,10 +154,11 @@ export class NewDonors extends Component {
     };
 
     render() {
-        const {donid, donfullname, donfirstname, donlastname, donemail, donaddress1, donaddress2, donpostcode, dondonortype, donnotes, donphone, doninvolveno}=this.state;
+        const {donid, donfullname, donfirstname, donlastname, donemail, donaddress1, donaddress2, donpostcode, dondonortype, donnotes, donphone, doninvolveno, type, isAdd, reqStatus}=this.state;
         let addModalClose=()=>this.setState({addModalShow:false, refresh: "YES"});
         let editModalClose=()=>this.setState({editModalShow:false, refresh: "YES"});
-
+        let successModalClose=()=>this.setState({successModalShow:false});
+        let successDeleteModalClose=()=>this.setState({successDeleteModalShow:false});
        
         return (
             <div>
@@ -195,6 +199,7 @@ export class NewDonors extends Component {
                 
                 {/* Donor Table */}
                 <div style={{overflowX:"auto"}}>
+
                     <Table className="mt-4" striped bordered hover size="sm">
                         <thead>
                             <tr>
@@ -237,7 +242,11 @@ export class NewDonors extends Component {
                                                     dondonortype:don.DonorType,
                                                     donnotes:don.Notes,
                                                     donphone:don.Phone,
-                                                    doninvolveno:don.InvolveNo
+                                                    doninvolveno:don.InvolveNo,
+                                                    successModalShow:false,
+                                                    reqStatus:`${don.FullName} saved`,
+                                                    type:"contact",
+                                                    isAdd:false
                                                     })}
                                             >
                                                 Edit
@@ -258,15 +267,33 @@ export class NewDonors extends Component {
                                             donnotes={donnotes}
                                             donphone={donphone}
                                             doninvolveno={doninvolveno}
+                                            successModalShow={this.state.successModalShow}
+                                            successModalClose={successModalClose}
+                                            reqStatus={reqStatus}
+                                            type={type}
+                                            isAdd={isAdd}
                                             />
 
                                             {/* Delete Donor */}
 
                                             <Dropdown.Item
-                                                onClick={()=>this.handleDelete(don.DonorID)}
+                                                onClick={()=>{
+                                                    this.setState({
+                                                        successDeleteModalShow:false,
+                                                        reqStatus:`${don.FullName} deleted`,
+                                                        type:"contact",
+                                                        isAdd:false,
+                                                    }); 
+                                                    this.handleDelete(don.DonorID)}}
                                             >
                                                 Delete
                                             </Dropdown.Item>
+                                            <SuccessModal show={this.state.successDeleteModalShow}
+                                                onHide={successDeleteModalClose}
+                                                reqStatus={reqStatus}
+                                                type={type}
+                                                isAdd={isAdd}
+                                            />
                                         </Dropdown.Menu>
                                     </Dropdown>
                                     </td>

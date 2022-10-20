@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { addDonor } from '../../actions/donors';
 
+import { SuccessModal } from '../common/SuccessModal';
+
 
 export class AddDonorForm extends Component{
 
@@ -19,7 +21,11 @@ export class AddDonorForm extends Component{
             Address2:"",
             PostCode:"",
             Notes:"N/A",
-            Phone:""
+            Phone:"",
+            successModalShow:false,
+            reqStatus:"",
+            type:"contact",
+            isAdd: true
         }
     };
 
@@ -79,6 +85,8 @@ export class AddDonorForm extends Component{
 
         this.props.addDonor(fullName, firstName, lastName, email, address1, address2, postCode, donorType, notes, phone);
 
+        let response = `${fullName} added`
+
         this.setState({
             fname:"",
             lname:"",
@@ -88,15 +96,24 @@ export class AddDonorForm extends Component{
             Address2:"",
             PostCode:"",
             Notes:"N/A",
-            Phone:""
+            Phone:"",
+            successModalShow:true,
+            reqStatus:response
         })
     }
 
-    render() {
 
+    render() {
+        let successModalClose=()=>this.setState({successModalShow:false});
         return (
             // Add Donor Form 
             <div>
+                <SuccessModal show={this.state.successModalShow}
+                        onHide={successModalClose}
+                        reqStatus={this.state.reqStatus}
+                        type={this.state.type}
+                        isAdd={this.state.isAdd}
+                />
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group controlId='FirstName'>
                         <Form.Label>First Name</Form.Label>

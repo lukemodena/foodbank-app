@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Modal, Row, Col, Form} from 'react-bootstrap';
 
-
+import { SuccessModal } from '../common/SuccessModal';
 
 // EDIT DONOR MODAL (Function) //
 
@@ -21,7 +21,12 @@ export function EditDonorModal(props) {
         dondonortype,
         donnotes,
         donphone,
-        doninvolveno
+        doninvolveno,
+        successModalShow,
+        successModalClose,
+        reqStatus,
+        type,
+        isAdd
     } = props
 
     return (
@@ -40,6 +45,12 @@ export function EditDonorModal(props) {
                     <p style={{fontSize: "15px", fontStyle: "italic"}}>{donfullname} has participated in the collection <strong>{doninvolveno}</strong> times.</p>
                     <Row>
                         <Col sm={6}>
+                            <SuccessModal show={successModalShow}
+                            onHide={successModalClose}
+                            reqStatus={reqStatus}
+                            type={type}
+                            isAdd={isAdd}
+                            />
                             <Form onSubmit={edit}>
                                 <Form.Group controlId='DonorID'>
                                     <Form.Control type='hidden' name='DonorID' disabled placeholder='DonorID' defaultValue={donid} />
