@@ -4,7 +4,7 @@ import { Button, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { addCollection, checkStatusAdd } from '../../actions/collections';
-
+import { SuccessModal } from '../common/SuccessModal';
 
 export class AddCollectionForm extends Component{
 
@@ -16,7 +16,11 @@ export class AddCollectionForm extends Component{
             Type:"",
             TotalWeight:"0",
             TotalCost:"0",
-            Status:"PLANNED"
+            Status:"PLANNED",
+            successModalShow:false,
+            reqStatus:"",
+            type:"collection",
+            isAdd: true
         }
     };
 
@@ -45,31 +49,45 @@ export class AddCollectionForm extends Component{
             this.props.checkStatusAdd(status)
             this.props.addCollection(date, type, totalWeight, totalCost, photo, spreadsheet, status);
 
+            let response = `Collection on ${date} added`
+
             this.setState({
                 CollectionDate:"",
                 Type:"",
                 TotalWeight:"",
                 TotalCost:"",
-                Status:"PLANNED"
+                Status:"PLANNED",
+                successModalShow:true,
+                reqStatus:response
             })
         } else {
             this.props.addCollection(date, type, totalWeight, totalCost, photo, spreadsheet, status);
             
+            let response = `Collection on ${date} added`
+
             this.setState({
                 CollectionDate:"",
                 Type:"",
                 TotalWeight:"",
                 TotalCost:"",
-                Status:"PLANNED"
+                Status:"PLANNED",
+                successModalShow:true,
+                reqStatus:response
             })
         }
     }
 
     render() {
-
+        let successModalClose=()=>this.setState({successModalShow:false});
         return (
             // Add Donor Form 
             <div>
+                <SuccessModal show={this.state.successModalShow}
+                        onHide={successModalClose}
+                        reqStatus={this.state.reqStatus}
+                        type={this.state.type}
+                        isAdd={this.state.isAdd}
+                />
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group controlId='CollectionDate'>
                         <Form.Label>Collection Date</Form.Label>

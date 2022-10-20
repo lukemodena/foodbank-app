@@ -8,6 +8,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/';
 import { TimePicker } from '@mui/x-date-pickers/';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
+import { SuccessModal } from '../common/SuccessModal';
+
 
 export function EditParticipationModal(props){
     const {
@@ -36,7 +38,12 @@ export function EditParticipationModal(props){
         totalDonatedVal,
         paymentRecievedVal,
         totDonChange,
-        payRecChange
+        payRecChange,
+        successModalShow,
+        successModalClose,
+        reqStatus,
+        type,
+        isAdd
     } = props
     
     
@@ -75,9 +82,9 @@ export function EditParticipationModal(props){
 
         let DonationChange = parseFloat(TotalDonated) - parseFloat(originalTotalDonated)
 
-        console.log(CollectionID, DonorID, ParticipantID, PaymentRecieved, "DonType:", DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID);
+       //console.log(CollectionID, DonorID, ParticipantID, PaymentRecieved, "DonType:", DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID);
 
-        //editpart(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID);
+        editpart(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID);
     }
 
 
@@ -97,6 +104,12 @@ export function EditParticipationModal(props){
         
                     <Row>
                         <Col sm={6}>
+                            <SuccessModal show={successModalShow}
+                                onHide={successModalClose}
+                                reqStatus={reqStatus}
+                                type={type}
+                                isAdd={isAdd}
+                            />
                             <Form onSubmit={handleSubmit}>
                             
                                 <Form.Group controlId='CollectionID'>

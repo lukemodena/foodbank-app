@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { AddParticipationModal } from './AddParticipationModal';
 import { EditParticipationModal } from './EditParticipationModal';
 import SearchBar from './SearchBar';
+import { SuccessModal } from '../common/SuccessModal';
 
 import { getDonors } from '../../actions/donors';
 import { getCollections } from '../../actions/collections';
@@ -161,6 +162,8 @@ export class ParticipationPage extends Component {
         // - if no, new participant is added + if cash donation wholesale is updated
         
         this.props.getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, donId, colId, whoId)
+        this.setState({successModalShow:true});
+        
     };
 
     // Edit Participant
@@ -168,6 +171,7 @@ export class ParticipationPage extends Component {
     handleEditParticipant = (CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID) => {
 
         this.props.editParticipant(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID)
+        this.setState({successModalShow:true});
     };
 
     // Participant Delete
@@ -175,7 +179,7 @@ export class ParticipationPage extends Component {
     handleDelete = (parId, parTotDon, collId, wholId) => {
         if(window.confirm('Are you sure?')){
             this.props.deleteParticipant(parId, parTotDon, collId, wholId);
-            this.setState({refresh:"YES"})
+            this.setState({successDeleteModalShow:true});
         }
     }
 
@@ -234,10 +238,12 @@ export class ParticipationPage extends Component {
     };
 
     render() {
-        const {parid, donid, whoid, collid, colldate, donfullname, donemail, donaddress1, donaddress2, donpostcode, donnotes, donphone, pardontype, partotdon, partime, parrec, dons}=this.state;
+        const {parid, donid, whoid, collid, colldate, donfullname, donemail, donaddress1, donaddress2, donpostcode, donnotes, donphone, pardontype, partotdon, partime, parrec, dons, type, isAdd, reqStatus}=this.state;
         let addParticipationClose=()=>this.setState({addParticipationShow:false, refresh: "YES"});
         let editParticipationClose=()=>this.setState({editParticipationShow:false, refresh: "YES"});
-
+        let successModalClose=()=>this.setState({successModalShow:false});
+        let successDeleteModalClose=()=>this.setState({successDeleteModalShow:false});
+       
         const typeChanger = (inputValue) => {
             this.setState({donationTypeVal:inputValue});
         };
@@ -301,7 +307,10 @@ export class ParticipationPage extends Component {
                             collid:this.state.collectionID,
                             whoid:this.props.whol[0].WholesaleID,
                             dons:this.props.dons,
-                            colldate:this.state.collectionDate
+                            colldate:this.state.collectionDate,
+                            reqStatus:`Participant for collection on ${this.state.collectionDate} saved`,
+                            type:"participant",
+                            isAdd:true
                         })}>
                             <BsPlusLg className="participant-addButton-Icon"/>
                         </Button>}
@@ -313,6 +322,11 @@ export class ParticipationPage extends Component {
                             whoid={whoid}
                             dons={dons}
                             colldate={colldate}
+                            successModalShow={this.state.successModalShow}
+                            successModalClose={successModalClose}
+                            reqStatus={reqStatus}
+                            type={type}
+                            isAdd={isAdd}
                         />
 
                     </Row>
@@ -365,7 +379,11 @@ export class ParticipationPage extends Component {
                                                         pardontype:par.DonationType,
                                                         partotdon:par.TotalDonated,
                                                         partime:dayjs(`2022-04-07 T${par.DropOffTime}`),
-                                                        parrec:par.PaymentRecieved
+                                                        parrec:par.PaymentRecieved,
+                                                        successModalShow:false,
+                                                        reqStatus:`${par.FullName} from collection on ${this.state.collectionDate} saved`,
+                                                        type:"participant",
+                                                        isAdd:false
                                                     }); 
                                                     typeChanger(par.DonationType); 
                                                     handleChange(dayjs(`2022-04-07 T${par.DropOffTime}`));
@@ -399,13 +417,36 @@ export class ParticipationPage extends Component {
                                                 paymentRecievedVal={this.state.paymentRecievedVal}
                                                 totDonChange={totDonChange}
                                                 payRecChange={payRecChange}
+                                                successModalShow={this.state.successModalShow}
+                                                successModalClose={successModalClose}
+                                                reqStatus={reqStatus}
+                                                type={type}
+                                                isAdd={isAdd}
                                             />
-                                            {/* Delete Donor */}
+                                            {/* Delete Participant */}
 
                                             <Dropdown.Item
-                                                onClick={()=>this.handleDelete(par.ParticipationID, par.TotalDonated, par.CollectionID, par.WholesaleID)}>
+                                                onClick={()=>{
+                                                    this.setState({
+                                                        successDeleteModalShow:false,
+                                                        reqStatus:`${par.FullName} from collection on ${this.state.collectionDate} deleted`,
+                                                        type:"participant",
+                                                        isAdd:false
+                                                    }); 
+                                                    this.handleDelete(par.ParticipationID, par.TotalDonated, par.CollectionID, par.WholesaleID)
+                                                    }
+                                                }
+                                            >
                                                 Delete
                                             </Dropdown.Item>
+
+                                            <SuccessModal show={this.state.successDeleteModalShow}
+                                                onHide={successDeleteModalClose}
+                                                reqStatus={reqStatus}
+                                                type={type}
+                                                isAdd={isAdd}
+                                            />
+
                                         </Dropdown.Menu>
                                     </Dropdown>
                                     </td>

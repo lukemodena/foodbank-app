@@ -1,6 +1,8 @@
 import React from "react";
 import {Button, Col, Form, Row, Modal} from 'react-bootstrap';
 
+import { SuccessModal } from "../../common/SuccessModal";
+
 export function EditWholesaleModal(props) {
     const {
         show,
@@ -12,6 +14,11 @@ export function EditWholesaleModal(props) {
         whototalspent,
         whoremainder,
         whoreceipt,
+        successModalShow,
+        successModalClose,
+        reqStatus,
+        type,
+        isAdd
     } = props
     return (
         <div className='container'>
@@ -29,6 +36,12 @@ export function EditWholesaleModal(props) {
 
                     <Row>
                         <Col sm={6}>
+                            <SuccessModal show={successModalShow}
+                                onHide={successModalClose}
+                                reqStatus={reqStatus}
+                                type={type}
+                                isAdd={isAdd}
+                            />
                             <Form onSubmit={editwhol}>
                                 <Form.Group controlId='CollectionID'>
                                     <Form.Label>Collection ID</Form.Label>

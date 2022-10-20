@@ -1,6 +1,7 @@
 import React from "react";
 import {Button, Col, Form, Row, Modal, Image} from 'react-bootstrap';
 import { BsDownload } from "react-icons/bs";
+import { SuccessModal } from "../common/SuccessModal";
 
 export function EditCollectionModal(props) {
     const {
@@ -15,7 +16,12 @@ export function EditCollectionModal(props) {
         colltotalcost,
         collphoto,
         collspreadsheet,
-        collstatus
+        collstatus,
+        successModalShow,
+        successModalClose,
+        reqStatus,
+        type,
+        isAdd
     } = props
     return (
         <div className='container'>
@@ -33,6 +39,12 @@ export function EditCollectionModal(props) {
 
                     <Row>
                         <Col sm={6}>
+                            <SuccessModal show={successModalShow}
+                                onHide={successModalClose}
+                                reqStatus={reqStatus}
+                                type={type}
+                                isAdd={isAdd}
+                            />
                             <Form onSubmit={addphoto}>
                                 <Form.Group controlId='CollectionID'>
                                     <Form.Control type='hidden' name='CollectionID' disabled placeholder='CollectionID' defaultValue={collid}/>

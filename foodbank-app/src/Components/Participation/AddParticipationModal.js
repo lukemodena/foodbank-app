@@ -8,6 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/';
 import { TimePicker } from '@mui/x-date-pickers/';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
+import { SuccessModal } from '../common/SuccessModal';
 
 export function AddParticipationModal(props){
     const {
@@ -17,7 +18,12 @@ export function AddParticipationModal(props){
         collid,
         whoid,
         dons,
-        colldate
+        colldate,
+        successModalShow,
+        successModalClose,
+        reqStatus,
+        type,
+        isAdd
     } = props
 
     const [value, setValue] = React.useState(dayjs('2022-04-07 T00:00:00'));
@@ -74,6 +80,12 @@ export function AddParticipationModal(props){
                 <Modal.Body>
                     <Row>
                         <Col sm={6}>
+                            <SuccessModal show={successModalShow}
+                                onHide={successModalClose}
+                                reqStatus={reqStatus}
+                                type={type}
+                                isAdd={isAdd}
+                            />
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group controlId='CollectionID'>
                                     <Form.Control type='hidden' name='CollectionID' disabled placeholder='CollectionID' defaultValue={collid}/>
