@@ -319,7 +319,7 @@ export class NewDonors extends Component {
                                                     colldate:this.props.statusCol[0].CollectionDate,
                                                     reqStatus:`Participant for collection on ${this.props.statusCol[0].CollectionDate} saved`,
                                                     type:"donor",
-                                                    isAdd:true,
+                                                    isAdd:false,
                                                     donid:don.DonorID,
                                                     donfullname:don.FullName,
                                                 })}
