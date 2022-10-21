@@ -8,8 +8,11 @@ import { AddDonorModal } from "./AddDonModal";
 import { EditDonorModal } from './EditDonModal';
 import SearchBar from "./SearchBar";
 import { SuccessModal } from '../common/SuccessModal';
+import { AddParticipationModal } from './AddParticipatingDonorModal';
 
 import { getDonors, searchDonors, deleteDonor, editDonor } from '../../actions/donors';
+import { getActiveCollection } from '../../actions/collections';
+import { getCurrentParticipants } from '../../actions/participation';
 
 // MAIN DONORS PAGE //
 
@@ -58,21 +61,27 @@ export class NewDonors extends Component {
 
     static propTypes = {
         dons: PropTypes.array.isRequired,
+        statusCol: PropTypes.array.isRequired,
+        whol: PropTypes.array.isRequired,
         getDonors: PropTypes.func.isRequired,
         searchDonors: PropTypes.func.isRequired,
         deleteDonor: PropTypes.func.isRequired,
         editDonor: PropTypes.func.isRequired,
+        getActiveCollection: PropTypes.func.isRequired,
+        getCurrentParticipants: PropTypes.func.isRequired,
       };
 
     // Handle Data Request (Initial + Refresh)
 
     componentDidMount() {
         this.props.getDonors();
+        this.props.getActiveCollection();
     }
 
     componentDidUpdate() {
         if (this.state.refresh === "YES") {
             this.props.getDonors();
+            this.props.getActiveCollection();
             this.setState({
                 refresh:"NO",
                 searchValue: "",
@@ -136,6 +145,31 @@ export class NewDonors extends Component {
         this.setState({successModalShow:true});
     };
 
+    // Add Participant
+
+    handleAddParticipant = (CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, WholesaleID) => {
+    
+        let colId = CollectionID
+        let donId = DonorID
+        let payRec = PaymentRecieved
+        let donTyp = DonationType
+        let totDon = TotalDonated
+        let droTim = DropOffTime
+        let whoId = WholesaleID
+
+        //let droTim = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(time)
+        let CollID = colId
+        let DonID = donId
+
+        // Checks if Donor already Participant in collection, 
+        // - If yes, new participant is not added 
+        // - if no, new participant is added + if cash donation wholesale is updated
+        
+        this.props.getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, donId, colId, whoId)
+        this.setState({successModalShow:true});
+        
+    };
+
     // Donor Type
 
     handleDonorType = (inputValue) => {
@@ -154,11 +188,12 @@ export class NewDonors extends Component {
     };
 
     render() {
-        const {donid, donfullname, donfirstname, donlastname, donemail, donaddress1, donaddress2, donpostcode, dondonortype, donnotes, donphone, doninvolveno, type, isAdd, reqStatus}=this.state;
+        const {donid, donfullname, donfirstname, donlastname, donemail, donaddress1, donaddress2, donpostcode, dondonortype, donnotes, donphone, doninvolveno, type, isAdd, reqStatus, collid, whoid, colldate}=this.state;
         let addModalClose=()=>this.setState({addModalShow:false, refresh: "YES"});
         let editModalClose=()=>this.setState({editModalShow:false, refresh: "YES"});
         let successModalClose=()=>this.setState({successModalShow:false});
         let successDeleteModalClose=()=>this.setState({successDeleteModalShow:false});
+        let addParticipationClose=()=>this.setState({addParticipationShow:false, refresh: "YES"});
        
         return (
             <div>
@@ -274,6 +309,38 @@ export class NewDonors extends Component {
                                             isAdd={isAdd}
                                             />
 
+                                            {/* Add to Participation List */}
+
+                                            <Dropdown.Item onClick={() => 
+                                                this.setState({
+                                                    addParticipationShow:true,
+                                                    collid:this.props.statusCol[0].CollectionID,
+                                                    whoid:this.props.whol[0].WholesaleID,
+                                                    colldate:this.props.statusCol[0].CollectionDate,
+                                                    reqStatus:`Participant for collection on ${this.props.statusCol[0].CollectionDate} saved`,
+                                                    type:"donor",
+                                                    isAdd:true,
+                                                    donid:don.DonorID,
+                                                    donfullname:don.FullName,
+                                                })}
+                                            >
+                                                Add to Participant List
+                                            </Dropdown.Item>
+                                            <AddParticipationModal show={this.state.addParticipationShow}
+                                            onHide={addParticipationClose}
+                                            addpart={this.handleAddParticipant}
+                                            collid={collid}
+                                            whoid={whoid}
+                                            colldate={colldate}
+                                            successModalShow={this.state.successModalShow}
+                                            successModalClose={successModalClose}
+                                            reqStatus={reqStatus}
+                                            type={type}
+                                            isAdd={isAdd}
+                                            donid={donid}
+                                            donfullname={donfullname}
+                                            />
+
                                             {/* Delete Donor */}
 
                                             <Dropdown.Item
@@ -319,7 +386,9 @@ export class NewDonors extends Component {
 
 const mapStateToProps = (state) => ({
     dons: state.donors.dons,
-    result: state.donors.result
+    result: state.donors.result,
+    statusCol: state.collections.statusCol,
+    whol: state.wholesale.whol
 });
 
-export default connect(mapStateToProps, { getDonors, searchDonors, deleteDonor, editDonor })(NewDonors)
+export default connect(mapStateToProps, { getDonors, searchDonors, deleteDonor, editDonor, getActiveCollection, getCurrentParticipants })(NewDonors)

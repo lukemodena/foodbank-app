@@ -150,10 +150,10 @@ export class ParticipationPage extends Component {
         let payRec = PaymentRecieved
         let donTyp = DonationType
         let totDon = TotalDonated
-        let time = DropOffTime
+        let droTim = DropOffTime
         let whoId = WholesaleID
 
-        let droTim = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(time)
+        //let droTim = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(time)
         let CollID = colId
         let DonID = donId
 
@@ -241,7 +241,7 @@ export class ParticipationPage extends Component {
         const {parid, donid, whoid, collid, colldate, donfullname, donemail, donaddress1, donaddress2, donpostcode, donnotes, donphone, pardontype, partotdon, partime, parrec, dons, type, isAdd, reqStatus}=this.state;
         let addParticipationClose=()=>this.setState({addParticipationShow:false, refresh: "YES"});
         let editParticipationClose=()=>this.setState({editParticipationShow:false, refresh: "YES"});
-        let successModalClose=()=>this.setState({successModalShow:false});
+        let successModalClose=()=>{this.setState({successModalShow:false}); editParticipationClose(); addParticipationClose()};
         let successDeleteModalClose=()=>this.setState({successDeleteModalShow:false});
        
         const typeChanger = (inputValue) => {

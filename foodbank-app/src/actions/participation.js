@@ -325,20 +325,20 @@ export const editParticipant = (CollectionID, DonorID, ParticipantID, PaymentRec
         };
         
         const body = {
-            "ParticipationID":parseInt(ParticipantID),
+            "ParticipationID":`${ParticipantID}`,
             "PaymentRecieved":`${PaymentRecieved}`,
             "DonationType":`${DonationType}`,
             "TotalDonated":`${TotalDonated}`,
             "DropOffTime":`${DropOffTime}`,
-            "DonorID":parseInt(DonorID),
-            "CollectionID":parseInt(CollectionID),
-            "WholesaleID":parseInt(WholesaleID)
+            "DonorID":`${DonorID}`,
+            "CollectionID":`${CollectionID}`,
+            "WholesaleID":`${WholesaleID}`
         };
 
         let donChange = parseFloat(DonationChange)
     
         try {
-            const res = await axios.post(`${process.env.REACT_APP_API}participants`, body, config);
+            const res = await axios.put(`${process.env.REACT_APP_API}participants`, body, config);
             dispatch({
                 type: EDIT_PARTICIPATION_SUCCESS,
                 payload: res.data

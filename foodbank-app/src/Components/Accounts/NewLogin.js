@@ -66,9 +66,6 @@ const NewLogin = ({ login, isAuthenticated, loginStatus }) => {
               
                 </Form.Group>
                 <p>
-                  Don't have an account? <Link to='/register'>Register</Link>
-                </p>
-                <p>
                   Forgot your Password? <Link to='/reset-password'>Reset Password</Link>
                 </p>
               </Form>

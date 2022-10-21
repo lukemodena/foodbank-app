@@ -77,12 +77,12 @@ export function EditParticipationModal(props){
         let DonationType = e.target.DonationType.value;
         let originalTotalDonated = e.target.OriginalTotalDonated.value;
         let TotalDonated = totalDonatedVal;
-        let DropOffTime = value;
+        let time = value;
         let WholesaleID = e.target.WholesaleID.value;
 
         let DonationChange = parseFloat(TotalDonated) - parseFloat(originalTotalDonated)
-
-       //console.log(CollectionID, DonorID, ParticipantID, PaymentRecieved, "DonType:", DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID);
+        let DropOffTime = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(time)
+        //console.log(CollectionID, DonorID, ParticipantID, PaymentRecieved, "DonType:", DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID);
 
         editpart(CollectionID, DonorID, ParticipantID, PaymentRecieved, DonationType, TotalDonated, DonationChange, DropOffTime, WholesaleID);
     }

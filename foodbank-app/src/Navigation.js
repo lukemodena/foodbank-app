@@ -25,9 +25,6 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
 
     const guestLinks = () => (
         <Fragment>
-            {/* <NavLink className="d-inline p-2 bg-light text-black ml-auto" to="/register">
-                Register
-            </NavLink> */}
             <NavLink className="d-inline p-2 bg-light text-black ml-auto" to="/login">
                 Login
             </NavLink>

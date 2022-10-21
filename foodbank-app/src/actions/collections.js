@@ -22,7 +22,11 @@ import {
     ADD_WHOLESALE_SUCCESS,
     ADD_WHOLESALE_FAIL,
     COLLECTION_STATUS_SUCCESS,
-    COLLECTION_STATUS_FAIL
+    COLLECTION_STATUS_FAIL,
+    WHOLESALE_SUCCESS,
+    WHOLESALE_FAIL,
+    ACTIVE_COLLECTION_SUCCESS,
+    ACTIVE_COLLECTION_FAIL
 } from './types';
 
 // PULL COLLECTION
@@ -473,5 +477,70 @@ export const addCollectionPhoto = (file, photo, ogfile, collectionId, date, type
         dispatch({
             type: OLD_PHOTO_DELETE_CANCEL
         });
+    }
+}
+// PULL WHOLESALE
+
+export const getWholesale = (CollectionID) => async dispatch => {
+
+    if (localStorage.getItem('token')){
+        const config ={
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`,
+                'Accept': 'application/json'
+            }
+        };
+    
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_API}searchwholesale?collid=${CollectionID}`, config)
+            dispatch({
+                type: WHOLESALE_SUCCESS,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: WHOLESALE_FAIL
+            });
+        }
+    } else {
+        dispatch({
+            type: WHOLESALE_FAIL
+        });
+    }
+};
+
+// GET ACTIVE COLLECTION
+
+export const getActiveCollection = () => async dispatch => {
+    if (localStorage.getItem('token')){
+        const config ={
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`,
+                'Accept': 'application/json'
+            }
+        };
+        try{ 
+            const res = await axios.get(`${process.env.REACT_APP_API}collectionstatus?status=ACTIVE`, config);
+            dispatch({
+                type: ACTIVE_COLLECTION_SUCCESS,
+                payload: res.data
+            });
+
+            const CollectionID = await res.data[0].CollectionID;
+            dispatch(getWholesale(CollectionID))
+
+        } catch(err) {
+            dispatch({
+                type: ACTIVE_COLLECTION_FAIL,
+                payload: err
+            });
+        }
+    } else {
+        dispatch({
+            type: ACTIVE_COLLECTION_FAIL
+        });
+        dispatch(alert('Insufficient Credentials'));
     }
 }

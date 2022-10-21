@@ -20,7 +20,9 @@ import {
     AUTHENTICATED_SUCCESS,
     AUTHENTICATED_FAIL,
     COLLECTION_STATUS_SUCCESS,
-    COLLECTION_STATUS_FAIL
+    COLLECTION_STATUS_FAIL,
+    ACTIVE_COLLECTION_SUCCESS,
+    ACTIVE_COLLECTION_FAIL
 } from '../actions/types';
 
 const initialState = { 
@@ -159,6 +161,16 @@ export default function(state = initialState, action) {
                 statusCol: payload
             }
         case COLLECTION_STATUS_FAIL:
+            return {
+                ...state,
+                result: payload
+            }
+        case ACTIVE_COLLECTION_SUCCESS:
+            return {
+                ...state,
+                statusCol: payload
+            }
+        case ACTIVE_COLLECTION_FAIL:
             return {
                 ...state,
                 result: payload
