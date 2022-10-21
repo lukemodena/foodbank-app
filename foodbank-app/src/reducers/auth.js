@@ -12,7 +12,8 @@ import {
 const initialState = {
     token: localStorage.getItem("token"),
     isAuthenticated: null,
-    user: null
+    user: null,
+    loginStatus: ""
 };
 // eslint-disable-next-line
 export default function(state = initialState, action) {
@@ -29,6 +30,7 @@ export default function(state = initialState, action) {
         case LOGIN_SUCCESS:
             localStorage.setItem('token', payload.token)
             localStorage.setItem('isAuthenticated', true)
+            localStorage.setItem('loginStatus', "Success")
             return {
                 ...state,
                 isAuthenticated: true,
@@ -59,11 +61,13 @@ export default function(state = initialState, action) {
         case LOGIN_FAIL:
             localStorage.removeItem('token')
             localStorage.setItem('isAuthenticated', false)
+            localStorage.setItem('loginStatus', "Failed")
             return {
                 ...state,
                 isAuthenticated: false,
                 token: null,
-                user: null
+                user: null,
+                loginStatus: "Failed"
             }
 
         case LOGOUT_SUCCESS:

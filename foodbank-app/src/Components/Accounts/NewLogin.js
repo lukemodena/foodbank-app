@@ -5,7 +5,7 @@ import {Modal, Button, Row, Col, Form} from 'react-bootstrap';
 
 import { login } from '../../actions/auth';
 
-const NewLogin = ({ login, isAuthenticated }) => {
+const NewLogin = ({ login, isAuthenticated, loginStatus }) => {
     const [formData, setFormData] = useState({
         username: '',
         password: ''
@@ -31,10 +31,12 @@ const NewLogin = ({ login, isAuthenticated }) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-
           <Row>
             <Col sm={6}>
               <Form onSubmit={e => onSubmit(e)}>
+                {(loginStatus==="Failed") && <div style={{textAlign:"center"}}>
+                  <p style={{color:"Red",fontSize:"10px"}}>Username and/or password were incorrect, please try again or select 'Reset Password'.</p>
+                </div>}
                 <Form.Group controlId='username'>
                     <Form.Label>Username</Form.Label>
                     <Form.Control 
@@ -61,6 +63,7 @@ const NewLogin = ({ login, isAuthenticated }) => {
                   <Button variant='primary' type='submit'>
                       Login
                   </Button>
+              
                 </Form.Group>
                 <p>
                   Don't have an account? <Link to='/register'>Register</Link>
@@ -79,7 +82,8 @@ const NewLogin = ({ login, isAuthenticated }) => {
 }
 
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    loginStatus: state.auth.loginStatus
 });
 
 export default connect(mapStateToProps, { login })(NewLogin)
