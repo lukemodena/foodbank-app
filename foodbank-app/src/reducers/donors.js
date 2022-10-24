@@ -89,7 +89,7 @@ export default function(state = initialState, action) {
         case DELETE_DONOR_SUCCESS:
             return {
                 ...state,
-                result: payload
+                result: "Contact Deleted Successfully"
             }
 
         case DELETE_DONOR_FAIL:

@@ -24,7 +24,7 @@ export function AddParticipationModal(props){
         type,
         isAdd,
         donid,
-        donfullname,
+        donfullname
     } = props
 
     const [value, setValue] = React.useState(dayjs('2022-04-07 T00:00:00'));
@@ -58,7 +58,7 @@ export function AddParticipationModal(props){
         let DropOffTime = value;
         let WholesaleID = e.target.WholesaleID.value;
 
-        setValue('2022-04-07 T00:00:00'); 
+        setValue(dayjs('2022-04-07 T00:00:00')); 
         setDonationTypeVal(''); 
         setTotalDonatedVal('0'); 
         setPaymentRecievedVal('false');

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Button, Table, Dropdown, Row} from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { BsPlusLg } from "react-icons/bs";
+import { BsPlusLg, BsXCircle } from "react-icons/bs";
 import PropTypes from 'prop-types';
 
 import { AddDonorModal } from "./AddDonModal";
@@ -10,7 +10,7 @@ import SearchBar from "./SearchBar";
 import { SuccessModal } from '../common/SuccessModal';
 import { AddParticipationModal } from './AddParticipatingDonorModal';
 
-import { getDonors, searchDonors, deleteDonor, editDonor } from '../../actions/donors';
+import { getDonors, searchDonors, deleteDonor, editDonor, deleteDonorsMulti } from '../../actions/donors';
 import { getActiveCollection } from '../../actions/collections';
 import { getCurrentParticipants } from '../../actions/participation';
 
@@ -54,6 +54,7 @@ export class NewDonors extends Component {
                     filter: "Other Contacts"
                 }
             ],
+            isChecked:[]
         }
     }
 
@@ -61,6 +62,7 @@ export class NewDonors extends Component {
 
     static propTypes = {
         dons: PropTypes.array.isRequired,
+        partresult: PropTypes.string.isRequired,
         statusCol: PropTypes.array.isRequired,
         whol: PropTypes.array.isRequired,
         getDonors: PropTypes.func.isRequired,
@@ -69,6 +71,7 @@ export class NewDonors extends Component {
         editDonor: PropTypes.func.isRequired,
         getActiveCollection: PropTypes.func.isRequired,
         getCurrentParticipants: PropTypes.func.isRequired,
+        deleteDonorsMulti: PropTypes.func.isRequired,
       };
 
     // Handle Data Request (Initial + Refresh)
@@ -122,6 +125,29 @@ export class NewDonors extends Component {
         }
     }
 
+    // Delete Multiple Donors
+
+    handleChecked = (e) => {
+        const id = e.target.value;
+
+        this.setState({
+            isChecked:[...this.state.isChecked, id]
+        });
+    };
+    
+    handleDeleteMulti = (e) => {
+        e.preventDefault()
+
+        let toDelete = this.state.isChecked
+        let length = toDelete.length
+
+        let message = `Are you sure you want to delete ${length} record/s?`
+        if(window.confirm(message)){
+            this.props.deleteDonorsMulti(toDelete);
+            
+            this.setState({successDeleteModalShow:true});
+        }
+    }
     // Donor Update
 
     handleEditSubmit = (e) => {
@@ -154,18 +180,19 @@ export class NewDonors extends Component {
         let payRec = PaymentRecieved
         let donTyp = DonationType
         let totDon = TotalDonated
-        let droTim = DropOffTime
+        let time = DropOffTime
         let whoId = WholesaleID
 
-        //let droTim = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(time)
+        let droTim = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(time)
         let CollID = colId
         let DonID = donId
 
         // Checks if Donor already Participant in collection, 
         // - If yes, new participant is not added 
         // - if no, new participant is added + if cash donation wholesale is updated
-        
+        //console.log(CollID, DonID, payRec, donTyp, totDon, droTim, donId, colId, whoId)
         this.props.getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, donId, colId, whoId)
+        
         this.setState({successModalShow:true});
         
     };
@@ -188,7 +215,7 @@ export class NewDonors extends Component {
     };
 
     render() {
-        const {donid, donfullname, donfirstname, donlastname, donemail, donaddress1, donaddress2, donpostcode, dondonortype, donnotes, donphone, doninvolveno, type, isAdd, reqStatus, collid, whoid, colldate}=this.state;
+        const {donid, donfullname, donfirstname, donlastname, donemail, donaddress1, donaddress2, donpostcode, dondonortype, donnotes, donphone, doninvolveno, type, isAdd, reqStatus, collid, whoid, colldate, isChecked}=this.state;
         let addModalClose=()=>this.setState({addModalShow:false, refresh: "YES"});
         let editModalClose=()=>this.setState({editModalShow:false, refresh: "YES"});
         let successModalClose=()=>this.setState({successModalShow:false});
@@ -230,6 +257,13 @@ export class NewDonors extends Component {
 
                     </Row>
 
+                    <SuccessModal show={this.state.successDeleteModalShow}
+                        onHide={successDeleteModalClose}
+                        reqStatus={reqStatus}
+                        type={type}
+                        isAdd={isAdd}
+                    />
+
                 </div>
                 
                 {/* Donor Table */}
@@ -238,6 +272,18 @@ export class NewDonors extends Component {
                     <Table className="mt-4" striped bordered hover size="sm">
                         <thead>
                             <tr>
+                                <th>
+                                    <Button className="deleteButton" variant="outline-secondary" onClick={(e) =>{
+                                        this.setState({
+                                            successDeleteModalShow:false,
+                                            reqStatus:`Contacts deleted`,
+                                            type:"contact",
+                                            isAdd:false
+                                        });
+                                        this.handleDeleteMulti(e)}}>
+                                        <BsXCircle className='deleteIcon'/>
+                                    </Button>
+                                </th>
                                 <th>ID</th>
                                 <th>Options</th>
                                 <th>Name</th>
@@ -254,6 +300,7 @@ export class NewDonors extends Component {
                         <tbody>
                             {this.props.dons.map((don)=>
                                 <tr key={don.DonorID}>
+                                    <td><input type="checkbox" value={don.DonorID} checked={don.isChecked} onChange={(e) => this.handleChecked(e)}/></td>
                                     <td>{don.DonorID}</td>
                                     <td>
                                     <Dropdown>
@@ -317,11 +364,10 @@ export class NewDonors extends Component {
                                                     collid:this.props.statusCol[0].CollectionID,
                                                     whoid:this.props.whol[0].WholesaleID,
                                                     colldate:this.props.statusCol[0].CollectionDate,
-                                                    reqStatus:`Participant for collection on ${this.props.statusCol[0].CollectionDate} saved`,
-                                                    type:"donor",
-                                                    isAdd:false,
+                                                    type:"partdonor",
+                                                    isAdd:null,
                                                     donid:don.DonorID,
-                                                    donfullname:don.FullName,
+                                                    donfullname:don.FullName
                                                 })}
                                             >
                                                 Add to Participant List
@@ -334,7 +380,7 @@ export class NewDonors extends Component {
                                             colldate={colldate}
                                             successModalShow={this.state.successModalShow}
                                             successModalClose={successModalClose}
-                                            reqStatus={reqStatus}
+                                            reqStatus={this.props.partresult}
                                             type={type}
                                             isAdd={isAdd}
                                             donid={donid}
@@ -349,18 +395,12 @@ export class NewDonors extends Component {
                                                         successDeleteModalShow:false,
                                                         reqStatus:`${don.FullName} deleted`,
                                                         type:"contact",
-                                                        isAdd:false,
+                                                        isAdd:false
                                                     }); 
                                                     this.handleDelete(don.DonorID)}}
                                             >
                                                 Delete
                                             </Dropdown.Item>
-                                            <SuccessModal show={this.state.successDeleteModalShow}
-                                                onHide={successDeleteModalClose}
-                                                reqStatus={reqStatus}
-                                                type={type}
-                                                isAdd={isAdd}
-                                            />
                                         </Dropdown.Menu>
                                     </Dropdown>
                                     </td>
@@ -386,9 +426,9 @@ export class NewDonors extends Component {
 
 const mapStateToProps = (state) => ({
     dons: state.donors.dons,
-    result: state.donors.result,
+    partresult: state.participants.partresult,
     statusCol: state.collections.statusCol,
     whol: state.wholesale.whol
 });
 
-export default connect(mapStateToProps, { getDonors, searchDonors, deleteDonor, editDonor, getActiveCollection, getCurrentParticipants })(NewDonors)
+export default connect(mapStateToProps, { getDonors, searchDonors, deleteDonor, editDonor, getActiveCollection, getCurrentParticipants, deleteDonorsMulti })(NewDonors)

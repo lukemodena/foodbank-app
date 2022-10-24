@@ -109,10 +109,11 @@ export const getCurrentParticipants = (CollectionID, DonorID, payRec, donTyp, to
     
         try {
             const res = await axios.get(`${process.env.REACT_APP_API}searchparticipants?collid=${CollectionID}&donid=${DonorID}`, config)
-            if (`${res.data[0].DonorID}` === DonorID){
+            
+            if (res.data.length !== 0){
                 dispatch({
                     type: PARTICIPATION_EXISTS,
-                    payload: "Donor Already Participating"
+                    payload: "Donor already Participating"
                 });
 
             } else {
@@ -126,9 +127,9 @@ export const getCurrentParticipants = (CollectionID, DonorID, payRec, donTyp, to
         } catch (err) {
             dispatch({
                 type: PARTICIPATION_NOT_EXISTS,
-                payload: "Donor Not Participating"
+                payload: "errors"
             });
-            dispatch(addParticipant(payRec, donTyp, totDon, droTim, donId, colId, whoId))
+            //dispatch(addParticipant(payRec, donTyp, totDon, droTim, donId, colId, whoId))
         }
     } else {
         dispatch({
@@ -282,9 +283,9 @@ export const addParticipant  = (payRec, donTyp, totDon, droTim, donId, colId, wh
             "DonationType":`${donTyp}`,
             "TotalDonated":`${totDon}`,
             "DropOffTime":`${droTim}`,
-            "DonorID":parseInt(donId),
-            "CollectionID":parseInt(colId),
-            "WholesaleID":parseInt(whoId)
+            "DonorID":`${donId}`,
+            "CollectionID":`${colId}`,
+            "WholesaleID":`${whoId}`
         };
     
         try {
@@ -431,7 +432,8 @@ export const deleteParticipant = (participantID, DonationVal, collectionID, whol
         try {
             const res = await axios.delete(`${process.env.REACT_APP_API}participants/${participantID}`, config);
             dispatch({
-                type: DELETE_PARTICIPATION_SUCCESS
+                type: DELETE_PARTICIPATION_SUCCESS,
+                payload: res.data
             });
 
             dispatch(updateWholesaleDelete(wholesaleID, collectionID, DonationVal));

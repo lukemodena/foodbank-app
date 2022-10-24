@@ -34,7 +34,8 @@ const initialState = {
             "PaymentRecieved": "N/A"
         }
     ],
-    result: '',
+    partresult:"",
+    result:"",
     isAuthenticated: null
 };
 // eslint-disable-next-line
@@ -45,14 +46,14 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 parsList: payload,
-                result: payload
+                partresult: "Participants found successfully"
             }
 
         case PARTICIPATION_LIST_FAIL:
             return {
                 ...state,
                 parsList: [],
-                result: payload
+                partresult: "Participants not found successfully"
             }
 
         case PARTICIPATION_SUCCESS:
@@ -70,13 +71,13 @@ export default function(state = initialState, action) {
         case ADD_PARTICIPATION_SUCCESS:
             return {
                 ...state,
-                result: payload
+                partresult:"Participant added successfully to the collection"
             }
 
         case ADD_PARTICIPATION_FAIL:
             return {
                 ...state,
-                result: payload
+                partresult:"Participant added unsuccessfully to the collection"
             }
 
         case EDIT_PARTICIPATION_SUCCESS:
@@ -104,16 +105,15 @@ export default function(state = initialState, action) {
             }
         
         case PARTICIPATION_EXISTS:
-            alert("Donor Already Participating")
             return {
                 ...state,
-                result: payload
+                partresult:"Contact Already Participating"
             }
         
         case PARTICIPATION_NOT_EXISTS:
             return {
                 ...state,
-                result: payload
+                result:"Contact not participating"
             }
 
     default:

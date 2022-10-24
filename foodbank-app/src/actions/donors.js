@@ -266,3 +266,24 @@ export const deleteDonor = (donorId) => async dispatch => {
         dispatch(alert('Insufficient Credentials'));
     }
 };
+
+// DELETE DONOR
+
+export const deleteDonorsMulti = (donors) => async dispatch => {
+    if (localStorage.getItem('token')) {
+        await donors.map((id) => {
+            try{
+                dispatch(deleteDonor(id))
+            } catch(err) {
+                dispatch({
+                    type: DELETE_DONOR_FAIL
+                })
+            }
+        })
+    } else {
+        dispatch({
+            type: DELETE_DONOR_FAIL
+        });
+        dispatch(alert('Insufficient Credentials'));
+    }
+};

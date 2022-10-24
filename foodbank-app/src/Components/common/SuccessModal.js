@@ -8,7 +8,7 @@ export function SuccessModal(props) {
         onHide,
         reqStatus,
         type,
-        isAdd
+        isAdd,
     } = props
 
     const refresh = () => {
@@ -17,6 +17,10 @@ export function SuccessModal(props) {
         } else {
             onHide()
         }
+    }
+
+    const log = () => {
+        console.log(reqStatus)
     }
     return (
         <div className='container'>
@@ -30,6 +34,10 @@ export function SuccessModal(props) {
                         Request Status
                     </Modal.Title>
                 </Modal.Header>
+
+                {(type === "partdonor") &&<Modal.Body>
+                    {reqStatus}
+                </Modal.Body>}
                 {(isAdd === false) &&<Modal.Body>
                     {reqStatus} successfully!
                 </Modal.Body>}
@@ -37,6 +45,7 @@ export function SuccessModal(props) {
                     {reqStatus} successfully!
                     Would you like to add another {type}?
                 </Modal.Body>}
+                
                 <Modal.Footer>
                     {(isAdd === false) &&<Button variant='danger' onClick={refresh}>Exit</Button>}
                     {(isAdd === true) &&<Row>

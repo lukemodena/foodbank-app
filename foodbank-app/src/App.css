@@ -123,6 +123,18 @@
   border-radius: .2rem;
 }
 
+/* Delete Button */
+
+.deleteButton {
+  border: 0px;
+  width: 27.07px;
+  height: 27.07px;
+}
+
+.deleteIcon {
+  transform: translate(-6.5px, -6.5px);
+}
+
 /* Donor Add Button */
 .addButton {
   transform: translate(451px, 5px);
