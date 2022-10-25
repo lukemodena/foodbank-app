@@ -267,7 +267,7 @@ export const deleteDonor = (donorId) => async dispatch => {
     }
 };
 
-// DELETE DONOR
+// DELETE MULTIPLE DONORS
 
 export const deleteDonorsMulti = (donors) => async dispatch => {
     if (localStorage.getItem('token')) {

@@ -1,6 +1,6 @@
 import React,{Component} from "react";
 import {Button, Table, Dropdown, Row} from 'react-bootstrap';
-import { BsPlusLg } from "react-icons/bs";
+import { BsPlusLg, BsXCircle } from "react-icons/bs";
 import SearchBar from "./SearchBar";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -11,7 +11,7 @@ import { AddParticipationModal } from "../Participation/AddParticipationModal";
 import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
 import { SuccessModal } from "../common/SuccessModal";
 
-import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, checkStatusEdit } from '../../actions/collections';
+import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, checkStatusEdit, deleteCollectionsMulti } from '../../actions/collections';
 import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
 import { getDonors } from "../../actions/donors";
 import { addParticipant, getCurrentParticipants } from "../../actions/participation";
@@ -56,8 +56,8 @@ export class NewCollection extends Component{
                 photofilename: "anonymous.png",
                 imagesrc: `${process.env.REACT_APP_API}media/photos/anonymous.png`,
                 photofile: []
-            }
-
+            },
+            isChecked:[]
         }
     }
 
@@ -79,7 +79,8 @@ export class NewCollection extends Component{
         pars: PropTypes.array.isRequired,
         addParticipant: PropTypes.func.isRequired,
         getCurrentParticipants: PropTypes.func.isRequired,
-        checkStatusEdit: PropTypes.func.isRequired
+        checkStatusEdit: PropTypes.func.isRequired,
+        deleteCollectionsMulti: PropTypes.func.isRequired,
         };
 
 
@@ -156,6 +157,35 @@ export class NewCollection extends Component{
         }
     }
 
+
+    handleChecked = (e) => {
+        const id = e.target.value;
+
+        this.setState({
+            isChecked:[...this.state.isChecked, id]
+        });
+    };
+    
+    handleDeleteMulti = (e) => {
+        e.preventDefault()
+
+        let toDelete = this.state.isChecked
+        let length = toDelete.length
+
+        if (length === 0){
+            let message = `Please select the collection dates you'd like to delete`
+            window.confirm(message)
+        } else {
+            let message = `Are you sure you want to delete ${length} record/s?`
+            if(window.confirm(message)){
+                this.props.deleteCollectionsMulti(toDelete);
+                
+                this.setState({successDeleteModalShow:true});
+            }
+        }
+
+        
+    }
 
     // Locally Store Photo
     handleFileSelected = (e) => {
@@ -335,12 +365,31 @@ export class NewCollection extends Component{
                             {this.props.total}kg
                         </Button>
                     </Row>
+
+                    <SuccessModal show={this.state.successDeleteModalShow}
+                        onHide={successDeleteModalClose}
+                        reqStatus={reqStatus}
+                        type={type}
+                        isAdd={isAdd}
+                    />
                 </div>
                 {/* Collection Table */}                    
                 <div style={{overflowX:"auto"}}>
                     <Table className="mt-4" striped bordered hover size="sm">
                         <thead>
                             <tr>
+                                <th>
+                                    <Button className="deleteButton" variant="outline-secondary" onClick={(e) =>{
+                                        this.setState({
+                                            successDeleteModalShow:false,
+                                            reqStatus:`Collections deleted`,
+                                            type:"collection",
+                                            isAdd:false
+                                        });
+                                        this.handleDeleteMulti(e)}}>
+                                        <BsXCircle className='deleteIcon'/>
+                                    </Button>
+                                </th>
                                 <th>ID</th>
                                 <th>Options</th>
                                 <th>Date</th>
@@ -353,6 +402,7 @@ export class NewCollection extends Component{
                         <tbody>
                             {this.props.colls.map(coll=>
                                 <tr key={coll.CollectionID}>
+                                    <td><input type="checkbox" value={coll.CollectionID} checked={coll.isChecked} onChange={(e) => this.handleChecked(e)}/></td>
                                     <td>{coll.CollectionID}</td>
                                     <td>
                                         
@@ -414,13 +464,6 @@ export class NewCollection extends Component{
                                                 >
                                                     Delete
                                                 </Dropdown.Item>
-
-                                                <SuccessModal show={this.state.successDeleteModalShow}
-                                                    onHide={successDeleteModalClose}
-                                                    reqStatus={reqStatus}
-                                                    type={type}
-                                                    isAdd={isAdd}
-                                                />
 
                                                 <Dropdown.Item onClick={() => 
                                                     this.setState({
@@ -511,4 +554,4 @@ const mapStateToProps = (state) => ({
     total: state.collections.total
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors, addParticipant, getCurrentParticipants, checkStatusEdit})(NewCollection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors, addParticipant, getCurrentParticipants, checkStatusEdit, deleteCollectionsMulti})(NewCollection)

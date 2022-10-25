@@ -64,11 +64,11 @@ export function EditCollectionModal(props) {
                                     </Form.Select>
                                 </Form.Group>
                                 <Form.Group controlId='TotalWeight'>
-                                    <Form.Label>Total Weight</Form.Label>
+                                    <Form.Label>Total Weight (kg)</Form.Label>
                                     <Form.Control type='text' name='TotalWeight' required placeholder='TotalWeight' defaultValue={colltotalweight}/>
                                 </Form.Group>
                                 <Form.Group controlId='TotalCost'>
-                                    <Form.Label>Total Cost</Form.Label>
+                                    <Form.Label>Total Cost (£)</Form.Label>
                                     <Form.Control type='text' name='TotalCost' required placeholder='TotalCost' defaultValue={colltotalcost}/>
                                 </Form.Group>
                                 <Form.Group controlId='CollectionStatus'>

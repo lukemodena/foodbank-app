@@ -141,12 +141,19 @@ export class NewDonors extends Component {
         let toDelete = this.state.isChecked
         let length = toDelete.length
 
-        let message = `Are you sure you want to delete ${length} record/s?`
-        if(window.confirm(message)){
-            this.props.deleteDonorsMulti(toDelete);
-            
-            this.setState({successDeleteModalShow:true});
+        if (length === 0){
+            let message = `Please select the contacts you'd like to delete`
+            window.confirm(message)
+        } else {
+            let message = `Are you sure you want to delete ${length} record/s?`
+            if(window.confirm(message)){
+                this.props.deleteDonorsMulti(toDelete);
+                
+                this.setState({successDeleteModalShow:true});
+            }
         }
+
+        
     }
     // Donor Update
 
@@ -294,7 +301,6 @@ export class NewDonors extends Component {
                                 <th>Type</th>
                                 <th>Notes</th>
                                 <th>Phone</th>
-                                <th>Times Donated</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -412,7 +418,6 @@ export class NewDonors extends Component {
                                     <td>{this.handleDonorType(don.DonorType)}</td>
                                     <td>{don.Notes}</td>
                                     <td>{don.Phone}</td>
-                                    <td>{don.InvolveNo}</td>
                                 </tr>)}
                         </tbody>
                     </Table>

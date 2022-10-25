@@ -381,6 +381,27 @@ export const deleteCollection = (collectionId) => async dispatch => {
     }
 };
 
+// DELETE MULTIPLE COLLECTIONS
+
+export const deleteCollectionsMulti = (collections) => async dispatch => {
+    if (localStorage.getItem('token')) {
+        await collections.map((id) => {
+            try{
+                dispatch(deleteCollection(id))
+            } catch(err) {
+                dispatch({
+                    type: DELETE_COLLECTION_FAIL
+                })
+            }
+        })
+    } else {
+        dispatch({
+            type: DELETE_COLLECTION_FAIL
+        });
+        dispatch(alert('Insufficient Credentials'));
+    }
+};
+
 // ADD COLLECTION PHOTO (After Delete)
 
 export const newCollectionPhoto = (file, photo, collectionId, date, type, totalWeight, totalCost, spreadsheet, status) => async dispatch => {
