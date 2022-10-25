@@ -1,4 +1,4 @@
-import React,{Fragment, useEffect} from "react";
+import React,{Fragment, useEffect, useState} from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Navbar,Nav } from "react-bootstrap";
 import FoodReachLogo from "./FoodReachLogo.png";
@@ -14,6 +14,8 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
 
 
     const navigate = useNavigate();
+
+    const [expanded, setExpanded] = useState(false);
     
     
     const handleLogout = (e) => {
@@ -25,7 +27,7 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
 
     const guestLinks = () => (
         <Fragment>
-            <NavLink className="d-inline p-2 bg-light text-black ml-auto" to="/login">
+            <NavLink className="d-inline p-2 bg-light text-black ml-auto" to="/login" onClick={() => setExpanded(false)}>
                 Login
             </NavLink>
         </Fragment>
@@ -33,17 +35,17 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
 
     const authLinks = () => (
         <Fragment>
-            <NavLink className="d-inline p-2 bg-light text-black" to="/contacts">
+            <NavLink className="d-inline p-2 bg-light text-black" to="/contacts" onClick={() => setExpanded(false)}>
                 Contacts
             </NavLink>
-            <NavLink className="d-inline p-2 bg-light text-black" to="/collections">
+            <NavLink className="d-inline p-2 bg-light text-black" to="/collections" onClick={() => setExpanded(false)}>
                 Collections
             </NavLink>
-            <NavLink className="d-inline p-2 bg-light text-black" to="/participants">
+            <NavLink className="d-inline p-2 bg-light text-black" to="/participants" onClick={() => setExpanded(false)}>
                 Participants
             </NavLink>
 
-            <NavLink className="d-inline p-2 bg-light text-black ml-auto" to="#!" onClick={handleLogout}>
+            <NavLink className="d-inline p-2 bg-light text-black ml-auto" to="/#" onClick={(e) => {handleLogout(e); setExpanded(false)}}>
                 Logout
             </NavLink>
         </Fragment>
@@ -51,16 +53,16 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
 
     return (
         <Fragment>
-            <Navbar className="navBar" bg="light" expand="lg" style={{borderBottom:"0.5px solid rgb(199, 199, 199)"}}>
+            <Navbar className="navBar" bg="light" expand="lg" expanded={expanded} style={{borderBottom:"0.5px solid rgb(199, 199, 199)"}}>
                 <div className="container">
-                    <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(expanded ? false : "expanded")}/>
                     {/* {(window.location.href.indexOf("contacts"))&&<h1 className='display-4'>CONTACTS</h1>} */}
                     <Navbar.Brand href="/">
                         <img src={FoodReachLogo} className="navBar-logo" style={{padding:"4px", width:"60px", height:"60px"}}/>
                     </Navbar.Brand>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav>
-                            <NavLink className="d-inline p-2 bg-light text-black" to="/">
+                            <NavLink className="d-inline p-2 bg-light text-black" to="/" onClick={() => setExpanded(false)}>
                                 Home
                             </NavLink>
                             
