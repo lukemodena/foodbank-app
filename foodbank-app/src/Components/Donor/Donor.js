@@ -230,7 +230,7 @@ export class NewDonors extends Component {
         let addParticipationClose=()=>this.setState({addParticipationShow:false, refresh: "YES"});
        
         return (
-            <div>
+            <div style={{paddingTop: "38.5px"}}>
 
                 <div style={{margin:"auto"}}>
                     <Row>
@@ -310,7 +310,7 @@ export class NewDonors extends Component {
                                     <td>{don.DonorID}</td>
                                     <td>
                                     <Dropdown>
-                                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                        <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                                             ...
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>

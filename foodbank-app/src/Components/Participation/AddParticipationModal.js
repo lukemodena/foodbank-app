@@ -142,7 +142,7 @@ export function AddParticipationModal(props){
                                     </Form.Select>}
                                 </Form.Group>
                             
-                                <Form.Group>
+                                <Form.Group style={{paddingTop: "25px"}}>
                                     <Button variant='primary' type='submit'>
                                         Add Participant
                                     </Button>

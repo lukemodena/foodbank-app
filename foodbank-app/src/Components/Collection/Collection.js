@@ -330,7 +330,7 @@ export class NewCollection extends Component{
         let successDeleteModalClose=()=>this.setState({successDeleteModalShow:false});
        
         return(
-            <div>
+            <div style={{paddingTop: "38.5px"}}>
                 <div style={{margin:"auto"}}>
                     <Row>
 
@@ -407,7 +407,7 @@ export class NewCollection extends Component{
                                     <td>
                                         
                                         <Dropdown onToggle={() => this.handleGetWholesale(coll.CollectionID)}>
-                                            <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                                                 ...
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>

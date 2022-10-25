@@ -118,7 +118,7 @@ export class AddCollectionForm extends Component{
                     <Form.Group controlId='TotalCost'>
                         <Form.Control type='hidden' name='TotalCost' required placeholder='TotalCost' onChange={this.onChange} value={this.state.TotalCost} />
                     </Form.Group>
-                    <Form.Group>
+                    <Form.Group style={{paddingTop: "25px"}}>
                         <Button variant='primary' type='submit'>
                             Add Collection
                         </Button>

@@ -93,7 +93,7 @@ export function EditCollectionModal(props) {
                                     <Form.Label>Collection Photo Upload</Form.Label>
                                     <Form.Control type="file" name='photofile' onChange={handleFile} />
                                 </Form.Group>
-                                <Form.Group>
+                                <Form.Group style={{paddingTop: "25px"}}>
                                     <Button variant='primary' type='submit'>
                                         Save Collection
                                     </Button>

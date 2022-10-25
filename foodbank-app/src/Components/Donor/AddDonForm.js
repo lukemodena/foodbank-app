@@ -159,7 +159,7 @@ export class AddDonorForm extends Component{
                         <Form.Label>Phone Number</Form.Label>
                         <Form.Control type='text' name='Phone' placeholder='Enter phone number...' onChange={this.onChange} value={this.state.Phone}/>
                     </Form.Group>
-                    <Form.Group>
+                    <Form.Group style={{paddingTop: "25px"}}>
                         <Button variant='primary' type='submit'>
                             Add Donor
                         </Button>

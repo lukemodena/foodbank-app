@@ -24,7 +24,7 @@ const NewLogin = ({ login, isAuthenticated, loginStatus }) => {
     }
 
   return (
-    <div className='col-md-6 m-auto'>
+    <div className='col-md-6 m-auto' style={{paddingTop: "45px"}}>
         <Modal.Header>
           <Modal.Title id='contained-modal-title-vcenter'>
               Login: 

@@ -47,6 +47,48 @@
   height: 50px;
 }
 
+.navLink {
+  display: inline;
+  padding: 8px;
+  color: #000;
+  transition: all 0s;
+}
+
+.navLink-Current {
+  display: inline;
+  padding-top: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  color: #000;
+  font-weight: bold;
+}
+
+.navLink-Log {
+  display: inline;
+  padding: 8px;
+  color: #000;
+  flex: auto;
+  transition: all 0s;
+}
+
+.navLink-Log-Current {
+  display: inline;
+  padding: 8px;
+  color: #000;
+  flex: auto;
+  font-weight: bold;
+}
+
+.navLink:hover {
+  font-weight: bold;
+  transition: all 0s;
+}
+
+.navLink-Log:hover {
+  font-weight: bold;
+  transition: all 0s;
+}
+
 /* Dropdown */
 .dropdownFilter {
   padding-top: 5px;

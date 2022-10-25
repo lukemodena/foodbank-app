@@ -23,14 +23,15 @@ function App() {
           <div className="container">
 
             <Navigation/>
-
-            <Routes>
-              <Route exact path='/' element={<Home/>}/>
-              <Route path='/contacts' element={<Donor/>}/>
-              <Route path='/collections' element={<Collection/>}/>
-              <Route exact path='/login' element={<NewLogin/>}/>
-              <Route exact path='/participants' element={<ParticipationPage/>}/>
-            </Routes>
+            <div style={{paddingTop: "45px"}}> 
+              <Routes>
+                <Route exact path='/' element={<Home/>}/>
+                <Route path='/contacts' element={<Donor/>}/>
+                <Route path='/collections' element={<Collection/>}/>
+                <Route exact path='/login' element={<NewLogin/>}/>
+                <Route exact path='/participants' element={<ParticipationPage/>}/>
+              </Routes>
+            </div>
             
           </div>
         </Fragment>

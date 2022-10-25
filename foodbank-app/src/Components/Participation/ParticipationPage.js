@@ -261,7 +261,7 @@ export class ParticipationPage extends Component {
         };
     
         return (
-            <div>
+            <div style={{paddingTop: "38.5px"}}>
 
                 <div style={{margin:"auto"}}>
                     <Row>
@@ -341,10 +341,9 @@ export class ParticipationPage extends Component {
                                 <th>ID</th>
                                 <th>Options</th>
                                 <th>Name</th>
+                                <th>Address</th>
                                 <th>Donation Type</th>
-                                <th>Total Donated</th>
                                 <th>Payment Recieved</th>
-                                <th>Drop-Off Time</th>
                                 <th>Email</th>
                                 <th>Phone</th>
                             </tr>
@@ -355,7 +354,7 @@ export class ParticipationPage extends Component {
                                     <td>{par.ParticipationID}</td>
                                     <td>
                                     <Dropdown>
-                                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                        <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                                             ...
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
@@ -451,10 +450,13 @@ export class ParticipationPage extends Component {
                                     </Dropdown>
                                     </td>
                                     <td>{par.FullName}</td>
+                                    <td>
+                                        {par.Address1} <br />
+                                        {par.Address2} <br />
+                                        {par.PostCode}
+                                    </td>
                                     <td>{this.handleParticipantType(par.DonationType)}</td>
-                                    <td>{par.TotalDonated}</td>
                                     <td>{this.handleParticipantPayment(par.PaymentRecieved)}</td>
-                                    <td>{par.DropOffTime}</td>
                                     <td>{par.Email}</td>
                                     <td>{par.Phone}</td>
                                     

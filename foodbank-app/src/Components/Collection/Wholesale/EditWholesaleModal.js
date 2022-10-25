@@ -71,7 +71,7 @@ export function EditWholesaleModal(props) {
                                     <Form.Label>Remainder</Form.Label>
                                     <Form.Control type='text' name='Remainder' disabled placeholder='Remainder' defaultValue={whoremainder}/>
                                 </Form.Group>
-                                <Form.Group>
+                                <Form.Group style={{paddingTop: "25px"}}>
                                     <Button variant='primary' type='submit'>
                                         Save Cash Donation
                                     </Button>

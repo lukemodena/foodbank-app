@@ -102,7 +102,7 @@ export function EditDonorModal(props) {
                                 <Form.Group controlId='InvolveNo'>
                                     <Form.Control type='hidden' name='InvolveNo' disabled placeholder='InvolveNo' defaultValue={doninvolveno} />
                                 </Form.Group>
-                                <Form.Group>
+                                <Form.Group style={{paddingTop: "25px"}}>
                                     <Button variant='primary' type='submit'>
                                         Save Donor
                                     </Button>

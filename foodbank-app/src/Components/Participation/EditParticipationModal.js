@@ -167,7 +167,7 @@ export function EditParticipationModal(props){
                                     </Form.Select>}
                                 </Form.Group>
                             
-                                <Form.Group>
+                                <Form.Group style={{paddingTop: "25px"}}>
                                     <Button variant='primary' type='submit'>
                                         Save Participant
                                     </Button>
@@ -175,37 +175,24 @@ export function EditParticipationModal(props){
                             </Form>
                         </Col>    
                         <Col sm={6}>
-                            <Form>
-                                <Form.Group controlId='FullName'>
-                                    <Form.Label>Full Name</Form.Label>
-                                    <Form.Control type='text' name='FullName' disabled placeholder='FullName' value={donfullname}/>
-                                </Form.Group>
-                                <Form.Group controlId='Email'>
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control type='text' name='Email' disabled placeholder='Email' value={donemail} />
-                                </Form.Group>
-                                <Form.Group controlId='Address1'>
-                                    <Form.Label>Address 1</Form.Label>
-                                    <Form.Control type='text' name='Address1' disabled placeholder='Address1' value={donaddress1} />
-                                </Form.Group>
-                                <Form.Group controlId='Address2'>
-                                    <Form.Label>Address 2</Form.Label>
-                                    <Form.Control type='text' name='Address2' disabled placeholder='Address2' value={donaddress2} />
-                                </Form.Group>
-                                <Form.Group controlId='PostCode'>
-                                    <Form.Label>Postcode</Form.Label>
-                                    <Form.Control type='text' name='PostCode' disabled placeholder='PostCode' value={donpostcode} />
-                                </Form.Group>
-                                <Form.Group controlId='Notes'>
-                                    <Form.Label>Notes</Form.Label>
-                                    <Form.Control type='text' name='Notes' disabled placeholder='Notes' value={donnotes} />
-                                </Form.Group>
-                                <Form.Group controlId='Phone'>
-                                    <Form.Label>Phone</Form.Label>
-                                    <Form.Control type='text' name='Phone' disabled placeholder='Phone' value={donphone} />
-                                </Form.Group>
-                    
-                            </Form>
+                            <Modal.Body>
+                                <p>
+                                    Full Name: <br />
+                                    <strong>{donfullname}</strong> <br />
+                                    Address: <br />
+                                    <strong>{donaddress1} <br />
+                                    {donaddress2} <br />
+                                    {donpostcode}</strong> <br />
+                                    Email: <br />
+                                    <strong>{donemail}</strong> <br />
+                                    Phone: <br />
+                                    <strong>{donphone}</strong> <br />
+                                    Notes: <br />
+                                    <strong>{donnotes}</strong> <br />
+                                </p>
+
+                            </Modal.Body>
+                           
                         </Col>
                     </Row>
                 </Modal.Body>
