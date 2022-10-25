@@ -394,9 +394,8 @@ export class NewCollection extends Component{
                                 <th>Options</th>
                                 <th>Date</th>
                                 <th>Type</th>
-                                <th>Total Weight</th>
-                                <th>Estimated Cost</th>
-                                <th>Spreadsheet</th>
+                                <th>Total Weight (kg)S</th>
+                                <th>Estimated Cost (£)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -533,7 +532,6 @@ export class NewCollection extends Component{
                                     <td>{this.handleCollectionType(coll.Type)}</td>
                                     <td>{coll.TotalWeight}</td>
                                     <td>{coll.TotalCost}</td>
-                                    <td>{coll.CollectionSpreadsheet}</td>
                                 </tr>)}
                         </tbody>
                     </Table>
