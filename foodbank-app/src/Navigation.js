@@ -1,6 +1,7 @@
 import React,{Fragment, useEffect, useState} from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { Navbar,Nav } from "react-bootstrap";
+import useWindowSize from "./Components/common/useWindow";
 import FoodReachLogo from "./FoodReachLogo.png";
 
 import { connect } from 'react-redux';
@@ -28,6 +29,8 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
     const location = useLocation();
     
     const pathname = location.pathname;
+
+    const size = useWindowSize(); 
 
     const guestLinks = () => (
         <Fragment>
@@ -63,7 +66,13 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
             <Navbar className="navBar" bg="light" expand="lg" fixed="top" expanded={expanded} style={{borderBottom:"0.5px solid rgb(199, 199, 199)"}}>
                 <div className="container">
                     <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(expanded ? false : "expanded")}/>
-                    {/* {(window.location.href.indexOf("contacts"))&&<h1 className='display-4'>CONTACTS</h1>} */}
+                    {(size.width <= 760) &&<div>
+                        {(pathname === "/") &&<p><strong>Home</strong></p>}
+                        {(pathname === "/login") &&<p><strong>Login</strong></p>}
+                        {(pathname === "/contacts") &&<p><strong>Contacts</strong></p>}
+                        {(pathname === "/collections") &&<p><strong>Collections</strong></p>}
+                        {(pathname === "/participants") &&<p><strong>Participants</strong></p>}
+                    </div>}
                     <Navbar.Brand href="/">
                         <img src={FoodReachLogo} className="navBar-logo" style={{padding:"4px", width:"60px", height:"60px"}}/>
                     </Navbar.Brand>
