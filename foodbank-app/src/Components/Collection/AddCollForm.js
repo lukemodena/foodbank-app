@@ -49,7 +49,7 @@ export class AddCollectionForm extends Component{
             this.props.checkStatusAdd(status)
             this.props.addCollection(date, type, totalWeight, totalCost, photo, spreadsheet, status);
 
-            let response = `Collection on ${date} added`
+            let response = `Collection on ${date} added successfully!`
 
             this.setState({
                 CollectionDate:"",

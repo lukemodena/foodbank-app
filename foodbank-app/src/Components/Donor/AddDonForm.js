@@ -31,6 +31,7 @@ export class AddDonorForm extends Component{
 
     static propTypes = {
         addDonor: PropTypes.func.isRequired,
+        result: PropTypes.string.isRequired,
     };
 
     // Handle Full Name  
@@ -110,7 +111,7 @@ export class AddDonorForm extends Component{
             <div>
                 <SuccessModal show={this.state.successModalShow}
                         onHide={successModalClose}
-                        reqStatus={this.state.reqStatus}
+                        reqStatus={this.props.result}
                         type={this.state.type}
                         isAdd={this.state.isAdd}
                 />
@@ -172,4 +173,8 @@ export class AddDonorForm extends Component{
 
 // Reducer
 
-export default connect(null, { addDonor })(AddDonorForm)
+const mapStateToProps = (state) => ({
+    result: state.donors.result
+});
+
+export default connect(mapStateToProps, { addDonor })(AddDonorForm)

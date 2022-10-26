@@ -42,7 +42,3 @@ export class AddDonorModal extends Component{
         )
     }
 }
-
-// Reducer
-
-// export default connect(null, { addDonor })(AddDonorModal)

@@ -42,8 +42,7 @@ export function SuccessModal(props) {
                     {reqStatus} successfully!
                 </Modal.Body>}
                 {(isAdd === true) &&<Modal.Body>
-                    {reqStatus} successfully!
-                    Would you like to add another {type}?
+                    <p>{reqStatus}<br />Would you like to add another {type}?</p>
                 </Modal.Body>}
                 
                 <Modal.Footer>
