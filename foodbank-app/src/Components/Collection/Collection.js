@@ -139,12 +139,20 @@ export class NewCollection extends Component{
 
     handleSearch = (startDate, endDate) => {
         let monthType = this.state.monthValue;
-        let searchInputStart = startDate;
-        let searchInputEnd = endDate;
+        let startYear = Intl.DateTimeFormat('en-GB', { year: "numeric" }).format(startDate)
+        let startMonth = Intl.DateTimeFormat('en-GB', { month: "2-digit" }).format(startDate)
+        let startDay = Intl.DateTimeFormat('en-GB', { day: "2-digit" }).format(startDate)
+        let searchInputStart = `${startYear}-${startMonth}-${startDay}`
+
+        let endYear = Intl.DateTimeFormat('en-GB', { year: "numeric" }).format(endDate)
+        let endMonth = Intl.DateTimeFormat('en-GB', { month: "2-digit" }).format(endDate)
+        let endDay = Intl.DateTimeFormat('en-GB', { day: "2-digit" }).format(endDate)
+        let searchInputEnd = `${endYear}-${endMonth}-${endDay}`
         this.setState({
             startDate: searchInputStart,
             endDate: searchInputEnd
         });
+        
         this.props.searchCollections(monthType, searchInputStart, searchInputEnd);
     }
 

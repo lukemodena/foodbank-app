@@ -154,7 +154,7 @@
 /* Total */
 
 .totalButton {
-  transform: translate(486px, 5px);
+  transform: translate(450px, 5px);
   position: absolute;
   width: 47.07px;
   height: 27.07px;
@@ -320,7 +320,7 @@
 /* Collection Add Button */
 
 .date-addButton {
-  transform: translate(451px, 5px);
+  transform: translate(415px, 5px);
   position: absolute;
   width: 27.07px;
   height: 27.07px;
@@ -409,7 +409,7 @@
   z-index: 1;
 }
 .date-searchBarInput-end {
-  transform: translate(93.25px, 0px);
+  transform: translate(52.25px, 0px);
   width: 93.25px;
   height: 27.07px;
   position: absolute;
@@ -419,7 +419,7 @@
 }
 
 .date-searchBarSubmit {
-  transform: translate(185.5px, 0px);
+  transform: translate(197.5px, 0px);
   height: 27.07px;
   width: 27.07px;
   position: absolute;
@@ -633,11 +633,11 @@
 
   .date-searchBarInput-end {
     width: 56.25px;
-    transform: translate(17.75px, 0px);
+    transform: translate(-22.75px, 0px);
   }
 
   .date-searchBarSubmit {
-    transform: translate(72.5px, 0px);
+    transform: translate(85.5px, 0px);
   }
 
   .searchButton-Icon {
