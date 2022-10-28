@@ -274,7 +274,7 @@ export class NewDonors extends Component {
                 </div>
                 
                 {/* Donor Table */}
-                <div style={{overflow:"hidden"}}>
+                <div style={{overflowX:"auto"}}>
 
                     <Table className="mt-4" striped bordered hover size="sm">
                         <thead>

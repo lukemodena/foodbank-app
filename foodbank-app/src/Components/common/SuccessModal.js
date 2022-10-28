@@ -31,7 +31,7 @@ export function SuccessModal(props) {
             centered>
                 <Modal.Header closeButton onClick={onHide}>
                     <Modal.Title id='contained-modal-title-vcenter'>
-                        Request Status
+                        Confirmation
                     </Modal.Title>
                 </Modal.Header>
 
