@@ -72,15 +72,15 @@ export function EditDonorModal(props) {
                                 </Form.Group>
                                 <Form.Group controlId='Address1'>
                                     <Form.Label>Address Line 1</Form.Label>
-                                    <Form.Control type='text' name='Address1' required placeholder='Enter address line 1...' defaultValue={donaddress1} />
+                                    <Form.Control type='text' name='Address1' placeholder='Enter address line 1...' defaultValue={donaddress1} />
                                 </Form.Group>
                                 <Form.Group controlId='Address2'>
                                     <Form.Label>Address Line 2</Form.Label>
-                                    <Form.Control type='text' name='Address2' required placeholder='Enter address line 2...' defaultValue={donaddress2} />
+                                    <Form.Control type='text' name='Address2' placeholder='Enter address line 2...' defaultValue={donaddress2} />
                                 </Form.Group>
                                 <Form.Group controlId='PostCode'>
                                     <Form.Label>Postal Code</Form.Label>
-                                    <Form.Control type='text' name='PostCode' required placeholder='Enter postcode...' defaultValue={donpostcode} />
+                                    <Form.Control type='text' name='PostCode' placeholder='Enter postcode...' defaultValue={donpostcode} />
                                 </Form.Group>
                                 <Form.Group controlId='DonorType'>
                                     <Form.Label>Donor Type</Form.Label>
@@ -97,7 +97,7 @@ export function EditDonorModal(props) {
                                 </Form.Group>
                                 <Form.Group controlId='Phone'>
                                     <Form.Label>Phone Number</Form.Label>
-                                    <Form.Control type='text' name='Phone' required placeholder='Enter phone number...' defaultValue={donphone} />
+                                    <Form.Control type='text' name='Phone' placeholder='Enter phone number...' defaultValue={donphone} />
                                 </Form.Group>
                                 <Form.Group controlId='InvolveNo'>
                                     <Form.Control type='hidden' name='InvolveNo' disabled placeholder='InvolveNo' defaultValue={doninvolveno} />

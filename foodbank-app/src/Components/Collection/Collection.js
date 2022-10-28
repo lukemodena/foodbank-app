@@ -4,6 +4,7 @@ import { BsPlusLg, BsXCircle } from "react-icons/bs";
 import SearchBar from "./SearchBar";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 
 import { AddCollectionModal } from "./AddCollModal";
 import { EditCollectionModal } from "./EditCollModal";
@@ -152,7 +153,7 @@ export class NewCollection extends Component{
             startDate: searchInputStart,
             endDate: searchInputEnd
         });
-        
+
         this.props.searchCollections(monthType, searchInputStart, searchInputEnd);
     }
 
@@ -279,6 +280,14 @@ export class NewCollection extends Component{
         }
     };
 
+    // Collection Date
+
+    handleCollectionDate = (inputValue) => {
+        let dateFormat = dayjs(`${inputValue} T00:00:00`);
+        let collectionDate = Intl.DateTimeFormat('en-GB', {  month: "long", day: "numeric", year: "numeric" }).format(dateFormat);
+
+        return collectionDate
+    }
     // Get Wholesale
 
     handleGetWholesale = (collid) => {
@@ -402,7 +411,7 @@ export class NewCollection extends Component{
                                 <th>Options</th>
                                 <th>Date</th>
                                 <th>Type</th>
-                                <th>Total Weight (kg)S</th>
+                                <th>Total Weight (kg)</th>
                                 <th>Estimated Cost (£)</th>
                             </tr>
                         </thead>
@@ -536,7 +545,7 @@ export class NewCollection extends Component{
 
                                         
                                     </td>
-                                    <td>{coll.CollectionDate}</td>
+                                    <td>{this.handleCollectionDate(coll.CollectionDate)}</td>
                                     <td>{this.handleCollectionType(coll.Type)}</td>
                                     <td>{coll.TotalWeight}</td>
                                     <td>{coll.TotalCost}</td>

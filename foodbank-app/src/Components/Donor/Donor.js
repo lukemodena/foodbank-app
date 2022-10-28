@@ -167,7 +167,7 @@ export class NewDonors extends Component {
         let email = e.target.Email.value;
         let address1 = e.target.Address1.value;
         let address2 = e.target.Address2.value;
-        let postCode = e.target.PostCode.value;
+        let postCode = e.target.PostCode.value.toUpperCase();
         let donorType = e.target.DonorType.value;
         let notes = e.target.Notes.value;
         let phone = e.target.Phone.value
@@ -274,7 +274,7 @@ export class NewDonors extends Component {
                 </div>
                 
                 {/* Donor Table */}
-                <div style={{overflowX:"auto"}}>
+                <div style={{overflow:"hidden"}}>
 
                     <Table className="mt-4" striped bordered hover size="sm">
                         <thead>
