@@ -287,7 +287,7 @@ export class NewCollection extends Component{
 
     handleCollectionDate = (inputValue) => {
         let dateFormat = dayjs(`${inputValue} T00:00:00`);
-        let collectionDate = Intl.DateTimeFormat('en-GB', {  month: "long", day: "numeric", year: "numeric" }).format(dateFormat);
+        let collectionDate = Intl.DateTimeFormat('en-GB', {  month: "short", day: "numeric", year: "numeric" }).format(dateFormat);
 
         return collectionDate
     }

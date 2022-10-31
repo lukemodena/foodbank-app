@@ -641,11 +641,11 @@
 
   .searchBarInput {
     width: 170.5px;
-    transform: translate(-38.5px, 0px);
+    transform: translate(-68.5px, 0px);
   }
 
   .searchBarSubmit {
-    transform: translate(105.5px, 0px);
+    transform: translate(75.5px, 0px);
   }
 
   .date-searchBarInput-start {
@@ -671,7 +671,7 @@
   }
 
   .addButton {
-    transform: translate(332.5px, 5px);
+    transform: translate(302.5px, 5px);
   }
 
   .date-addButton {
