@@ -55,6 +55,10 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
             {(pathname !== "/participants") &&<NavLink className="navLink" to="/participants" style={{ textDecoration: 'none' }} onClick={() => setExpanded(false)}>
                 Participants
             </NavLink>}
+            {(pathname === "/archive") &&<p className="navLink-Current">Archive</p>}
+            {(pathname !== "/archive") &&<NavLink className="navLink" to="/archive" style={{ textDecoration: 'none' }} onClick={() => setExpanded(false)}>
+                Archive
+            </NavLink>}
             <NavLink className="navLink-Log" to="/#" style={{ textDecoration: 'none' }} onClick={(e) => {handleLogout(e); setExpanded(false)}}>
                 Logout
             </NavLink>
@@ -72,6 +76,7 @@ const Navigation = ({logout, checkAuthenticated, isAuthenticated}) => {
                         {(pathname === "/contacts") &&<p><strong>Contacts</strong></p>}
                         {(pathname === "/collections") &&<p><strong>Collections</strong></p>}
                         {(pathname === "/participants") &&<p><strong>Participants</strong></p>}
+                        {(pathname === "/archive") &&<p><strong>Archive</strong></p>}
                     </div>}
                     <Navbar.Brand href="/">
                         <img src={FoodReachLogo} className="navBar-logo" style={{padding:"4px", width:"60px", height:"60px"}}/>

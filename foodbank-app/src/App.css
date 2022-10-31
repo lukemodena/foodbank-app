@@ -164,7 +164,19 @@
 /* Total */
 
 .totalButton {
-  transform: translate(450px, 5px);
+  transform: translate(415px, 5px);
+  position: absolute;
+  width: 47.07px;
+  height: 27.07px;
+  background-color: #f0f0f0;
+  border: 0.5px solid #C7C7C7;
+  padding: 1px 1px;
+  font-size: 10px;
+  border-radius: .2rem;
+}
+
+.totalButtonCash {
+  transform: translate(470.07px, 5px);
   position: absolute;
   width: 47.07px;
   height: 27.07px;
@@ -614,10 +626,10 @@
 
 @media (max-width: 391px) {
   .dropdownFilter {
-    width: 140.7px;
+    width: 110.7px;
   }
   .dropdownFilterButton {
-    width: 140.7px;
+    width: 110.7px;
   }
 
   .participation-dropdownFilter {
@@ -638,16 +650,16 @@
 
   .date-searchBarInput-start {
     width: 56.25px;
-    transform: translate(-38.5px, 0px);
+    transform: translate(-68.5px, 0px);
   }
 
   .date-searchBarInput-end {
     width: 56.25px;
-    transform: translate(-22.75px, 0px);
+    transform: translate(-52.75px, 0px);
   }
 
   .date-searchBarSubmit {
-    transform: translate(85.5px, 0px);
+    transform: translate(55.5px, 0px);
   }
 
   .searchButton-Icon {
@@ -663,10 +675,14 @@
   }
 
   .date-addButton {
-    transform: translate(299px, 5px);
+    transform: translate(270px, 5px);
   }
 
   .totalButton {
-    transform: translate(330px, 5px);
+    transform: translate(270px, 5px);
+  }
+
+  .totalButtonCash {
+    transform: translate(321.07px, 5px);
   }
 }

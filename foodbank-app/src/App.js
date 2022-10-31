@@ -7,7 +7,7 @@ import NewLogin from './Components/Accounts/NewLogin';
 import Donor from './Components/Donor/Donor';
 import Collection from './Components/Collection/Collection';
 import ParticipationPage from './Components/Participation/ParticipationPage';
-
+import OldCollection from './Components/CollectionHistory/OldCollection';
 
 import {HashRouter as Router, Route, Routes} from 'react-router-dom';
 
@@ -28,6 +28,7 @@ function App() {
                 <Route exact path='/' element={<Home/>}/>
                 <Route path='/contacts' element={<Donor/>}/>
                 <Route path='/collections' element={<Collection/>}/>
+                <Route path='/archive' element={<OldCollection/>}/>
                 <Route exact path='/login' element={<NewLogin/>}/>
                 <Route exact path='/participants' element={<ParticipationPage/>}/>
               </Routes>

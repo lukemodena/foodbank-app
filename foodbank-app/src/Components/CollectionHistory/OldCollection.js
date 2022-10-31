@@ -1,12 +1,11 @@
 import React,{Component} from "react";
 import {Button, Table, Dropdown, Row} from 'react-bootstrap';
-import { BsPlusLg, BsXCircle } from "react-icons/bs";
+import { BsXCircle } from "react-icons/bs";
 import SearchBar from "./SearchBar";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
-import { AddCollectionModal } from "./AddCollModal";
 import { EditCollectionModal } from "./EditCollModal";
 import { AddParticipationModal } from "../Participation/AddParticipationModal";
 import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
@@ -17,7 +16,7 @@ import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesa
 import { getDonors } from "../../actions/donors";
 import { addParticipant, getCurrentParticipants } from "../../actions/participation";
 
-export class NewCollection extends Component{
+export class OldCollection extends Component{
 
     constructor(props){
         super(props);
@@ -27,7 +26,8 @@ export class NewCollection extends Component{
             whol:[],
             dons:[],
             pars: [],
-            colltotalcost: null,
+            totalWeight: null,
+            totalCost: null,
             searchValue: [],
             startDate: "",
             endDate: "",
@@ -68,6 +68,7 @@ export class NewCollection extends Component{
         colls: PropTypes.array.isRequired,
         dons: PropTypes.array.isRequired,
         total: PropTypes.number.isRequired,
+        totalc: PropTypes.number.isRequired,
         getCollections: PropTypes.func.isRequired,
         searchCollections: PropTypes.func.isRequired,
         deleteCollection: PropTypes.func.isRequired,
@@ -88,17 +89,23 @@ export class NewCollection extends Component{
     // Handle Data Request (Initial + Refresh)
 
     componentDidMount(){
-        let status = 'PLANNED,ACTIVE';
+        let status = 'ARCHIVED';
         this.props.getCollections(status);
-        const total = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 )
-        this.setState({colltotalcost: total})
+        const totalw = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
+        const totalc = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 );
+
+        this.setState({
+            totalWeight: totalw,
+            totalCost: totalc
+        })
     }
 
     componentDidUpdate() {
         if (this.state.refresh === "YES") {
-            let status = 'PLANNED,ACTIVE';
+            let status = 'ARCHIVED';
             this.props.getCollections(status);
-            const total = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 )
+            const totalw = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
+            const totalc = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 );
         
             this.setState({
                 refresh:"NO",
@@ -106,7 +113,8 @@ export class NewCollection extends Component{
                 endDate: "",
                 monthValue: "",
                 monthFilter:"All",
-                colltotalcost: total
+                totalWeight: totalw,
+                totalCost: totalc
             });
         }
     }
@@ -115,26 +123,30 @@ export class NewCollection extends Component{
 
     handleFilter = (value, filter) => {
         let monthType = value;
+        let status = 'ARCHIVED';
 
         if (monthType === "0") {
-            let status = 'PLANNED,ACTIVE';
             this.props.getCollections(status);
-            const total = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
+            const totalw = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
+            const totalc = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 );
             this.setState({
                 monthValue: monthType,
                 monthFilter: filter,
-                colltotalcost: total
+                totalWeight: totalw,
+                totalCost: totalc
             });
         } else {
             let searchInputStart = this.state.startDate;
             let searchInputEnd = this.state.endDate;
-            this.props.searchCollections(monthType, searchInputStart, searchInputEnd);
-            const total = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
+            this.props.searchCollections(monthType, searchInputStart, searchInputEnd, status);
+            const totalw = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 );
+            const totalc = this.props.colls.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 );
 
             this.setState({
                 monthValue: monthType,
                 monthFilter: filter,
-                colltotalcost: total
+                totalWeight: totalw,
+                totalCost: totalc
             }) 
         }
     }
@@ -315,34 +327,10 @@ export class NewCollection extends Component{
         this.setState({successModalShow:true});
     };
 
-    // Add Participant
-
-    handleAddParticipant = (CollectionID, DonorID, PaymentRecieved, DonationType, TotalDonated, DropOffTime, WholesaleID) => {
-        
-        let colId = CollectionID
-        let donId = DonorID
-        let payRec = PaymentRecieved
-        let donTyp = DonationType
-        let totDon = TotalDonated
-        let time = DropOffTime
-        let whoId = WholesaleID
-
-        let droTim = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(time)
-        let CollID = colId
-        let DonID = donId
-
-        // Checks if Donor already Participant in collection, 
-        // - If yes, new participant is not added 
-        // - if no, new participant is added + if cash donation wholesale is updated
-        
-        this.props.getCurrentParticipants(CollID, DonID, payRec, donTyp, totDon, droTim, donId, colId, whoId)
-        this.setState({successModalShow:true});
-    };
-
     
     render(){
         const {collid, colldate, colltype, colltotalweight, colltotalcost, collphoto, collspreadsheet, collstatus, whoid, whototaldonated, whototalspent, whoremainder, whoreceipt, dons, type, isAdd, reqStatus}=this.state;
-        let addModalClose=()=>this.setState({addModalShow:false, refresh: "YES"});
+   
         let editModalClose=()=>this.setState({editModalShow:false, refresh: "YES"});
         let addParticipationClose=()=>this.setState({addParticipationShow:false, refresh: "YES"});
         let editWholesaleClose=()=>this.setState({editWholesaleShow:false, refresh: "YES"});
@@ -372,14 +360,12 @@ export class NewCollection extends Component{
 
                         <SearchBar callback={(startDate, endDate) => this.handleSearch(startDate, endDate)}/>
 
-                        {/* Add New Collection Modal */}
-
-                        <Button variant="secondary" className="date-addButton"
-                        onClick={()=>this.setState({addModalShow:true})}>
-                            <BsPlusLg className="date-addButton-Icon"/>
+                        <Button variant="font-size: 15px;" disabled className="totalButton">
+                            {this.props.total}kg
                         </Button>
-                        <AddCollectionModal show={this.state.addModalShow}
-                        onHide={addModalClose}/>
+                        <Button variant="font-size: 15px;" disabled className="totalButtonCash">
+                            £{this.props.totalc}
+                        </Button>
                     </Row>
 
                     <SuccessModal show={this.state.successDeleteModalShow}
@@ -565,7 +551,8 @@ const mapStateToProps = (state) => ({
     dons: state.donors.dons,
     pars: state.participants.pars,
     result: state.collections.result,
-    total: state.collections.total
+    total: state.collections.total,
+    totalc: state.collections.totalc,
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors, addParticipant, getCurrentParticipants, checkStatusEdit, deleteCollectionsMulti})(NewCollection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors, addParticipant, getCurrentParticipants, checkStatusEdit, deleteCollectionsMulti})(OldCollection)

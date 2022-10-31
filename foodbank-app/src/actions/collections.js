@@ -31,7 +31,7 @@ import {
 
 // PULL COLLECTION
 
-export const getCollections = () => async dispatch => {
+export const getCollections = (status) => async dispatch => {
 
     if (localStorage.getItem('token')){
         const config ={
@@ -43,7 +43,7 @@ export const getCollections = () => async dispatch => {
         };
     
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API}searchcollections`, config)
+            const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?status=${status}`, config)
             dispatch({
                 type: COLLECTIONS_SUCCESS,
                 payload: res.data

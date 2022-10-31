@@ -29,6 +29,7 @@ const initialState = {
     colls: [],
     result: '',
     total: 0,
+    totalc: 0,
     isAuthenticated: null,
     statusCol: []
 };
@@ -53,28 +54,32 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 colls: payload,
-                total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 )
+                total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 ),
+                totalc: payload.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 )
             }
 
         case COLLECTIONS_FAIL:
             return {
                 ...state,
                 colls: [],
-                total: 0
+                total: 0,
+                totalc: 0
             }
 
         case COLLECTION_SEARCH_SUCCESS:
             return{
                 ...state,
                 colls: payload,
-                total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 )
+                total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 ),
+                totalc: payload.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 )
             }
             
         case COLLECTION_SEARCH_FAIL:
             return {
                 ...state,
                 colls: payload,
-                total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 )
+                total: payload.reduce((a,v) =>  a = a + parseInt(v.TotalWeight) , 0 ),
+                totalc: payload.reduce((a,v) =>  a = a + parseInt(v.TotalCost) , 0 )
             }
 
         case ADD_COLLECTION_SUCCESS:
@@ -144,6 +149,7 @@ export default function(state = initialState, action) {
                 colls: [],
                 result: '',
                 total: 0,
+                totalc: 0
             }
 
         case COLLECTION_ID_SEARCH_SUCCESS:
