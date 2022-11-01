@@ -6,15 +6,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
-import { EditCollectionModal } from "./EditCollModal";
-import { AddParticipationModal } from "../Participation/AddParticipationModal";
-import { EditWholesaleModal } from "./Wholesale/EditWholesaleModal";
 import { SuccessModal } from "../common/SuccessModal";
+import { MoreInformationModal } from "./MoreInfoModal";
 
-import { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, checkStatusEdit, deleteCollectionsMulti } from '../../actions/collections';
-import { addWholesale, getWholesale, editWholesale } from "../../actions/wholesale";
+import { getCollections, searchCollections, deleteCollection, checkStatusEdit, deleteCollectionsMulti } from '../../actions/collections';
+import { getWholesale } from "../../actions/wholesale";
 import { getDonors } from "../../actions/donors";
-import { addParticipant, getCurrentParticipants } from "../../actions/participation";
+import { getCurrentParticipants } from "../../actions/participation";
 
 export class OldCollection extends Component{
 
@@ -72,14 +70,9 @@ export class OldCollection extends Component{
         getCollections: PropTypes.func.isRequired,
         searchCollections: PropTypes.func.isRequired,
         deleteCollection: PropTypes.func.isRequired,
-        editCollection: PropTypes.func.isRequired,
-        addCollectionPhoto: PropTypes.func.isRequired,
-        addWholesale: PropTypes.func.isRequired,
         getWholesale: PropTypes.func.isRequired,
-        editWholesale: PropTypes.func.isRequired,
         whol: PropTypes.array.isRequired,
         pars: PropTypes.array.isRequired,
-        addParticipant: PropTypes.func.isRequired,
         getCurrentParticipants: PropTypes.func.isRequired,
         checkStatusEdit: PropTypes.func.isRequired,
         deleteCollectionsMulti: PropTypes.func.isRequired,
@@ -211,75 +204,6 @@ export class OldCollection extends Component{
         
     }
 
-    // Locally Store Photo
-    handleFileSelected = (e) => {
-        const file = e.target.files[0];
-        const filename = e.target.files[0].name;
-        this.setState({ 
-            photo: {
-                photofilename: filename,
-                photofile: file,
-                imagesrc: 'http://127.0.0.1:8000/media/'+filename
-            }
-        });
-    }
-
-    // Collection Update + Photo Update
-
-    handleFileSubmit = (e) => {
-        e.preventDefault()
-
-        let file = e.target.photofile.files[0];
-
-        if (file == null) {
-            let collectionId = e.target.CollectionID.value;
-            let date = e.target.CollectionDate.value;
-            let type = e.target.Type.value;
-            let totalWeight = e.target.TotalWeight.value;
-            let totalCost = e.target.TotalCost.value;
-            let photo = e.target.CollectionPhoto.value;
-            let spreadsheet = e.target.CollectionSpreadsheet.value;
-            let status = e.target.CollectionStatus.value;
-
-            if (status === "ACTIVE"){
-                this.props.checkStatusEdit(status, collectionId)
-
-                this.props.editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status);
-                this.setState({successModalShow:true});
-            } else {
-                this.props.editCollection(collectionId, date, type, totalWeight, totalCost, photo, spreadsheet, status);
-                this.setState({successModalShow:true});
-            }
-
-        } else {
-            const formData = new FormData();
-        
-            let photo = e.target.photofile.files[0].name;
-            let collectionId = e.target.CollectionID.value;
-            let date = e.target.CollectionDate.value;
-            let type = e.target.Type.value;
-            let totalWeight = e.target.TotalWeight.value;
-            let totalCost = e.target.TotalCost.value;
-            let ogfile = e.target.CollectionPhoto.value;
-            let spreadsheet = e.target.CollectionSpreadsheet.value;
-            let status = e.target.CollectionStatus.value;
-
-            formData.append(
-                "myFile",
-                file
-            );
-
-            if (status === "ACTIVE"){
-                this.props.checkStatusEdit(status, collectionId)
-
-                this.props.addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status);
-                this.setState({successModalShow:true});
-            } else {
-                this.props.addCollectionPhoto(file, photo, ogfile, collectionId, date, type, totalWeight, totalCost, spreadsheet, status);
-                this.setState({successModalShow:true});
-            }
-        }
-    };
 
     // Collection Type
 
@@ -311,29 +235,11 @@ export class OldCollection extends Component{
         this.props.getDonors()
     };
 
-    // Edit Wholesale
-
-    handleEditWholesale = (e) => {
-        e.preventDefault()
-
-        let wholId = e.target.WholesaleID.value;
-        let totalDonated = e.target.TotalDonated.value;
-        let totalSpent = e.target.TotalSpent.value;
-        let collId = e.target.CollectionID.value;
-        let newDonationVal = e.target.AddDonation.value;
-        let wholesaleReceipt = e.target.Receipt.value;
-
-        this.props.editWholesale(wholId, totalDonated, totalSpent, collId, newDonationVal, wholesaleReceipt)
-        this.setState({successModalShow:true});
-    };
-
     
     render(){
         const {collid, colldate, colltype, colltotalweight, colltotalcost, collphoto, collspreadsheet, collstatus, whoid, whototaldonated, whototalspent, whoremainder, whoreceipt, dons, type, isAdd, reqStatus}=this.state;
    
-        let editModalClose=()=>this.setState({editModalShow:false, refresh: "YES"});
-        let addParticipationClose=()=>this.setState({addParticipationShow:false, refresh: "YES"});
-        let editWholesaleClose=()=>this.setState({editWholesaleShow:false, refresh: "YES"});
+        let infoModalClose=()=>this.setState({infoModalShow:false, refresh: "YES"});
         let successModalClose=()=>this.setState({successModalShow:false});
         let successDeleteModalClose=()=>this.setState({successDeleteModalShow:false});
        
@@ -414,28 +320,31 @@ export class OldCollection extends Component{
                                             <Dropdown.Menu>
 
                                                 <Dropdown.Item 
-                                                onClick={()=>this.setState({editModalShow:true,
+                                                onClick={()=>this.setState({infoModalShow:true,
                                                     collid:coll.CollectionID,
-                                                    colldate:coll.CollectionDate,
-                                                    colltype:coll.Type,
+                                                    colldate:this.handleCollectionDate(coll.CollectionDate),
+                                                    colltype:this.handleCollectionType(coll.Type),
                                                     colltotalweight:coll.TotalWeight,
                                                     colltotalcost:coll.TotalCost,
                                                     collphoto:coll.CollectionPhoto,
                                                     collphotourl:`http://127.0.0.1:8000/media/${coll.CollectionPhoto}`,
                                                     collspreadsheet:coll.CollectionSpreadsheet,
                                                     collstatus:coll.CollectionStatus,
+                                                    whoid:this.props.whol[0].WholesaleID,
+                                                    whototaldonated:this.props.whol[0].TotalDonated,
+                                                    whototalspent:this.props.whol[0].TotalSpent,
+                                                    whoremainder:this.props.whol[0].Remainder,
+                                                    whoreceipt:this.props.whol[0].WholesaleReceipt,
                                                     successModalShow:false,
                                                     reqStatus:`Collection on ${coll.CollectionDate} saved`,
                                                     type:"collection",
                                                     isAdd:false
                                                     })}
                                                 >
-                                                        Edit
+                                                        More Information...
                                                 </Dropdown.Item>
-                                                <EditCollectionModal show={this.state.editModalShow}
-                                                onHide={editModalClose}
-                                                fileSelect={this.handleFileSelected}
-                                                addphoto={this.handleFileSubmit}
+                                                <MoreInformationModal show={this.state.infoModalShow}
+                                                onHide={infoModalClose}
                                                 collid={collid}
                                                 colldate={colldate}
                                                 colltype={colltype}
@@ -444,6 +353,10 @@ export class OldCollection extends Component{
                                                 collphoto={collphoto}
                                                 collspreadsheet={collspreadsheet}
                                                 collstatus={collstatus}
+                                                whototaldonated={whototaldonated}
+                                                whototalspent={whototalspent}
+                                                whoremainder={whoremainder}
+                                                whoreceipt={whoreceipt}
                                                 successModalShow={this.state.successModalShow}
                                                 successModalClose={successModalClose}
                                                 reqStatus={reqStatus}
@@ -465,66 +378,6 @@ export class OldCollection extends Component{
                                                 >
                                                     Delete
                                                 </Dropdown.Item>
-
-                                                <Dropdown.Item onClick={() => 
-                                                    this.setState({
-                                                        editWholesaleShow:true,
-                                                        collid:coll.CollectionID,
-                                                        whoid:this.props.whol[0].WholesaleID,
-                                                        whototaldonated:this.props.whol[0].TotalDonated,
-                                                        whototalspent:this.props.whol[0].TotalSpent,
-                                                        whoremainder:this.props.whol[0].Remainder,
-                                                        whoreceipt:this.props.whol[0].WholesaleReceipt,
-                                                        reqStatus:`Cash donation for collection on ${coll.CollectionDate} saved`,
-                                                        type:"wholesale",
-                                                        isAdd:false
-                                                    })}
-                                                >
-                                                    Manage Wholesale
-                                                </Dropdown.Item>
-                                                <EditWholesaleModal show={this.state.editWholesaleShow}
-                                                onHide={editWholesaleClose}
-                                                editwhol={this.handleEditWholesale}
-                                                collid={collid}
-                                                whoid={whoid}
-                                                whototaldonated={whototaldonated}
-                                                whototalspent={whototalspent}
-                                                whoremainder={whoremainder}
-                                                whoreceipt={whoreceipt}
-                                                successModalShow={this.state.successModalShow}
-                                                successModalClose={successModalClose}
-                                                reqStatus={reqStatus}
-                                                type={type}
-                                                isAdd={isAdd}
-                                                />
-
-                                                <Dropdown.Item onClick={() => 
-                                                    this.setState({
-                                                        addParticipationShow:true,
-                                                        collid:coll.CollectionID,
-                                                        whoid:this.props.whol[0].WholesaleID,
-                                                        dons:this.props.dons,
-                                                        colldate:coll.CollectionDate,
-                                                        reqStatus:`Participant for collection on ${coll.CollectionDate} saved`,
-                                                        type:"participant",
-                                                        isAdd:true
-                                                    })}
-                                                >
-                                                    Add Participant
-                                                </Dropdown.Item>
-                                                <AddParticipationModal show={this.state.addParticipationShow}
-                                                onHide={addParticipationClose}
-                                                addpart={this.handleAddParticipant}
-                                                collid={collid}
-                                                whoid={whoid}
-                                                dons={dons}
-                                                colldate={colldate}
-                                                successModalShow={this.state.successModalShow}
-                                                successModalClose={successModalClose}
-                                                reqStatus={reqStatus}
-                                                type={type}
-                                                isAdd={isAdd}
-                                                />
                                             </Dropdown.Menu>
                                         </Dropdown>
 
@@ -555,4 +408,4 @@ const mapStateToProps = (state) => ({
     totalc: state.collections.totalc,
 });
 
-export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, editCollection, addCollectionPhoto, addWholesale, getWholesale, editWholesale, getDonors, addParticipant, getCurrentParticipants, checkStatusEdit, deleteCollectionsMulti})(OldCollection)
+export default connect(mapStateToProps, { getCollections, searchCollections, deleteCollection, getWholesale, getDonors, getCurrentParticipants, checkStatusEdit, deleteCollectionsMulti})(OldCollection)

@@ -46,6 +46,7 @@ export function SuccessModal(props) {
                 </Modal.Body>}
                 
                 <Modal.Footer>
+                    {(type === "partdonor") &&<Button variant='danger' onClick={refresh}>Exit</Button>}
                     {(isAdd === false) &&<Button variant='danger' onClick={refresh}>Exit</Button>}
                     {(isAdd === true) &&<Row>
                         <Col>

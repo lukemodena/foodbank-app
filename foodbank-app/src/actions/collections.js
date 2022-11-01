@@ -41,17 +41,30 @@ export const getCollections = (status) => async dispatch => {
                 'Accept': 'application/json'
             }
         };
-    
-        try {
-            const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?status=${status}`, config)
-            dispatch({
-                type: COLLECTIONS_SUCCESS,
-                payload: res.data
-            });
-        } catch (err) {
-            dispatch({
-                type: COLLECTIONS_FAIL
-            });
+        if (status !== null) {
+            try {
+                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections?status=${status}`, config)
+                dispatch({
+                    type: COLLECTIONS_SUCCESS,
+                    payload: res.data
+                });
+            } catch (err) {
+                dispatch({
+                    type: COLLECTIONS_FAIL
+                });
+            }
+        } else {
+            try {
+                const res = await axios.get(`${process.env.REACT_APP_API}searchcollections`, config)
+                dispatch({
+                    type: COLLECTIONS_SUCCESS,
+                    payload: res.data
+                });
+            } catch (err) {
+                dispatch({
+                    type: COLLECTIONS_FAIL
+                });
+            }
         }
     } else {
         dispatch({

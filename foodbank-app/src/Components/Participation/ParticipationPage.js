@@ -92,7 +92,8 @@ export class ParticipationPage extends Component {
     // Handle Data Request (Initial + Refresh)
 
     componentDidMount() {
-        this.props.getCollections();
+        let status = null
+        this.props.getCollections(status);
         this.props.getDonors();
     }
 
